@@ -1,6 +1,8 @@
 # UIFrameWork
 A tiny and powerful UIFrameWork for Unity4.x
 
+Now Only for Chinese.
+
 基于NGUI编写的简单可扩展自动化UI框架
 
 

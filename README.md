@@ -7,7 +7,7 @@ Now Only for Chinese.
 
 
 更详细的内容请查看文章：
-地址 ： http://blog.csdn.net/fredomyan/article/details/46879203
+地址 ： http://protonjoy.com/uiframework/
 
 
 一： 框架实现的主要内容如下：

@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
+
+    /// <summary>
+    /// http://www.willrmiller.com/?p=87#comment-267
+    /// Event Manager.
+    /// </summary>
     public class EventManager
     {
         private Dictionary<string, Delegate> mEventDic = new Dictionary<string, Delegate>();

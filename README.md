@@ -42,7 +42,7 @@ Unity4.x和NGUI3.6.7
 2. 如果发现问题，可以留言，谢谢
 
 
-Updates：
+**Updates**
 
 2016.1.29 
 

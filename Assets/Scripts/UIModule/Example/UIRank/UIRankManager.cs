@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     public class UIRankManager : UIManagerBase
     {

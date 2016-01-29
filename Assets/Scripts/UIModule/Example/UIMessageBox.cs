@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     public class UIMessageBox : UIBaseWindow, IWindowAnimation
     {

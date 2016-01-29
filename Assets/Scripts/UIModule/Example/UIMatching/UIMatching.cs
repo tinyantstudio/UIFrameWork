@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// 比赛界面

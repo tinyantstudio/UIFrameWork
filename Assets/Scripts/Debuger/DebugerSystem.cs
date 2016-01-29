@@ -8,9 +8,6 @@ public class DebugerSystem : MonoBehaviour{
     [System.Serializable]
     public class DBSystemStr
     {
-        //debug string define
-        public string DBStrBattleSystem = "BattleSystem# ";
-        public string DBStrUISystem = "UISystem# ";
     }
 
     public DBSystemStr DebugString;

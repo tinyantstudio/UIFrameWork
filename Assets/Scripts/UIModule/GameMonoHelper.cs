@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     public class GameMonoHelper : MonoBehaviour
     {

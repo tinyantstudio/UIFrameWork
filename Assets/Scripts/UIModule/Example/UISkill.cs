@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-namespace CoolGame
+namespace TinyFrameWork
 {
     public class UISkill : UIBaseWindow, IWindowAnimation
     {

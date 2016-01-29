@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// 游戏工具类

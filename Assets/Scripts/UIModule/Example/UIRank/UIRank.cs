@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// 排行榜界面

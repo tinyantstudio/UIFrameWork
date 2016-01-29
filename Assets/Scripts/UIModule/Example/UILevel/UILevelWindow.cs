@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// 关卡界面

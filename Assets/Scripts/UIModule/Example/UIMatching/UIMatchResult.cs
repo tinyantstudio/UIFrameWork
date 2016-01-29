@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     public class UIMatchResult : UIBaseWindow
     {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// RankWindow子界面

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CoolGame
+namespace TinyFrameWork
 {
     /// <summary>
     /// UI 界面管理类
@@ -74,10 +74,6 @@ namespace CoolGame
             }
             if (shownWindows.ContainsKey(id))
                 return null;
-
-            // 隐藏callWindowId指向窗口
-            /*if(showData != null)
-                HideWindow(showData.callWindowId, null);*/
 
             UIBaseWindow baseWindow = GetGameWindow(id);
             bool newAdded = false;

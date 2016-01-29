@@ -24,6 +24,7 @@ Now Only for Chinese.
 
 6.便于进行需求和功能扩展(比如，在跳出页面之前添加逻辑处理等) 
 
+
 二：NGUI和Unity版本
 
 Unity4.x和NGUI3.6.7
@@ -39,3 +40,10 @@ Unity4.x和NGUI3.6.7
 1. 该框架已经被用到实际项目开发中
 
 2. 如果发现问题，可以留言，谢谢
+
+
+Updates：
+
+2016.1.29 
+
+1.事件系统(add event system to project.)

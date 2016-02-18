@@ -12,3 +12,5 @@
 /Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Messaging.dll.meta
 /Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll
 /Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll.meta
+/.vs
+/UnityVS.UIFrameWork.v12.suo

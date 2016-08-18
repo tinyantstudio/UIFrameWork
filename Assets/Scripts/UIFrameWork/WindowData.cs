@@ -5,14 +5,17 @@ using System.Collections.Generic;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// 窗口Data
-    /// 1.显示方式
-    /// 2.窗口类型
+    /// Define the Window core data
+    /// 1. windowType
+    /// 2. showMode
+    /// 3. colliderMode
+    /// !!You must init the window's core data in the InitWindowData !!
     /// </summary>
-    public class WindowData {
-
-        // 是否是导航起始窗口(到该界面需要重置导航信息)
-        public bool isStartWindow = false; 
+    public class WindowData
+    {
+        // If target window is mark as StartWindow force clear all the navigation sequence data
+        // Your start Game MainMenu always the startWindow
+        public bool isStartWindow = false;
         public UIWindowType windowType = UIWindowType.Normal;
         public UIWindowShowMode showMode = UIWindowShowMode.DoNothing;
         public UIWindowColliderMode colliderMode = UIWindowColliderMode.None;
@@ -24,13 +27,13 @@ namespace TinyFrameWork
         public List<WindowID> backShowTargets;
     }
 
-    public class ShowWindowData 
+    public class ShowWindowData
     {
-        // Reset窗口
+        // Reset window
         public bool forceResetWindow = false;
-        // Clear导航信息
+        // force clear the navigation data
         public bool forceClearBackSeqData = false;
-        // Object 数据
+        // Object (pass data to target showed window)
         public object data;
     }
 

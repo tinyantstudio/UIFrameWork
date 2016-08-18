@@ -10,24 +10,25 @@ namespace TinyFrameWork
     /// </summary>
     public class UIManager : UIManagerBase
     {
-        // 保存UI常用节点
+        // save the UIRoot
         public Transform UIRoot;
-        // NormalWindow节点
+        // NormalWindow node
         [System.NonSerialized]
         public Transform UINormalWindowRoot;
-        // PopUpWindow节点
+        // PopUpWindow node
         [System.NonSerialized]
         public Transform UIPopUpWindowRoot;
-        // Fixed Window节点
+        // FixedWindow node
         [System.NonSerialized]
         public Transform UIFixedWidowRoot;
 
-        // 层级分离depth
-        private int fixedWindowDepth = 100;     // 界面固定window起始depth
-        private int popUpWindowDepth = 150;     // PopUp类型window起始depth
-        private int normalWindowDepth = 2;      // Normal类型window起始depth
+        // Each Type window start Depth
+        private int fixedWindowDepth = 100;     
+        private int popUpWindowDepth = 150;     
+        private int normalWindowDepth = 2;       
 
-        // Atlas refrence
+        // Atlas reference
+        // Mask Atlas(Common Collider window Bg)
         public UIAtlas maskAtlas;
 
         private static UIManager instance;
@@ -50,8 +51,9 @@ namespace TinyFrameWork
             if (baseWindow != null)
             {
                 RealShowWindow(baseWindow, id);
-                
+
                 // 是否清空当前导航信息(回到主菜单)
+                // If target window is mark as StartWindow force clear all the navigation sequence data
                 if (baseWindow.windowData.isStartWindow)
                 {
                     Debuger.Log("[Enter the start window, reset the backSequenceData for the navigation system.]");

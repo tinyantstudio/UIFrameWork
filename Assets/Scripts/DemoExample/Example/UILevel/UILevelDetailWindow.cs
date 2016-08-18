@@ -32,7 +32,7 @@ namespace TinyFrameWork
             };
         }
 
-        public override void InitWindowData()
+        protected override void InitWindowData()
         {
             base.InitWindowData();
             this.windowData.colliderMode = UIWindowColliderMode.Normal;

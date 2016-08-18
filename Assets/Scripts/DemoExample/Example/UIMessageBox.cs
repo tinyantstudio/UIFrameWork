@@ -41,7 +41,7 @@ namespace TinyFrameWork
             };
         }
 
-        public override void InitWindowData()
+        protected override void InitWindowData()
         {
             base.InitWindowData();
             this.windowData.windowType = UIWindowType.PopUp;

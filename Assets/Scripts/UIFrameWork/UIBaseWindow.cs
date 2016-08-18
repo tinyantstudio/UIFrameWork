@@ -101,6 +101,7 @@ namespace TinyFrameWork
         /// </summary>
         public virtual void InitWindowOnAwake()
         {
+
         }
 
         /// <summary>
@@ -124,12 +125,10 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// Init the window data
+        /// Init the window core data
         /// </summary>
-        public virtual void InitWindowData()
+        protected virtual void InitWindowData()
         {
-            if (windowData == null)
-                windowData = new WindowData();
         }
 
         public virtual void ShowWindow()

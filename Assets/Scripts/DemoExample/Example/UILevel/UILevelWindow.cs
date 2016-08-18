@@ -24,7 +24,7 @@ namespace TinyFrameWork
             twAlpha = gameObject.GetComponent<TweenAlpha>();
         }
 
-        public override void InitWindowData()
+        protected override void InitWindowData()
         {
             base.InitWindowData();
             this.preWindowID = WindowID.WindowID_MainMenu;

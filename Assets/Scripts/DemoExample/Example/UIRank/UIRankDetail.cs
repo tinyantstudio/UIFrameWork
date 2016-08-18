@@ -44,7 +44,7 @@ namespace TinyFrameWork
             ResetAnimation();
         }
 
-        public override void InitWindowData()
+        protected override void InitWindowData()
         {
             base.InitWindowData();
             windowData.showMode = UIWindowShowMode.NeedBack;

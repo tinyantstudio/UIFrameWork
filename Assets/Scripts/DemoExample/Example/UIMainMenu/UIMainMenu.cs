@@ -80,7 +80,7 @@ namespace TinyFrameWork
                 twPositions[i].PlayForward();
         }
 
-        public override void InitWindowData()
+        protected override void InitWindowData()
         {
             base.InitWindowData();
             this.windowData.isStartWindow = true;

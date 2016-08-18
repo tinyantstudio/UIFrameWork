@@ -11,14 +11,14 @@ namespace TinyFrameWork
         public List<GameObject> listToDestroy;
         public void ShowRankWindow()
         {
-            UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
-            UIManager.GetInstance().ShowWindow(WindowID.WindowID_MainMenu);
+            UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
+            UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_MainMenu);
         }
 
         public void HideRankWindow()
         {
-            UIManager.GetInstance().HideWindow(WindowID.WindowID_Rank);
-            UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
+            UICenterMasterManager.GetInstance().HideWindow(WindowID.WindowID_Rank);
+            UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
         }
 
 

@@ -19,7 +19,7 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnReturn).onClick = delegate
             {
-                UIManager.GetInstance().ReturnWindow();
+                UICenterMasterManager.GetInstance().ReturnWindow();
             };
 
             // message box Test.
@@ -42,12 +42,12 @@ namespace TinyFrameWork
                 //        UIManager.GetInstance().CloseMessageBox();
                 //    });
 
-                UIManager.GetInstance().ShowMessageBox(
+                UICenterMasterManager.GetInstance().ShowMessageBox(
                     "You are yourself, please don't lose confidence.",
                     "Sure!",
                     delegate
                     {
-                        UIManager.GetInstance().CloseMessageBox();
+                        UICenterMasterManager.GetInstance().CloseMessageBox();
                     });
             };
         }

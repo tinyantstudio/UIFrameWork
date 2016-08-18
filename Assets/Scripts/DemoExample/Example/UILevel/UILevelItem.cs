@@ -15,7 +15,7 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnLevelItem).onClick = delegate
             {
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
                 // UIManager.GetInstance().ShowWindowDelay(2.0f, WindowID.WindowID_LevelDetail);
             };
         }

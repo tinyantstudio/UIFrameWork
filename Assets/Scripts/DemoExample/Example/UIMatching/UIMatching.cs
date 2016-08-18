@@ -35,8 +35,8 @@ namespace TinyFrameWork
                     // UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
                     // UIManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
 
-                    UIManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
-                    UIBaseWindow baseWindow = UIManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
+                    UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
+                    UIBaseWindow baseWindow = UICenterMasterManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
                     ((UIMatchResult)baseWindow).SetMatchResult(true, targetBackWindowId);
                 });
             };
@@ -47,8 +47,8 @@ namespace TinyFrameWork
             {
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
-                    UIManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
-                    UIBaseWindow baseWindow = UIManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
+                    UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
+                    UIBaseWindow baseWindow = UICenterMasterManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
                     ((UIMatchResult)baseWindow).SetMatchResult(false, targetBackWindowId);
                 });
             };

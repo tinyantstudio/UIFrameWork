@@ -110,21 +110,21 @@ namespace TinyFrameWork
         {
             if (!realReturnToMainMenu)
             {
-                UIManager.GetInstance().ShowMessageBox(
+                UICenterMasterManager.GetInstance().ShowMessageBox(
                     "Do you want to leave level window?",
                     "Yes",
                     delegate
                     {
                         Debug.Log("Message Box click YES to leave level window.");
-                        UIManager.GetInstance().CloseMessageBox();
+                        UICenterMasterManager.GetInstance().CloseMessageBox();
                         realReturnToMainMenu = true;
-                        UIManager.GetInstance().ReturnWindow();
+                        UICenterMasterManager.GetInstance().ReturnWindow();
                     },
                     "No",
                     delegate
                     {
                         Debug.Log("Message Box click NO.");
-                        UIManager.GetInstance().CloseMessageBox();
+                        UICenterMasterManager.GetInstance().CloseMessageBox();
                     });
             }
             return !realReturnToMainMenu;

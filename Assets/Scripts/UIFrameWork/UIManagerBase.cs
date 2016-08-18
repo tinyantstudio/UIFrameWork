@@ -126,10 +126,8 @@ namespace TinyFrameWork
             }
         }
 
-        // 直接打开窗口
         protected void ShowWindowForBack(WindowID id)
         {
-            // 检测控制权限
             if (!this.IsWindowInControl(id))
             {
                 Debug.Log("UIManager has no control power of " + id.ToString());
@@ -141,11 +139,10 @@ namespace TinyFrameWork
             UIBaseWindow baseWindow = GetGameWindow(id);
             baseWindow.ShowWindow();
             shownWindows[(int)baseWindow.GetID] = baseWindow;
-
         }
 
         /// <summary>
-        /// 隐藏界面
+        /// Hide target window
         /// </summary>
         /// <param name="id"></param>
         public virtual void HideWindow(WindowID id, Action onCompleted = null)
@@ -201,7 +198,8 @@ namespace TinyFrameWork
 
         private bool ReturnWindowManager(UIBaseWindow baseWindow)
         {
-            // 退出当前界面子界面
+            // Recursion call to return windowManager
+            // if the current window has windowManager just call current's windowManager ReturnWindowManager
             UIManagerBase baseWindowManager = baseWindow.GetWindowManager;
             bool isValid = false;
             if (baseWindowManager != null)
@@ -209,13 +207,16 @@ namespace TinyFrameWork
             return isValid;
         }
 
-        // 界面导航返回
         protected bool RealReturnWindow()
         {
             if (backSequence.Count == 0)
             {
                 // 如果当前BackSequenceData 不存在返回数据
-                // 检测当前Window的preWindowId是否指向上一级合法菜单
+                // 检测当前Window的preWindowId是否指向上一级合法指定菜单
+
+                // if BackSequenceData is null
+                // Check window's preWindowId
+                // if preWindowId defined just move to target Window(preWindowId)
                 if (curShownNormalWindow == null)
                     return false;
                 if (ReturnWindowManager(curShownNormalWindow))
@@ -236,7 +237,6 @@ namespace TinyFrameWork
             BackWindowSequenceData backData = backSequence.Peek();
             if (backData != null)
             {
-                // 退出当前界面子界面
                 if (ReturnWindowManager(backData.hideTargetWindow))
                     return true;
 
@@ -254,15 +254,12 @@ namespace TinyFrameWork
                                 {
                                     Debug.Log("change currentShownNormalWindow : " + backId);
                                     {
-                                        // 改变当前活跃Normal窗口
                                         this.lastShownNormalWindow = this.curShownNormalWindow;
                                         this.curShownNormalWindow = GetGameWindow(backId); 
                                     }
                                 }
                             }
                         }
-                        
-                        // 隐藏当前界面
                         backSequence.Pop();
                     });
                 else

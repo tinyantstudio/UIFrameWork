@@ -37,7 +37,7 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnClose).onClick = delegate
             {
-                UIManager.GetInstance().CloseMessageBox();
+                UICenterMasterManager.GetInstance().CloseMessageBox();
             };
         }
 

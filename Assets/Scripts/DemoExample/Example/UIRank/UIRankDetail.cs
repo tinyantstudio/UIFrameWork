@@ -35,7 +35,7 @@ namespace TinyFrameWork
             // Go to the Level Window
             UIEventListener.Get(btnGoToLevel).onClick = delegate
             {
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
             };
         }
 

@@ -41,16 +41,16 @@ namespace TinyFrameWork
             {
                 //ShowWindowData windowData = new ShowWindowData();
                 //windowData.needClearBackSequence = true;
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
             };
 
             UIEventListener.Get(btnRank).onClick = delegate
             {
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
             };
         }
 
@@ -85,8 +85,8 @@ namespace TinyFrameWork
         {
             // 返回到进入比赛界面
             // 比赛入口不同
-            UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-            UIManager.GetInstance().ShowWindow(targetBackWindowId, null);
+            UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
+            UICenterMasterManager.GetInstance().ShowWindow(targetBackWindowId, null);
         }
     }
 }

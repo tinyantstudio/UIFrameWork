@@ -6,9 +6,16 @@ using System.Collections.Generic;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// UI 界面管理类
+    /// UI Main Manager "the Master" most important Class
+    ///         Control all the "Big Parent" window:UIRank,UIShop,UIGame,UIMainMenu and so on.
+    ///         UIRankManager: control the rank window logic (UIRankDetail sub window)
+    ///         May be UIShopManager:control the UIShopDetailWindow or UIShopSubTwoWindow
+    /// 
+    /// 枢纽中心，控制整个大界面的显示逻辑UIRank，UIMainMenu等
+    ///         UIRank排行榜界面可能也会有自己的Manager用来管理Rank系统中自己的子界面，这些子界面不交给"老大"UICenterMasterManager管理
+    ///         分而治之，不是中央集权
     /// </summary>
-    public class UIManager : UIManagerBase
+    public class UICenterMasterManager : UIManagerBase
     {
         // save the UIRoot
         public Transform UIRoot;
@@ -28,11 +35,11 @@ namespace TinyFrameWork
         private int normalWindowDepth = 2;       
 
         // Atlas reference
-        // Mask Atlas(Common Collider window Bg)
+        // Mask Atlas for sprite mask(Common Collider window background)
         public UIAtlas maskAtlas;
 
-        private static UIManager instance;
-        public static UIManager GetInstance()
+        private static UICenterMasterManager instance;
+        public static UICenterMasterManager GetInstance()
         {
             return instance;
         }
@@ -269,7 +276,7 @@ namespace TinyFrameWork
                                 removedKey = new List<WindowID>();
                             removedKey.Add((WindowID)window.Key);
 
-                            // HideOther类型 直接隐藏其他窗口
+                            // HideOther Type(hide all window directly)
                             window.Value.HideWindowDirectly();
                         }
 
@@ -288,6 +295,7 @@ namespace TinyFrameWork
                     if (sortByMinDepth.Count > 0)
                     {
                         // 按照层级顺序存入显示List中 
+                        // Add to return show target list
                         sortByMinDepth.Sort(new CompareBaseWindow());
                         for (int i = 0; i < sortByMinDepth.Count;i++ )
                         {
@@ -367,7 +375,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// MessageBox弹出
+        /// MessageBox
         /// </summary>
         /// 
         public void ShowMessageBox(string msg)

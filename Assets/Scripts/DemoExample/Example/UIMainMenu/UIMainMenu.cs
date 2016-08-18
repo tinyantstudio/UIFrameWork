@@ -44,7 +44,7 @@ namespace TinyFrameWork
             {
                 ShowWindowData showData = new ShowWindowData();
                 showData.forceResetWindow = true;
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank, showData);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Rank, showData);
             };
 
             UIEventListener.Get(btnSwitch).onClick = delegate
@@ -58,12 +58,12 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnLevel).onClick = delegate
             {
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
             };
 
             UIEventListener.Get(btnSkill).onClick = delegate
             {
-                UIManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
+                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
             };
         }
 

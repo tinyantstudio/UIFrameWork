@@ -47,8 +47,8 @@ namespace TinyFrameWork
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
                     delegate
                     {
-                        UIManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);
-                        UIManager.GetInstance().GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.windowID);
+                        UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);
+                        UICenterMasterManager.GetInstance().GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.windowID);
                     });
             };
         }

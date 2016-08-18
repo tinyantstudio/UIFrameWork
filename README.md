@@ -62,7 +62,7 @@ Unity4.x和NGUI3.6.7
 
 
 ****
-# English simple wiki
+# English
 ****
 
 ## Important information
@@ -79,7 +79,7 @@ Unity4.x和NGUI3.6.7
 8. Do more (event system , Decoupled your game code)
 
 
-## Updating or the "future":
+## Updating:
 1. MVC? 
 2. Add a common Event system to this framework( Decoupled goal for communication between the window and your game logic)
 3. optimizing the code (such as GC problem, the code design and son on)
@@ -95,4 +95,4 @@ some attention
 1. If you find some cool idea just share with using
 2. Edit the Issue page !!! or email me if you want some feed back(Really need feedback and your idea)
 
-**Wish this simple tiny frame work can help some one who want to save his time develop the window logic**
+Wish this simple tiny frame work can help some one who want to save his time develop the window logic

@@ -99,9 +99,11 @@ Wish this simple tiny frame work can help some one who want to save his time dev
 
 
 
-## Show the result
+## Show the result 
 
-[See total Gif result Just Click Link](http://7xp9wk.com1.z0.glb.clouddn.com/UIFramework.gif)
+[See result Click Link](http://7xp9wk.com1.z0.glb.clouddn.com/UIFramework.gif)
 
 
 ![UIFrameWork](http://7xp9wk.com1.z0.glb.clouddn.com/UIFramework.gif)
+
+

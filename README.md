@@ -1,15 +1,17 @@
 # UIFrameWork
 A tiny and powerful UIFrameWork for Unity4.x
 
-Now Only for Chinese.
+Now Only for Chinese and simple English wiki to help someone need it.
 
+*****
+# 中文介绍
+*****
 基于NGUI编写的简单可扩展自动化UI框架
 
 
 更详细的内容请查看文章：
 地址 ： http://blog.csdn.net/fredomyan/article/details/46879203
 
-************************************
 
 一： 框架实现的主要内容如下：
 
@@ -25,16 +27,10 @@ Now Only for Chinese.
 
 6.便于进行需求和功能扩展(比如，在跳出页面之前添加逻辑处理等) 
 
-最新的加入的功能和开发计划，请直接阅读issue和下面的Updates栏目，针对该框架的更新状况
-
-************************************
-
 
 二：NGUI和Unity版本
 
 Unity4.x和NGUI3.6.7
-
-************************************
 
 三：注意问题
 
@@ -49,8 +45,6 @@ Unity4.x和NGUI3.6.7
 2. 如果发现问题，可以留言，谢谢
 
 
-************************************
-
 **注意：**
 
 本工程使用的Unity4.x版本，使用Unity5.x打开，由于使用的NGUI版本较低，会出现脚本错误，解决方法如下
@@ -60,21 +54,45 @@ Unity4.x和NGUI3.6.7
 2. 更换完毕，可能出现项目中使用的NGUI3.6.7版本API或者功能不存在，直接删除或者按照导入的新版本NGUI修改即可
 
 
-************************************
-
-**开发交流和思考issue**
-
-
-有时间会针对该框架做一个讨论，直接点击issue查看，里面会记录一些框架思考，包括，针对某一个功能应该采用什么设计方案等等
-
-希望有兴趣的朋友一起探讨，一起提升，一些参与思考和设计！
-
-谢谢支持！
-
-************************************
-
 **Updates**
 
 2016.1.29 
 
 1.事件系统(add event system to project.)
+
+
+****
+# English simple wiki
+****
+
+## Important information
+1. Unity4.x和NGUI3.6.7(If you want using Unity3d 5.x version, just update the NGUI's right version too)
+
+## UIFrameWork Target:
+1. load window, Show, hide, close window
+2. Animation Interface for your window hide/show animation
+3. Window Depth, window common collider bg manaager
+4. (!!!maybe the most goal)Manager your window navigation (when you click the return/back button you need not to care which window I should Go)
+5. Add some very common MessageBox
+6. Give you a total game example(just the window logic)
+7. You can easily modify for your own game
+8. Do more (event system , Decoupled your game code)
+
+
+## Updating or the "future":
+1. MVC? 
+2. Add a common Event system to this framework( Decoupled goal for communication between the window and your game logic)
+3. optimizing the code (such as GC problem, the code design and son on)
+4. thinking......
+5. Oh UGUI? Just change the window depth manager I think.
+
+## Attention
+
+some attention
+
+
+## Last
+1. If you find some cool idea just share with using
+2. Edit the Issue page !!! or email me if you want some feed back(Really need feedback and your idea)
+
+**Wish this simple tiny frame work can help some one who want to save his time develop the window logic**

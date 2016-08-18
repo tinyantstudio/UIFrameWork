@@ -5,7 +5,6 @@ namespace TinyFrameWork
 {
     public class UIRankOwnDetail : UIBaseWindow, IWindowAnimation
     {
-        private UILabel lbName;
         private GameObject btnClose;
         private UISprite spHeadIcon;
 
@@ -19,7 +18,6 @@ namespace TinyFrameWork
             InitWindowData();
             base.InitWindowOnAwake();
 
-            lbName = GameUtility.FindDeepChild<UILabel>(this.gameObject, "Name");
             spHeadIcon = GameUtility.FindDeepChild<UISprite>(this.gameObject, "Sprite");
             btnClose = GameUtility.FindDeepChild(this.gameObject, "Close").gameObject;
             objAnimation = this.gameObject;

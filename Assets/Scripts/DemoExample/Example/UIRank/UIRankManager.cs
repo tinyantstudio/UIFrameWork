@@ -35,7 +35,7 @@ namespace TinyFrameWork
             if (rankDetailScript == null)
                 rankDetailScript = objRankDetail.AddComponent<UIRankDetail>();
 
-            allWindows[WindowID.WindowID_Rank_Detail] = rankDetailScript;
+            allWindows[(int)WindowID.WindowID_Rank_Detail] = rankDetailScript;
 
             // UIRankOwnDetail子界面
             GameObject objRankOwnDetail = GameUtility.FindDeepChild(this.gameObject, "OwnDetailWindow").gameObject;
@@ -43,7 +43,7 @@ namespace TinyFrameWork
             if (rankOwnDetailScript == null)
                 rankOwnDetailScript = objRankOwnDetail.AddComponent<UIRankOwnDetail>();
 
-            allWindows[WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
+            allWindows[(int)WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
         }
 
         protected override void InitWindowControl()
@@ -60,19 +60,19 @@ namespace TinyFrameWork
                 Debug.Log("UIRankManager has no control power of " + id.ToString());
                 return; 
             }
-            if (shownWindows.ContainsKey(id))
+            if (shownWindows.ContainsKey((int)id))
                 return;
-            if (allWindows.ContainsKey(id))
+            if (allWindows.ContainsKey((int)id))
             {
-                UIBaseWindow baseWindow = allWindows[id];
+                UIBaseWindow baseWindow = allWindows[(int)id];
                 if (baseWindow.windowData.showMode == UIWindowShowMode.NeedBack)
                 {
                     BackWindowSequenceData backData = new BackWindowSequenceData();
                     backData.hideTargetWindow = baseWindow;
                     backSequence.Push(backData);
                 }
-                allWindows[id].ShowWindow();
-                shownWindows[id] = allWindows[id];
+                allWindows[(int)id].ShowWindow();
+                shownWindows[(int)id] = allWindows[(int)id];
 
                 this.lastShownNormalWindow = this.curShownNormalWindow;
                 curShownNormalWindow = baseWindow;
@@ -86,7 +86,7 @@ namespace TinyFrameWork
 
         public override void ResetAllInControlWindows()
         {
-            foreach (KeyValuePair<WindowID, UIBaseWindow> childWindow in allWindows)
+            foreach (KeyValuePair<int, UIBaseWindow> childWindow in allWindows)
             {
                 childWindow.Value.ResetWindow(); 
             }
@@ -98,6 +98,5 @@ namespace TinyFrameWork
             bool isValidBack = RealReturnWindow();
             return isValidBack;
         }
-    } 
+    }
 }
-

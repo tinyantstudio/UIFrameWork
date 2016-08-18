@@ -32,6 +32,7 @@ namespace TinyFrameWork
             btnGoToLevel = GameUtility.FindDeepChild(this.gameObject, "Move/BtnGotoLevel").gameObject;
             UIEventListener.Get(btnClose).onClick = OnBtnClose;
 
+            // Go to the Level Window
             UIEventListener.Get(btnGoToLevel).onClick = delegate
             {
                 UIManager.GetInstance().ShowWindow(WindowID.WindowID_Level);

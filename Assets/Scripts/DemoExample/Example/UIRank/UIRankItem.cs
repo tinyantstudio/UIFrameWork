@@ -3,16 +3,15 @@ using System.Collections;
 
 namespace TinyFrameWork
 {
+    /// <summary>
+    /// Demo rank item to show the rank detail content
+    /// </summary>
     public class UIRankItem : MonoBehaviour
     {
-
         private UILabel lbItemName;
         private UISprite spIcon;
         private GameObject btnBg;
 
-        /// <summary>
-        /// Item需要编写通用类
-        /// </summary>
         void Awake()
         {
             lbItemName = GameUtility.FindDeepChild<UILabel>(this.gameObject, "Label");
@@ -31,12 +30,10 @@ namespace TinyFrameWork
 
         public void OnBtnClick(GameObject obj)
         {
-            // item 被点击
-
+            // To show Rank logic's child window(Rank_Detail)
             UIRankManager.GetInstance().ShowWindow(WindowID.WindowID_Rank_Detail);
             UIRankDetail detail = (UIRankDetail)UIRankManager.GetInstance().GetGameWindow(WindowID.WindowID_Rank_Detail);
             detail.UpdateDetailData(lbItemName.text, spIcon.spriteName);
-
             Debug.Log("Item clicked.");
         }
     }

@@ -72,7 +72,7 @@ namespace TinyFrameWork
                 Debug.Log("UIManager has no control power of " + id.ToString());
                 return null;
             }
-            if (shownWindows.ContainsKey(id))
+            if (shownWindows.ContainsKey((int)id))
                 return null;
 
             UIBaseWindow baseWindow = GetGameWindow(id);
@@ -80,10 +80,9 @@ namespace TinyFrameWork
             if (!baseWindow)
             {
                 newAdded = true;
-                // 窗口不存在从内存进行加载
-                if (UIResourceDefine.windowPrefabPath.ContainsKey(id))
+                if (UIResourceDefine.windowPrefabPath.ContainsKey((int)id))
                 {
-                    string prefabPath = UIResourceDefine.UIPrefabPath + UIResourceDefine.windowPrefabPath[id];
+                    string prefabPath = UIResourceDefine.UIPrefabPath + UIResourceDefine.windowPrefabPath[(int)id];
                     GameObject prefab = Resources.Load<GameObject>(prefabPath);
                     if (prefab != null)
                     {
@@ -93,7 +92,7 @@ namespace TinyFrameWork
                         // 需要动态添加对应的控制界面,prefab不用添加脚本
                         Transform targetRoot = GetTargetRoot(baseWindow.windowData.windowType);
                         GameUtility.AddChildToTarget(targetRoot, baseWindow.gameObject.transform);
-                        allWindows[id] = baseWindow;
+                        allWindows[(int)id] = baseWindow;
                     }
                 }
             }
@@ -128,7 +127,6 @@ namespace TinyFrameWork
             InitWindowControl();
             isNeedWaitHideOver = true;
 
-            // test
             DontDestroyOnLoad(UIRoot);
 
             if (UIFixedWidowRoot == null)
@@ -150,6 +148,7 @@ namespace TinyFrameWork
                 GameUtility.ChangeChildLayer(UINormalWindowRoot, UIRoot.gameObject.layer);
             }
 
+            // test for show two main window to start the demo.
             ShowWindow(WindowID.WindowID_MainMenu);
             ShowWindow(WindowID.WindowID_TopBar);
         }
@@ -174,7 +173,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 导航返回
+        /// Return logic 
         /// </summary>
         public override bool ReturnWindow()
         {
@@ -187,6 +186,11 @@ namespace TinyFrameWork
             return RealReturnWindow();
         }
 
+        /// <summary>
+        /// Calculate right depth with windowType
+        /// Find next right depth
+        /// </summary>
+        /// <param name="baseWindow"></param>
         private void AdjustBaseWindowDepth(UIBaseWindow baseWindow)
         {
             UIWindowType windowType = baseWindow.windowData.windowType;
@@ -212,7 +216,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 窗口背景碰撞体处理
+        /// Add Collider and BgTexture for target window
         /// </summary>
         private void AddColliderBgForWindow(UIBaseWindow baseWindow)
         {
@@ -250,7 +254,7 @@ namespace TinyFrameWork
 
                     BackWindowSequenceData backData = new BackWindowSequenceData();
 
-                    foreach (KeyValuePair<WindowID, UIBaseWindow> window in shownWindows)
+                    foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                     {
                         bool needToHide = true;
                         if (windowData.showMode == UIWindowShowMode.NeedBack
@@ -261,7 +265,7 @@ namespace TinyFrameWork
                         {
                             if (removedKey == null)
                                 removedKey = new List<WindowID>();
-                            removedKey.Add(window.Key);
+                            removedKey.Add((WindowID)window.Key);
 
                             // HideOther类型 直接隐藏其他窗口
                             window.Value.HideWindowDirectly();
@@ -275,7 +279,7 @@ namespace TinyFrameWork
                     if (removedKey != null)
                     {
                         for (int i = 0; i < removedKey.Count; i++)
-                            shownWindows.Remove(removedKey[i]);
+                            shownWindows.Remove((int)removedKey[i]);
                     }
 
                     // push to backToShowWindows stack

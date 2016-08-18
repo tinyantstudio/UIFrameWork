@@ -5,18 +5,17 @@ using System;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// 排行榜界面
+    /// UIRank window 
     /// </summary>
     public class UIRank : UIBaseWindow, IWindowAnimation
     {
-        private Transform objEffect;
         private UIRankManager rankWindowManager;
         private Transform itemsGrid;
         private UIScrollView scrollView;
 
         private GameObject btnGoToMatch;
 
-        // aniamtion content
+        // animation content
         private Transform trsAnimation;
         private TweenPosition twPosition;
 
@@ -30,10 +29,6 @@ namespace TinyFrameWork
             this.preWindowID = WindowID.WindowID_MainMenu;
             InitWindowData();
             base.InitWindowOnAwake();
-
-            // this.RegisterReturnLogic(RetrunPreLogic);
-
-            objEffect = GameUtility.FindDeepChild(this.gameObject, "EffectParent");
             itemsGrid = GameUtility.FindDeepChild(this.gameObject, "LeftAnchor/LeftMain/Scroll View/Grid");
             trsAnimation = GameUtility.FindDeepChild(this.gameObject, "LeftAnchor/LeftMain");
             scrollView = GameUtility.FindDeepChild<UIScrollView>(this.gameObject, "LeftAnchor/LeftMain/Scroll View");
@@ -46,9 +41,10 @@ namespace TinyFrameWork
                 rankWindowManager.InitWindowManager();
             }
 
+            // Just go to Match logic
             UIEventListener.Get(btnGoToMatch).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("AnimationCurve",
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
                     delegate
                     {
                         UIManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);
@@ -76,7 +72,7 @@ namespace TinyFrameWork
         public override void ShowWindow()
         {
             NGUITools.SetActive(this.gameObject, true);
-            // 显示主界面，选择性显示子界面
+            // you can use Rank's window manager to show target child window
             // UIRankManager.GetInstance().ShowWindow(WindowID.WindowID_Rank_OwnDetail);
             EnterAnimation(delegate
             {
@@ -89,7 +85,7 @@ namespace TinyFrameWork
 
         public override void HideWindow(Action onComplete)
         {
-            // 隐藏主界面，可以选择性隐藏子界面
+            // Hide target child window
             UIRankManager.GetInstance().HideWindow(WindowID.WindowID_Rank_OwnDetail, null);
             QuitAnimation(delegate
             {

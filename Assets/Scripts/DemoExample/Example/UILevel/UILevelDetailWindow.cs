@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace TinyFrameWork
 {
+    /// <summary>
+    /// Demo level detail window to show the Level Detail
+    /// </summary>
     public class UILevelDetailWindow : UIBaseWindow, IWindowAnimation
     {
         private GameObject btnStart;
@@ -20,7 +23,7 @@ namespace TinyFrameWork
             UIEventListener.Get(btnStart).onClick = delegate
             {
                 // Application.LoadLevel("AnimationCurve");
-                GameMonoHelper.GetInstance().LoadGameScene("AnimationCurve",
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
                     delegate
                     {
                         UIManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);

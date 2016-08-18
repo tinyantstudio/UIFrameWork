@@ -26,9 +26,10 @@ namespace TinyFrameWork
             btnLose = GameUtility.FindDeepChild(this.gameObject, "BtnLose").gameObject;
 
             // win the game
+            // load new scene to show target window
             UIEventListener.Get(btnWin).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("TestEmptyScene", delegate
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
                     // 是否需要一个退出比赛单独接口?
                     // UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
@@ -41,9 +42,10 @@ namespace TinyFrameWork
             };
 
             // lose the game
+            // load new scene to show target window
             UIEventListener.Get(btnLose).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("TestEmptyScene", delegate
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
                     UIManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
                     UIBaseWindow baseWindow = UIManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);

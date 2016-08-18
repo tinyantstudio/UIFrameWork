@@ -15,14 +15,15 @@ namespace TinyFrameWork
         private bool isLock = false;
         protected bool isShown = false;
 
-        // 当前界面ID
+        // Current windowID
         protected WindowID windowID = WindowID.WindowID_Invaild;
 
-        // 指向上一级界面ID(BackSequence无内容，返回上一级)
+        // if there is no BackSequece Data just check the preWindowID
+        // Try open preWindowID
         protected WindowID preWindowID = WindowID.WindowID_Invaild;
         public WindowData windowData = new WindowData();
 
-        // Return处理逻辑
+        // Return Logic when leaving current window
         private event BoolDelegate returnPreLogic = null;
 
         protected Transform mTrs;
@@ -63,9 +64,7 @@ namespace TinyFrameWork
             private set { preWindowID = value; }
         }
 
-        /// <summary>
-        /// 能否添加到导航数据中
-        /// </summary>
+        // Need to added to back seq data
         public bool CanAddedToBackSeq
         {
             get
@@ -98,14 +97,14 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 在Awake中调用，初始化界面(给界面元素赋值操作)
+        /// Called on Awake() used for window data Init
         /// </summary>
         public virtual void InitWindowOnAwake()
         {
         }
 
         /// <summary>
-        /// 获得该窗口管理类
+        /// Get the current window's manager
         /// </summary>
         public UIManagerBase GetWindowManager
         {
@@ -118,14 +117,14 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 重置窗口
+        /// Reset the window
         /// </summary>
         public virtual void ResetWindow()
         {
         }
 
         /// <summary>
-        /// 初始化窗口数据
+        /// Init the window data
         /// </summary>
         public virtual void InitWindowData()
         {
@@ -166,7 +165,8 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 界面在退出或者用户点击返回之前都可以注册执行逻辑
+        /// Register call back method before the window returned(closed)
+        /// Case: when you exit a window to pop up a confirm MessageBox
         /// </summary>
         protected void RegisterReturnLogic(BoolDelegate newLogic)
         {

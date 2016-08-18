@@ -14,8 +14,8 @@ namespace TinyFrameWork
     /// </summary>
     public abstract class UIManagerBase : MonoBehaviour
     {
-        protected Dictionary<WindowID, UIBaseWindow> allWindows;
-        protected Dictionary<WindowID, UIBaseWindow> shownWindows;
+        protected Dictionary<int, UIBaseWindow> allWindows;
+        protected Dictionary<int, UIBaseWindow> shownWindows;
         protected Stack<BackWindowSequenceData> backSequence;
         // 当前显示活跃界面
         protected UIBaseWindow curShownNormalWindow = null;
@@ -42,9 +42,9 @@ namespace TinyFrameWork
         protected virtual void Awake()
         {
             if (allWindows == null)
-                allWindows = new Dictionary<WindowID, UIBaseWindow>();
+                allWindows = new Dictionary<int, UIBaseWindow>();
             if (shownWindows == null)
-                shownWindows = new Dictionary<WindowID, UIBaseWindow>();
+                shownWindows = new Dictionary<int, UIBaseWindow>();
             if (backSequence == null)
                 backSequence = new Stack<BackWindowSequenceData>();
         }
@@ -53,8 +53,8 @@ namespace TinyFrameWork
         {
             if (!IsWindowInControl(id))
                 return null;
-            if (allWindows.ContainsKey(id))
-                return allWindows[id];
+            if (allWindows.ContainsKey((int)id))
+                return allWindows[(int)id];
             else
                 return null;
         }
@@ -117,7 +117,7 @@ namespace TinyFrameWork
         protected virtual void RealShowWindow(UIBaseWindow baseWindow, WindowID id)
         {
             baseWindow.ShowWindow();
-            shownWindows[id] = baseWindow;
+            shownWindows[(int)id] = baseWindow;
             if (baseWindow.windowData.windowType == UIWindowType.Normal)
             {
                 // 改变当前显示Normal窗口
@@ -135,12 +135,12 @@ namespace TinyFrameWork
                 Debug.Log("UIManager has no control power of " + id.ToString());
                 return;
             }
-            if (shownWindows.ContainsKey(id))
+            if (shownWindows.ContainsKey((int)id))
                 return;
 
             UIBaseWindow baseWindow = GetGameWindow(id);
             baseWindow.ShowWindow();
-            shownWindows[baseWindow.GetID] = baseWindow;
+            shownWindows[(int)baseWindow.GetID] = baseWindow;
 
         }
 
@@ -160,7 +160,7 @@ namespace TinyFrameWork
                 Debug.Log("UIRankManager has no control power of " + id.ToString());
                 return;
             }
-            if (!shownWindows.ContainsKey(id))
+            if (!shownWindows.ContainsKey((int)id))
                 return;
 
             if (!isNeedWaitHideOver)
@@ -168,25 +168,25 @@ namespace TinyFrameWork
                 if (onComplete != null)
                     onComplete();
 
-                shownWindows[id].HideWindow(null);
-                shownWindows.Remove(id);
+                shownWindows[(int)id].HideWindow(null);
+                shownWindows.Remove((int)id);
                 return;
             }
 
-            if (shownWindows.ContainsKey(id))
+            if (shownWindows.ContainsKey((int)id))
             {
                 if (onComplete != null)
                 {
                     onComplete += delegate
                     {
-                        shownWindows.Remove(id);
+                        shownWindows.Remove((int)id);
                     };
-                    shownWindows[id].HideWindow(onComplete);
+                    shownWindows[(int)id].HideWindow(onComplete);
                 }
                 else
                 {
-                    shownWindows[id].HideWindow(onComplete);
-                    shownWindows.Remove(id);
+                    shownWindows[(int)id].HideWindow(onComplete);
+                    shownWindows.Remove((int)id);
                 }
             }
         }
@@ -230,7 +230,7 @@ namespace TinyFrameWork
                     });
                 }
                 else
-                    Debug.LogWarning("currentShownWindow " + curShownNormalWindow.GetID + " preWindowId is " + WindowID.WindowID_Invaild);
+                    Debug.LogWarning("## CurrentShownWindow " + curShownNormalWindow.GetID + " preWindowId is " + WindowID.WindowID_Invaild);
                 return false;
             }
             BackWindowSequenceData backData = backSequence.Peek();
@@ -241,7 +241,7 @@ namespace TinyFrameWork
                     return true;
 
                 WindowID hideId = backData.hideTargetWindow.GetID;
-                if (backData.hideTargetWindow != null && shownWindows.ContainsKey(hideId))
+                if (backData.hideTargetWindow != null && shownWindows.ContainsKey((int)hideId))
                     HideWindow(hideId, delegate
                     {
                         if (backData.backShowTargets != null)
@@ -272,7 +272,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 清空导航信息
+        /// Clear the back sequence data
         /// </summary>
         public void ClearBackSequence()
         {
@@ -281,13 +281,13 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 清空所有界面
+        /// Destroy all window
         /// </summary>
         public virtual void ClearAllWindow()
         {
             if (allWindows != null)
             {
-                foreach (KeyValuePair<WindowID, UIBaseWindow> window in allWindows)
+                foreach (KeyValuePair<int, UIBaseWindow> window in allWindows)
                 {
                     UIBaseWindow baseWindow = window.Value;
                     baseWindow.DestroyWindow();
@@ -297,13 +297,14 @@ namespace TinyFrameWork
                 backSequence.Clear();
             }
         }
+
         protected void HideAllShownWindow(bool includeFixed = true)
         {
             List<WindowID> removedKey = null;
 
             if (!includeFixed)
             {
-                foreach (KeyValuePair<WindowID, UIBaseWindow> window in shownWindows)
+                foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                 {
                     if (window.Value.windowData.windowType == UIWindowType.Fixed)
                         continue;
@@ -311,36 +312,39 @@ namespace TinyFrameWork
                     if (removedKey == null)
                         removedKey = new List<WindowID>();
 
-                    removedKey.Add(window.Key);
+                    removedKey.Add((WindowID)window.Key);
                     window.Value.HideWindowDirectly();
                 }
 
                 if (removedKey != null)
                 {
                     for (int i = 0; i < removedKey.Count; i++)
-                        shownWindows.Remove(removedKey[i]);
+                        shownWindows.Remove((int)removedKey[i]);
                 }
             }
             else
             {
-                foreach (KeyValuePair<WindowID, UIBaseWindow> window in shownWindows)
+                foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                     window.Value.HideWindowDirectly();
                 shownWindows.Clear();
             }
         }
 
+        // check window control
         protected bool IsWindowInControl(WindowID id)
         {
             int targetId = 1 << ((int)id);
             return ((managedWindowId & targetId) == targetId);
         }
 
+        // add window to target manager
         protected void AddWindowInControl(WindowID id)
         {
             int targetId = 1 << ((int)id);
             managedWindowId |= targetId;
         }
 
+        // init the Manager's control window
         protected abstract void InitWindowControl();
         public virtual void ResetAllInControlWindows()
         {

@@ -96,3 +96,9 @@ some attention
 2. Edit the Issue page !!! or email me if you want some feed back(Really need feedback and your idea)
 
 Wish this simple tiny frame work can help some one who want to save his time develop the window logic
+
+
+
+## Show the result
+
+![UIFrameWork](http://7xp9wk.com1.z0.glb.clouddn.com/UIFramework.gif)

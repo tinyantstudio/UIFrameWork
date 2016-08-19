@@ -67,6 +67,7 @@ Unity4.x和NGUI3.6.7
 1.事件系统(add event system to project.)
 
 2016.8.19
+
 1. 增加一些关键性注释，导航系统如何运作，为什么框架中存在多个UIManager，为什么UICenterCoreManager是中央管理器，而其他的UIXXManager是地方政府
 2. 整理框架结构，删除多余测试文件
 3. 修改了Dictionary<Enum,int>的装箱问题
@@ -105,7 +106,9 @@ Unity4.x和NGUI3.6.7
 5. Oh UGUI? Just change the window depth manager I think.
 
 ## Updated
+
 **2016.8.19**
+
 1. Add some core comment for explain the navigation system(UICenterCoreManager is the KEY core manager)
 2. delete some unused file , clear the folder
 3. fixed Dictionary<Enum,int> boxing bug

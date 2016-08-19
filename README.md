@@ -8,12 +8,18 @@ Now Only for Chinese and simple English wiki to help someone need it.
 *****
 基于NGUI编写的简单可扩展自动化UI框架
 
+## 如何运行
 
-更详细的内容请查看文章：
+1. 找到Scenes文件中MainStart场景，双击进入
+2. 找到场景中的!!DemoDriver!!
+3. 开启和关闭日志信息
+4. 点击运行，在游戏中随意点击界面，开始玩"游戏"，查看各种界面跳转，为了快速理解，可以先将日志开启
+
+**更详细的内容请查看文章(比较久远的核心的设计)**
 地址 ： http://blog.csdn.net/fredomyan/article/details/46879203
 
 
-一： 框架实现的主要内容如下：
+## 框架实现的主要内容如下：
 
 1.加载，显示，隐藏，关闭页面，根据标示获得相应界面实例 
 
@@ -28,17 +34,17 @@ Now Only for Chinese and simple English wiki to help someone need it.
 6.便于进行需求和功能扩展(比如，在跳出页面之前添加逻辑处理等) 
 
 
-二：NGUI和Unity版本
+## NGUI和Unity版本
 
 Unity4.x和NGUI3.6.7
 
-三：注意问题
+##　注意问题
 
 1.工程中包含了NGUI3.6.7版本
 
 2.该框架的重点不关注NGUI或者UGUI，关注的重点是窗口管理和框架的设计，在设计过程依赖第三方的UI插件控制层级，动画，布局等，所以相同的思路，UGUI同样可以支持，后续添加UGUI版本。
 
-四：问题
+## 问题
 
 1. 该框架已经被用到实际项目开发中
 

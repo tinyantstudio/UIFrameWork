@@ -29,16 +29,16 @@ namespace TinyFrameWork
     }
 
     /// <summary>
-    /// 1. HideOther (close or hide other window when open HideOther window)
-    /// 2. NeedBack ()
-    /// 3. NoNeedBack
+    /// 1. HideOther (close or hide other window when open HideOther window add to navigation sequence data)
+    /// 2. NeedBack (open window don't close other window add to navigation sequence data)
+    /// 3. NoNeedBack (open window close other window no need add to navigation sequence data)
     /// </summary>
     public enum UIWindowShowMode
     {
         DoNothing,
-        HideOther,     // 闭其他界面()
-        NeedBack,      // 点击返回按钮关闭当前,不关闭其他界面(需要调整好层级关系)
-        NoNeedBack,    // 关闭TopBar,关闭其他界面,不加入backSequence队列
+        HideOther,     // 打开界面关闭其他界面
+        NeedBack,      // 打开界面不关闭其他界面
+        NoNeedBack,    // 打开界面关闭其他界面，不加入导航队列
     }
 
     public enum UIWindowColliderMode

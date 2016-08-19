@@ -55,7 +55,7 @@ namespace TinyFrameWork
             EnterAnimation(delegate
             {
                 IsLock = false;
-                Debug.Log("UIRankDetail play enter Animation is over.");
+                Debuger.Log("UIRankDetail play enter Animation is over.");
             });
         }
 
@@ -63,7 +63,7 @@ namespace TinyFrameWork
         {
             QuitAnimation(delegate
             {
-                Debug.Log("UIRankDetail play quit animation is over.");
+                Debuger.Log("UIRankDetail play quit animation is over.");
                 if (onComplete != null)
                     onComplete();
             });

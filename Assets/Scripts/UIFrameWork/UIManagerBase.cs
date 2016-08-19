@@ -130,7 +130,7 @@ namespace TinyFrameWork
         {
             if (!this.IsWindowInControl(id))
             {
-                Debug.Log("UIManager has no control power of " + id.ToString());
+                Debuger.Log("UIManager has no control power of " + id.ToString());
                 return;
             }
             if (shownWindows.ContainsKey((int)id))
@@ -252,7 +252,7 @@ namespace TinyFrameWork
                                 ShowWindowForBack(backId);
                                 if (i == backData.backShowTargets.Count - 1)
                                 {
-                                    Debug.Log("change currentShownNormalWindow : " + backId);
+                                    Debuger.Log("##[UIFrameWork] Change currentShownNormalWindow : " + backId);
                                     {
                                         this.lastShownNormalWindow = this.curShownNormalWindow;
                                         this.curShownNormalWindow = GetGameWindow(backId); 

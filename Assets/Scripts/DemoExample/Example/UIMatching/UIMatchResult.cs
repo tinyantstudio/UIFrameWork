@@ -58,6 +58,7 @@ namespace TinyFrameWork
         {
             base.InitWindowData();
             this.windowData.showMode = UIWindowShowMode.NoNeedBack;
+            this.preWindowID = WindowID.WindowID_LevelDetail;
         }
 
         public void SetMatchResult(bool isWin, WindowID backWindowId)
@@ -83,8 +84,6 @@ namespace TinyFrameWork
 
         private void OnContineBtn(GameObject obj)
         {
-            // 返回到进入比赛界面
-            // 比赛入口不同
             UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
             UICenterMasterManager.GetInstance().ShowWindow(targetBackWindowId, null);
         }

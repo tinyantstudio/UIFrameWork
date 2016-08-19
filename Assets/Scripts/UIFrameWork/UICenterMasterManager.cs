@@ -49,7 +49,7 @@ namespace TinyFrameWork
             base.Awake();
             instance = this;
             InitWindowManager();
-            Debug.Log("UIManager is call awake.");
+            Debuger.Log("## UICenterMasterManager is call awake.");
         }
 
         public override void ShowWindow(WindowID id, ShowWindowData data = null)
@@ -78,7 +78,7 @@ namespace TinyFrameWork
             // Check the window control state
             if (!this.IsWindowInControl(id))
             {
-                Debug.Log("UIManager has no control power of " + id.ToString());
+                Debuger.Log("## UIManager has no control power of " + id.ToString());
                 return null;
             }
 
@@ -200,7 +200,6 @@ namespace TinyFrameWork
 
         /// <summary>
         /// Calculate right depth with windowType
-        /// Find next right depth
         /// </summary>
         /// <param name="baseWindow"></param>
         private void AdjustBaseWindowDepth(UIBaseWindow baseWindow)
@@ -210,17 +209,17 @@ namespace TinyFrameWork
             if (windowType == UIWindowType.Normal)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UINormalWindowRoot.gameObject, false) + 1, normalWindowDepth, int.MaxValue);
-                Debug.Log("[UIWindowType.Normal] maxDepth is " + needDepth + baseWindow.GetID);
+                Debuger.Log("[UIWindowType.Normal] maxDepth is " + needDepth + baseWindow.GetID);
             }
             else if (windowType == UIWindowType.PopUp)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UIPopUpWindowRoot.gameObject) + 1, popUpWindowDepth, int.MaxValue);
-                Debug.Log("[UIWindowType.PopUp] maxDepth is " + needDepth);
+                Debuger.Log("[UIWindowType.PopUp] maxDepth is " + needDepth);
             }
             else if (windowType == UIWindowType.Fixed)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UIFixedWidowRoot.gameObject) + 1, fixedWindowDepth, int.MaxValue);
-                Debug.Log("[UIWindowType.Fixed] max depth is " + needDepth);
+                Debuger.Log("[UIWindowType.Fixed] max depth is " + needDepth);
             }
             if(baseWindow.MinDepth != needDepth)
                 GameUtility.SetTargetMinPanel(baseWindow.gameObject, needDepth);
@@ -255,7 +254,7 @@ namespace TinyFrameWork
                         dealBackSequence = false;
                         HideWindow(curShownNormalWindow.GetID, null);
                     }
-                    Debug.Log("* current shown Normal Window is " + curShownNormalWindow.GetID);
+                    Debuger.Log("* current shown Normal Window is " + curShownNormalWindow.GetID);
                 }
 
                 if (shownWindows.Count > 0 && dealBackSequence)
@@ -361,7 +360,7 @@ namespace TinyFrameWork
                         }
                     }
                     else
-                        Debug.LogError("Back data hide target window is null!");
+                        Debuger.LogError("Back data hide target window is null!");
                 }
             }
         }

@@ -57,7 +57,7 @@ namespace TinyFrameWork
         {
             if (!IsWindowInControl(id))
             {
-                Debug.Log("UIRankManager has no control power of " + id.ToString());
+                Debuger.Log("UIRankManager has no control power of " + id.ToString());
                 return; 
             }
             if (shownWindows.ContainsKey((int)id))

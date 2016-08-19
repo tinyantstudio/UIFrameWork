@@ -13,6 +13,8 @@ public class DemoDriver : MonoBehaviour
         // MainMenu and TopBar so you can enter the really cool demo
         // Just click some game logic button to feel the frameWork's doing
 
+        // You can switch the Debuger state ON/OFF
+
         TinyFrameWork.UICenterMasterManager.GetInstance().ShowWindow(TinyFrameWork.WindowID.WindowID_MainMenu);
         TinyFrameWork.UICenterMasterManager.GetInstance().ShowWindow(TinyFrameWork.WindowID.WindowID_TopBar);
     }

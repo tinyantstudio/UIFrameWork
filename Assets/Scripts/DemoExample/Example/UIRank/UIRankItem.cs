@@ -34,8 +34,7 @@ namespace TinyFrameWork
             UIRankManager.GetInstance().ShowWindow(WindowID.WindowID_Rank_Detail);
             UIRankDetail detail = (UIRankDetail)UIRankManager.GetInstance().GetGameWindow(WindowID.WindowID_Rank_Detail);
             detail.UpdateDetailData(lbItemName.text, spIcon.spriteName);
-            Debug.Log("Item clicked.");
+            Debuger.Log("[UIRank] UIRank Item clicked.");
         }
     }
-
 }

@@ -103,7 +103,7 @@ Unity4.x和NGUI3.6.7
 2. Add a common Event system to this framework( Decoupled goal for communication between the window and your game logic)
 3. optimizing the code (such as GC problem, the code design and son on)
 4. thinking......
-5. Oh UGUI? Just change the window depth manager I think.
+5. Oh UGUI? Just change the window depth manager or something relevant to NGUI
 
 ## Updated
 

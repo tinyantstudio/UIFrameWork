@@ -11,16 +11,20 @@ namespace TinyFrameWork
     {
         protected UIPanel originPanel;
 
-        // 如果需要可以添加一个BoxCollider屏蔽事件
+        // Lock state
+        // When your window is in loading state
+        // You can check IsLock to enable some button click method and so on
+        // or you Add a very high depth collider instead
         private bool isLock = false;
+        // in showing
         protected bool isShown = false;
-
         // Current windowID
         protected WindowID windowID = WindowID.WindowID_Invaild;
 
         // if there is no BackSequece Data just check the preWindowID
         // Try open preWindowID
         protected WindowID preWindowID = WindowID.WindowID_Invaild;
+        // Core window data must be init before open the Window
         public WindowData windowData = new WindowData();
 
         // Return Logic when leaving current window

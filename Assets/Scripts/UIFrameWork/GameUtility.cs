@@ -10,7 +10,7 @@ namespace TinyFrameWork
     public class GameUtility
     {
         /// <summary>
-        /// 查找子节点
+        /// Find Deep child with name
         /// </summary>
         public static Transform FindDeepChild(GameObject _target, string _childName)
         {
@@ -29,7 +29,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 查找子节点脚本
+        /// Find component in Target Child
         /// </summary>
         public static T FindDeepChild<T>(GameObject _target, string _childName) where T : Component
         {
@@ -39,11 +39,6 @@ namespace TinyFrameWork
             return (T)((object)null);
         }
 
-
-        /// <summary>
-        /// 根据最小depth设置目标所有Panel深度，从小到大
-        /// </summary>
-        /// 
         private class CompareSubPanels : IComparer<UIPanel>
         {
             public int Compare(UIPanel left, UIPanel right)
@@ -52,6 +47,9 @@ namespace TinyFrameWork
             }
         }
 
+        /// <summary>
+        /// Set the mini depth to target with given Sorted list
+        /// </summary>
         public static void SetTargetMinPanel(GameObject obj, int depth)
         {
             List<UIPanel> lsPanels = GetPanelSorted(obj, true);
@@ -68,6 +66,7 @@ namespace TinyFrameWork
 
         /// <summary>
         /// 获得指定目标最大depth值
+        /// Get the target Max depth
         /// </summary>
         public static int GetMaxTargetDepth(GameObject obj, bool includeInactive = false)
         {
@@ -80,6 +79,7 @@ namespace TinyFrameWork
 
         /// <summary>
         /// 返回最大或者最小Depth界面
+        /// Get the max or min depth UIPanel
         /// </summary>
         public static GameObject GetPanelDepthMaxMin(GameObject target, bool maxDepth, bool includeInactive)
         {
@@ -108,6 +108,7 @@ namespace TinyFrameWork
 
         /// <summary>
         /// 添加子节点
+        /// Add child to target
         /// </summary>
         public static void AddChildToTarget(Transform target, Transform child)
         {
@@ -121,6 +122,7 @@ namespace TinyFrameWork
 
         /// <summary>
         /// 修改子节点Layer  NGUITools.SetLayer();
+        /// Change child layer
         /// </summary>
         public static void ChangeChildLayer(Transform t, int layer)
         {
@@ -135,6 +137,7 @@ namespace TinyFrameWork
 
         /// <summary>
         /// 给目标添加Collider背景
+        /// Add Collider Background for target
         /// </summary>
         public static void AddColliderBgToTarget(GameObject target, string maskName, UIAtlas altas, bool isTransparent)
         {
@@ -154,7 +157,7 @@ namespace TinyFrameWork
             Transform bg = GameUtility.FindDeepChild(target, "WindowColliderBg(Cool)");
             if (bg == null)
             {
-                // add sprite or widget to ColliderBg gameobject
+                // add sprite or widget to ColliderBg
                 UIWidget widget = null;
                 if (!isTransparent)
                     widget = NGUITools.AddSprite(windowBg.gameObject, altas, maskName);
@@ -165,6 +168,7 @@ namespace TinyFrameWork
                 bg = widget.transform;
                 
                 // fill the screen
+                // You can use the new Anchor system
                 UIStretch stretch = bg.gameObject.AddComponent<UIStretch>();
                 stretch.style = UIStretch.Style.Both;
                 // set relative size bigger

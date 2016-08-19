@@ -75,16 +75,20 @@ namespace TinyFrameWork
 
         protected override UIBaseWindow ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
         {
-            // 检测控制权限
+            // Check the window control state
             if (!this.IsWindowInControl(id))
             {
                 Debug.Log("UIManager has no control power of " + id.ToString());
                 return null;
             }
+
+            // If the window in shown list just return
             if (shownWindows.ContainsKey((int)id))
                 return null;
 
             UIBaseWindow baseWindow = GetGameWindow(id);
+
+            // If window not in scene start Instantiate new window to scene
             bool newAdded = false;
             if (!baseWindow)
             {
@@ -97,8 +101,11 @@ namespace TinyFrameWork
                     {
                         GameObject uiObject = (GameObject)GameObject.Instantiate(prefab);
                         NGUITools.SetActive(uiObject, true);
+
+                        // NOTE: You can add component to the window in the inspector
+                        // Or just AddComponent<UIxxxxWindow>() to the target
                         baseWindow = uiObject.GetComponent<UIBaseWindow>();
-                        // 需要动态添加对应的控制界面,prefab不用添加脚本
+                        // Get the window target root parent
                         Transform targetRoot = GetTargetRoot(baseWindow.windowData.windowType);
                         GameUtility.AddChildToTarget(targetRoot, baseWindow.gameObject.transform);
                         allWindows[(int)id] = baseWindow;
@@ -109,18 +116,18 @@ namespace TinyFrameWork
             if (baseWindow == null)
                 Debug.LogError("[window instance is null.]" + id.ToString());
 
-            // 重置界面(第一次添加，强制Reset)
+            // Call reset window when first load new window
+            // Or get forceResetWindow param
             if (newAdded || (showData != null && showData.forceResetWindow))
                 baseWindow.ResetWindow();
 
-            // 显示界面固定内容
-
-
-            // 导航系统数据更新
+            // refresh the navigation data
             RefreshBackSequenceData(baseWindow);
-            // 调整层级depth
+
+            // Adjust the window depth
             AdjustBaseWindowDepth(baseWindow);
-            // 添加背景Collider
+
+            // Add common background collider to window
             AddColliderBgForWindow(baseWindow);
             return baseWindow;
         }
@@ -156,10 +163,6 @@ namespace TinyFrameWork
                 GameUtility.AddChildToTarget(UIRoot, UINormalWindowRoot);
                 GameUtility.ChangeChildLayer(UINormalWindowRoot, UIRoot.gameObject.layer);
             }
-
-            // test for show two main window to start the demo.
-            ShowWindow(WindowID.WindowID_MainMenu);
-            ShowWindow(WindowID.WindowID_TopBar);
         }
 
         protected override void InitWindowControl()

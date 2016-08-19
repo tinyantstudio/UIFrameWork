@@ -60,10 +60,22 @@ Unity4.x和NGUI3.6.7
 
 1.事件系统(add event system to project.)
 
+2016.8.19
+1. 增加一些关键性注释，导航系统如何运作，为什么框架中存在多个UIManager，为什么UICenterCoreManager是中央管理器，而其他的UIXXManager是地方政府
+2. 整理框架结构，删除多余测试文件
+3. 修改了Dictionary<Enum,int>的装箱问题
+4. 增加一个DebugSystem,控制日志的关闭和开启方便调试和审查当前框架底层运转(Debuger.Log("");别使用Debug.Log("");)
 
 ****
 # English
-****
+***
+
+## How to Start
+
+1. Click the **MainStart.scene** in Scenes folder
+2. find GameObject **"!!!DemoDriver!!!"** in scene
+3. Toggle the **DebugSystem Enable Log**
+4. play the **"Game"** from one window to other window ,back to another window ......
 
 ## Important information
 1. Unity4.x和NGUI3.6.7(If you want using Unity3d 5.x version, just update the NGUI's right version too)
@@ -85,6 +97,14 @@ Unity4.x和NGUI3.6.7
 3. optimizing the code (such as GC problem, the code design and son on)
 4. thinking......
 5. Oh UGUI? Just change the window depth manager I think.
+
+## Updated
+**2016.8.19**
+1. Add some core comment for explain the navigation system(UICenterCoreManager is the KEY core manager)
+2. delete some unused file , clear the folder
+3. fixed Dictionary<Enum,int> boxing bug
+4. Add a new DebugSystem ,you can toggle the Console debug(use Debuger.Log("");Not the Debug.Log("");)
+5. rename all the example scenes for easy understanding
 
 ## Attention
 

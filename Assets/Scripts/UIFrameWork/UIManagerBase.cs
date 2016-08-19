@@ -17,14 +17,18 @@ namespace TinyFrameWork
         protected Dictionary<int, UIBaseWindow> allWindows;
         protected Dictionary<int, UIBaseWindow> shownWindows;
         protected Stack<BackWindowSequenceData> backSequence;
-        // 当前显示活跃界面
+        // current active base window
         protected UIBaseWindow curShownNormalWindow = null;
-        // 上一活跃界面
+        // last active base window
         protected UIBaseWindow lastShownNormalWindow = null;
 
         // 是否等待关闭结束
         // 开启:等待界面关闭结束,处理后续逻辑
         // 关闭:不等待界面关闭结束，处理后续逻辑
+
+        // Wait HideAnimation over
+        // True: wait the window hide animation over
+        // False: immediately call the complete animation finish the hide process
         protected bool isNeedWaitHideOver = false;
 
         // 管理的界面ID
@@ -38,6 +42,9 @@ namespace TinyFrameWork
                 return left.MinDepth - right.MinDepth;
             }
         }
+
+        // Cached list avoid (always new List<WindowID>)
+        private List<WindowID> listCached = new List<WindowID>();
 
         protected virtual void Awake()
         {
@@ -68,7 +75,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 初始化当前界面管理类
+        /// Init the window Manager
         /// </summary>
         public virtual void InitWindowManager()
         {
@@ -81,20 +88,18 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 显示界面
+        /// Show target Window
         /// </summary>
-        /// <param name="id">界面ID</param>
         public virtual void ShowWindow(WindowID id, ShowWindowData data = null)
         {
-
         }
 
         /// <summary>
-        /// Delay 显示界面
+        /// Delay to show target window
         /// </summary>
-        /// <param name="delayTime"> 延迟时间</param>
-        /// <param name="id"> 界面ID</param>
-        /// <param name="data">显示数据</param>
+        /// <param name="delayTime"> delayTime</param>
+        /// <param name="id"> WindowId</param>
+        /// <param name="data">show window data</param>
         public virtual void ShowWindowDelay(float delayTime, WindowID id, ShowWindowData data = null)
         {
             StartCoroutine(_ShowWindowDelay(delayTime, id, data));
@@ -111,9 +116,6 @@ namespace TinyFrameWork
             return null;
         }
 
-        /// <summary>
-        /// 显示界面，方面在现实之前做其他操作
-        /// </summary>
         protected virtual void RealShowWindow(UIBaseWindow baseWindow, WindowID id)
         {
             baseWindow.ShowWindow();
@@ -122,15 +124,18 @@ namespace TinyFrameWork
             {
                 // 改变当前显示Normal窗口
                 lastShownNormalWindow = curShownNormalWindow;
-                curShownNormalWindow = baseWindow; 
+                curShownNormalWindow = baseWindow;
             }
         }
 
-        protected void ShowWindowForBack(WindowID id)
+        /// <summary>
+        /// Navigation reShow target windows
+        /// </summary>
+        protected void ShowWindowForNavigation(WindowID id)
         {
             if (!this.IsWindowInControl(id))
             {
-                Debuger.Log("UIManager has no control power of " + id.ToString());
+                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
             if (shownWindows.ContainsKey((int)id))
@@ -144,17 +149,19 @@ namespace TinyFrameWork
         /// <summary>
         /// Hide target window
         /// </summary>
-        /// <param name="id"></param>
         public virtual void HideWindow(WindowID id, Action onCompleted = null)
         {
             CheckDirectlyHide(id, onCompleted);
         }
 
+        /// <summary>
+        /// Check condition to hide the target window
+        /// </summary>
         protected virtual void CheckDirectlyHide(WindowID id, Action onComplete)
         {
             if (!IsWindowInControl(id))
             {
-                Debug.Log("UIRankManager has no control power of " + id.ToString());
+                Debug.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
             if (!shownWindows.ContainsKey((int)id))
@@ -189,7 +196,7 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// 返回逻辑
+        /// Each UI manager's return window logic
         /// </summary>
         public virtual bool ReturnWindow()
         {
@@ -227,7 +234,7 @@ namespace TinyFrameWork
                 {
                     HideWindow(curShownNormalWindow.GetID, delegate
                     {
-                        ShowWindow(preWindowId, null); 
+                        ShowWindow(preWindowId, null);
                     });
                 }
                 else
@@ -249,13 +256,13 @@ namespace TinyFrameWork
                             for (int i = 0; i < backData.backShowTargets.Count; i++)
                             {
                                 WindowID backId = backData.backShowTargets[i];
-                                ShowWindowForBack(backId);
+                                ShowWindowForNavigation(backId);
                                 if (i == backData.backShowTargets.Count - 1)
                                 {
                                     Debuger.Log("##[UIFrameWork] Change currentShownNormalWindow : " + backId);
                                     {
                                         this.lastShownNormalWindow = this.curShownNormalWindow;
-                                        this.curShownNormalWindow = GetGameWindow(backId); 
+                                        this.curShownNormalWindow = GetGameWindow(backId);
                                     }
                                 }
                             }
@@ -297,26 +304,21 @@ namespace TinyFrameWork
 
         protected void HideAllShownWindow(bool includeFixed = true)
         {
-            List<WindowID> removedKey = null;
-
+            listCached.Clear();
             if (!includeFixed)
             {
                 foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                 {
                     if (window.Value.windowData.windowType == UIWindowType.Fixed)
                         continue;
-
-                    if (removedKey == null)
-                        removedKey = new List<WindowID>();
-
-                    removedKey.Add((WindowID)window.Key);
+                    listCached.Add((WindowID)window.Key);
                     window.Value.HideWindowDirectly();
                 }
 
-                if (removedKey != null)
+                if (listCached.Count > 0)
                 {
-                    for (int i = 0; i < removedKey.Count; i++)
-                        shownWindows.Remove((int)removedKey[i]);
+                    for (int i = 0; i < listCached.Count; i++)
+                        shownWindows.Remove((int)listCached[i]);
                 }
             }
             else

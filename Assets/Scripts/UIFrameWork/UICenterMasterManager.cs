@@ -30,9 +30,9 @@ namespace TinyFrameWork
         public Transform UIFixedWidowRoot;
 
         // Each Type window start Depth
-        private int fixedWindowDepth = 100;     
-        private int popUpWindowDepth = 150;     
-        private int normalWindowDepth = 2;       
+        private int fixedWindowDepth = 100;
+        private int popUpWindowDepth = 150;
+        private int normalWindowDepth = 2;
 
         // Atlas reference
         // Mask Atlas for sprite mask(Common Collider window background)
@@ -186,6 +186,9 @@ namespace TinyFrameWork
 
         /// <summary>
         /// Return logic 
+        /// When return back navigation check current window's Return Logic
+        /// If true just execute the return logic
+        /// If false just immediately enter the RealReturnWindow() logic
         /// </summary>
         public override bool ReturnWindow()
         {
@@ -221,7 +224,7 @@ namespace TinyFrameWork
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UIFixedWidowRoot.gameObject) + 1, fixedWindowDepth, int.MaxValue);
                 Debuger.Log("[UIWindowType.Fixed] max depth is " + needDepth);
             }
-            if(baseWindow.MinDepth != needDepth)
+            if (baseWindow.MinDepth != needDepth)
                 GameUtility.SetTargetMinPanel(baseWindow.gameObject, needDepth);
             baseWindow.MinDepth = needDepth;
         }
@@ -234,7 +237,6 @@ namespace TinyFrameWork
             UIWindowColliderMode colliderMode = baseWindow.windowData.colliderMode;
             if (colliderMode == UIWindowColliderMode.None)
                 return;
-
             if (colliderMode == UIWindowColliderMode.Normal)
                 GameUtility.AddColliderBgToTarget(baseWindow.gameObject, "Mask02", maskAtlas, true);
             if (colliderMode == UIWindowColliderMode.WithBg)
@@ -254,7 +256,7 @@ namespace TinyFrameWork
                         dealBackSequence = false;
                         HideWindow(curShownNormalWindow.GetID, null);
                     }
-                    Debuger.Log("* current shown Normal Window is " + curShownNormalWindow.GetID);
+                    Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.GetID);
                 }
 
                 if (shownWindows.Count > 0 && dealBackSequence)
@@ -299,7 +301,7 @@ namespace TinyFrameWork
                         // 按照层级顺序存入显示List中 
                         // Add to return show target list
                         sortByMinDepth.Sort(new CompareBaseWindow());
-                        for (int i = 0; i < sortByMinDepth.Count;i++ )
+                        for (int i = 0; i < sortByMinDepth.Count; i++)
                         {
                             WindowID pushWindowId = sortByMinDepth[i].GetID;
                             newPushList.Add(pushWindowId);
@@ -331,10 +333,35 @@ namespace TinyFrameWork
                     if (backData.hideTargetWindow != null)
                     {
                         // 栈顶不是即将显示界面(导航序列被打断)
+                        // 如果当前导航队列顶部元素和当前显示的界面一致，表示和当前的导航数衔接上，后续导航直接使用导航数据
+                        // 不一致则表示，导航已经失效，下次点击返回按钮，我们直接根据window的preWindowId确定跳转到哪一个界面
+
+                        // 如果测试：进入到demo的 关卡详情，点击失败按钮，然后你可以选择从游戏中跳转到哪一个界面，查看导航输出信息
+                        // 可以知道是否破坏了导航数据
+
+                        // if the navigation stack top window not equals to current show window just clear the navigation stack
+                        // check whether the navigation is broken
+
+                        // Example:(we from mainmenu to uilevelwindow to uileveldetailwindow)
+                        // UILevelDetailWindow <- UILevelWindow <- UIMainMenu   (current navigation stack top element is UILevelDetailWindow)
+
+                        // click the GotoGame in UILevelDetailWindow to enter the real Game
+
+                        // 1. Exit game we want to enter UILevelDetailWindow(OK, the same as navigation stack top UILevelDetailWindow) so we not break the navigation
+                        // when we enter the UILevelDetailWindow our system will follow the navigation system
+
+                        // 2. Exit game we want to enter UISkillWindow(OK, not the same as navigation stack top UILevelDetailWindow)so we break the navigation
+                        // reset the navigation data 
+                        // when we click return Button in the UISkillWindow we will find UISkillWindow's preWindowId to navigation because our navigation data is empty
+                        // we should use preWindowId for navigating to next window
+
+                        // HOW to Test
+                        // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
+                         
                         if (backData.hideTargetWindow.GetID != baseWindow.GetID)
                         {
-                            Debuger.Log("[**Need to clear all back window sequence data**].");
-                            Debuger.Log("[hide target window and show window id is " + backData.hideTargetWindow.GetID + " != " + baseWindow.GetID);
+                            Debuger.Log("## UICenterMasterManager : Need to clear all back window sequence data ##");
+                            Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.GetID + " != " + baseWindow.GetID);
                             backSequence.Clear();
                         }
                         else
@@ -343,19 +370,19 @@ namespace TinyFrameWork
                             if (windowData.showMode == UIWindowShowMode.NeedBack
                                 && backData.backShowTargets != null)
                             {
-                                    for (int i = 0; i < backData.backShowTargets.Count; i++)
+                                for (int i = 0; i < backData.backShowTargets.Count; i++)
+                                {
+                                    WindowID backId = backData.backShowTargets[i];
+                                    // 保证最上面为currentShownWindow
+                                    if (i == backData.backShowTargets.Count - 1)
                                     {
-                                        WindowID backId = backData.backShowTargets[i];
-                                        // 保证最上面为currentShownWindow
-                                        if (i == backData.backShowTargets.Count - 1)
-                                        {
-                                            Debug.Log("change currentShownNormalWindow : " + backId);
-                                            // 改变当前活跃Normal窗口
-                                            this.lastShownNormalWindow = this.curShownNormalWindow;
-                                            this.curShownNormalWindow = GetGameWindow(backId);                                            
-                                        }
-                                        ShowWindowForBack(backId);
+                                        Debug.Log("change currentShownNormalWindow : " + backId);
+                                        // 改变当前活跃Normal窗口
+                                        this.lastShownNormalWindow = this.curShownNormalWindow;
+                                        this.curShownNormalWindow = GetGameWindow(backId);
                                     }
+                                    ShowWindowForNavigation(backId);
+                                }
                             }
                         }
                     }

@@ -76,7 +76,7 @@ namespace TinyFrameWork
             // UIRankManager.GetInstance().ShowWindow(WindowID.WindowID_Rank_OwnDetail);
             EnterAnimation(delegate
             {
-                Debuger.Log("UIRank window's enter animation is over.");
+                Debuger.Log("## UIRank window's enter animation is over.");
             });
 
             // test
@@ -89,7 +89,7 @@ namespace TinyFrameWork
             UIRankManager.GetInstance().HideWindow(WindowID.WindowID_Rank_OwnDetail, null);
             QuitAnimation(delegate
             {
-                Debuger.Log("UIRank window's Hide animation is over");
+                Debuger.Log("## UIRank window's Hide animation is over");
                 NGUITools.SetActive(this.gameObject, false);
                 if (onComplete != null)
                     onComplete();

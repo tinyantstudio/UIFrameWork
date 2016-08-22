@@ -32,7 +32,9 @@ namespace TinyFrameWork
         protected bool isNeedWaitHideOver = false;
 
         // 管理的界面ID
-        protected int managedWindowId = 0;
+        // protected int managedWindowId = 0;
+        // Managed windowIds
+        protected List<int> managedWindowIds = new List<int>();
 
         // 界面按MinDepth排序
         protected class CompareBaseWindow : IComparer<UIBaseWindow>
@@ -332,15 +334,17 @@ namespace TinyFrameWork
         // check window control
         protected bool IsWindowInControl(WindowID id)
         {
-            int targetId = 1 << ((int)id);
-            return ((managedWindowId & targetId) == targetId);
+            //int targetId = 1 << ((int)id);
+            //return ((managedWindowId & targetId) == targetId);
+            return this.managedWindowIds.Contains((int)id);
         }
 
         // add window to target manager
         protected void AddWindowInControl(WindowID id)
         {
-            int targetId = 1 << ((int)id);
-            managedWindowId |= targetId;
+            //int targetId = 1 << ((int)id);
+            //managedWindowId |= targetId;
+            this.managedWindowIds.Add((int)id);
         }
 
         // init the Manager's control window

@@ -167,7 +167,7 @@ namespace TinyFrameWork
 
         protected override void InitWindowControl()
         {
-            this.managedWindowId = 0;
+            managedWindowIds.Clear();
             AddWindowInControl(WindowID.WindowID_Level);
             AddWindowInControl(WindowID.WindowID_Rank);
             AddWindowInControl(WindowID.WindowID_MainMenu);
@@ -357,7 +357,7 @@ namespace TinyFrameWork
 
                         // HOW to Test
                         // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
-                         
+
                         if (backData.hideTargetWindow.GetID != baseWindow.GetID)
                         {
                             Debuger.Log("## UICenterMasterManager : Need to clear all back window sequence data ##");
@@ -451,4 +451,3 @@ namespace TinyFrameWork
         }
     }
 }
-

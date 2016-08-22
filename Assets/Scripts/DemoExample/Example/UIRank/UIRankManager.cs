@@ -48,7 +48,7 @@ namespace TinyFrameWork
 
         protected override void InitWindowControl()
         {
-            this.managedWindowId = 0;
+            this.managedWindowIds.Clear();
             AddWindowInControl(WindowID.WindowID_Rank_Detail);
             AddWindowInControl(WindowID.WindowID_Rank_OwnDetail);
         }

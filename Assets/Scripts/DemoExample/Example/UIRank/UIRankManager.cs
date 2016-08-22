@@ -65,7 +65,8 @@ namespace TinyFrameWork
             if (allWindows.ContainsKey((int)id))
             {
                 UIBaseWindow baseWindow = allWindows[(int)id];
-                if (baseWindow.windowData.showMode == UIWindowShowMode.NeedBack)
+                // if (baseWindow.windowData.showMode == UIWindowShowMode.NeedBack)
+                if(baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
                 {
                     BackWindowSequenceData backData = new BackWindowSequenceData();
                     backData.hideTargetWindow = baseWindow;

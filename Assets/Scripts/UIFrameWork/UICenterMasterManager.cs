@@ -251,7 +251,8 @@ namespace TinyFrameWork
                 bool dealBackSequence = true;
                 if (curShownNormalWindow != null)
                 {
-                    if (curShownNormalWindow.windowData.showMode == UIWindowShowMode.NoNeedBack)
+                    // if (curShownNormalWindow.windowData.showMode == UIWindowShowMode.NoNeedBack)
+                    if (curShownNormalWindow.windowData.navigationMode == UIWindowNavigationMode.IgnoreNavigation)
                     {
                         dealBackSequence = false;
                         HideWindow(curShownNormalWindow.GetID, null);
@@ -270,7 +271,11 @@ namespace TinyFrameWork
                     foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                     {
                         bool needToHide = true;
-                        if (windowData.showMode == UIWindowShowMode.NeedBack
+                        //if (windowData.showMode == UIWindowShowMode.NeedBack
+                        //    || window.Value.windowData.windowType == UIWindowType.Fixed)
+                        //    needToHide = false;
+
+                        if (windowData.showMode == UIWindowShowMode.DoNothing
                             || window.Value.windowData.windowType == UIWindowType.Fixed)
                             needToHide = false;
 
@@ -313,7 +318,8 @@ namespace TinyFrameWork
                     }
                 }
             }
-            else if (windowData.showMode == UIWindowShowMode.NoNeedBack)
+            // else if (windowData.showMode == UIWindowShowMode.NoNeedBack)
+            else if (windowData.showMode == UIWindowShowMode.HideOtherWindow)
                 HideAllShownWindow(true);
 
             CheckBackSequenceData(baseWindow);
@@ -367,7 +373,9 @@ namespace TinyFrameWork
                         else
                         {
                             // NeedBack类型要将backShowTargets界面显示
-                            if (windowData.showMode == UIWindowShowMode.NeedBack
+                            //if (windowData.showMode == UIWindowShowMode.NeedBack
+                            //    && backData.backShowTargets != null)
+                            if (windowData.navigationMode == UIWindowNavigationMode.NeedAdded
                                 && backData.backShowTargets != null)
                             {
                                 for (int i = 0; i < backData.backShowTargets.Count; i++)

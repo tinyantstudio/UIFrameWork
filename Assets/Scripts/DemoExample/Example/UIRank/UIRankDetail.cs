@@ -47,7 +47,9 @@ namespace TinyFrameWork
         protected override void InitWindowData()
         {
             base.InitWindowData();
-            windowData.showMode = UIWindowShowMode.NeedBack;
+            // windowData.showMode = UIWindowShowMode.NeedBack;
+            windowData.showMode = UIWindowShowMode.DoNothing;
+            windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
         public override void ShowWindow()
         {

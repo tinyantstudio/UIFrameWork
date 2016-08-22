@@ -73,13 +73,14 @@ namespace TinyFrameWork
         {
             get
             {
-                if (this.windowData.windowType == UIWindowType.PopUp)
-                    return false;
-                if (this.windowData.windowType == UIWindowType.Fixed)
-                    return false;
-                if (this.windowData.showMode == UIWindowShowMode.NoNeedBack)
-                    return false;
-                return true;
+                //if (this.windowData.windowType == UIWindowType.PopUp)
+                //    return false;
+                //if (this.windowData.windowType == UIWindowType.Fixed)
+                //    return false;
+                //if (this.windowData.showMode == UIWindowShowMode.NoNeedBack)
+                //    return false;
+                return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
+                // return true;
             }
         }
 
@@ -93,10 +94,11 @@ namespace TinyFrameWork
         {
             get
             {
-                if (this.windowData.showMode == UIWindowShowMode.HideOther
-                    || this.windowData.showMode == UIWindowShowMode.NeedBack)
-                    return true;
-                return false;
+                //if (this.windowData.showMode == UIWindowShowMode.HideOther
+                //    || this.windowData.showMode == UIWindowShowMode.NeedBack)
+                //    return true;
+                return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
+                // return false;
             }
         }
 

@@ -25,6 +25,12 @@ namespace TinyFrameWork
             UIEventListener.Get(btnClose).onClick = OnBtnSwitch;
         }
 
+        protected override void InitWindowData()
+        {
+            base.InitWindowData();
+
+        }
+
         public override void ResetWindow()
         {
             isShown = false;

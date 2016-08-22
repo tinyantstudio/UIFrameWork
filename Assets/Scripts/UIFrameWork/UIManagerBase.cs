@@ -7,9 +7,9 @@ namespace TinyFrameWork
 {
     /// <summary>
     /// IUIManager
-    ///     界面管理基类
-    ///     管理子界面
-    ///          
+    ///     Base UIManager
+    ///     Manager some sub window(UIRankManager for UIRankDetailWindow and UIRankOwnDetailWindow)
+    ///     NOTE:UICenterMasterManager is the Center key master for manager all parent window(UIRank UISkill and so on)
     ///
     /// </summary>
     public abstract class UIManagerBase : MonoBehaviour
@@ -37,6 +37,7 @@ namespace TinyFrameWork
         protected List<int> managedWindowIds = new List<int>();
 
         // 界面按MinDepth排序
+        // Compare with panel depth
         protected class CompareBaseWindow : IComparer<UIBaseWindow>
         {
             public int Compare(UIBaseWindow left, UIBaseWindow right)
@@ -45,7 +46,7 @@ namespace TinyFrameWork
             }
         }
 
-        // Cached list avoid (always new List<WindowID>)
+        // Cached list avoid (avoid always new List<WindowID>)
         private List<WindowID> listCached = new List<WindowID>();
 
         protected virtual void Awake()

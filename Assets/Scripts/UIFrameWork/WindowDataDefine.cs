@@ -19,6 +19,7 @@ namespace TinyFrameWork
         public UIWindowType windowType = UIWindowType.Normal;
         public UIWindowShowMode showMode = UIWindowShowMode.DoNothing;
         public UIWindowColliderMode colliderMode = UIWindowColliderMode.None;
+        public UIWindowNavigationMode navigationMode = UIWindowNavigationMode.IgnoreNavigation;
     }
 
     public class BackWindowSequenceData

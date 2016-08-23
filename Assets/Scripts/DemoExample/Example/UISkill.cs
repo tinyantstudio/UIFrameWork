@@ -36,7 +36,7 @@ namespace TinyFrameWork
             this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             NGUITools.SetActive(this.gameObject, true);
             IsLock = true;

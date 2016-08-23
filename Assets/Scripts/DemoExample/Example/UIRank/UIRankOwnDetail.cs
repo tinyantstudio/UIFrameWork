@@ -37,7 +37,7 @@ namespace TinyFrameWork
             ResetAnimation();
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             isShown = true;
             EnterAnimation(delegate 
@@ -89,7 +89,6 @@ namespace TinyFrameWork
             else
                 UIRankManager.GetInstance().ShowWindow(windowID, null);
         }
-
-    } 
+    }
 }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
@@ -11,6 +12,11 @@ namespace TinyFrameWork
         private GameObject btnStart;
         private TweenAlpha twAlpha;
 
+        private UILabel lbLevelDes;
+        private UILabel lbLevelName;
+
+        private List<GameObject> listStarts = new List<GameObject>();
+
         public override void InitWindowOnAwake()
         {
             this.windowID = WindowID.WindowID_LevelDetail;
@@ -18,6 +24,13 @@ namespace TinyFrameWork
             InitWindowData();
 
             btnStart = GameUtility.FindDeepChild(this.gameObject, "LevelDetailRight/BtnEnter").gameObject;
+            this.lbLevelDes = GameUtility.FindDeepChild<UILabel>(this.gameObject, "LevelDetailRight/Content/des");
+            this.lbLevelName = GameUtility.FindDeepChild<UILabel>(this.gameObject, "levelName");
+
+            this.listStarts.Add(GameUtility.FindDeepChild(this.gameObject, "Stars/star01").gameObject);
+            this.listStarts.Add(GameUtility.FindDeepChild(this.gameObject, "Stars/star02").gameObject);
+            this.listStarts.Add(GameUtility.FindDeepChild(this.gameObject, "Stars/star03").gameObject);
+
             twAlpha = this.gameObject.GetComponent<TweenAlpha>();
 
             UIEventListener.Get(btnStart).onClick = delegate
@@ -36,20 +49,29 @@ namespace TinyFrameWork
         {
             base.InitWindowData();
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
-            // this.windowData.showMode = UIWindowShowMode.HideOther;
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             ResetAnimation();
-            base.ShowWindow();
+            base.ShowWindow(contextData);
             IsLock = true;
             EnterAnimation(delegate
             {
                 IsLock = false;
             });
+
+            ContextDataLevelDetail detail = contextData as ContextDataLevelDetail;
+            if (detail != null)
+            {
+                this.lbLevelDes.text = detail.levelDescription;
+                this.lbLevelName.text = detail.levelName;
+
+                for (int i = 0; i < listStarts.Count; i++)
+                    this.listStarts[i].SetActive(i + 1 <= detail.starCount);
+            }
         }
 
         public override void HideWindow(System.Action onCompleteHide = null)

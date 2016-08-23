@@ -32,14 +32,15 @@ namespace TinyFrameWork
     /// 1. HideOther (close or hide other window when open HideOther window add to navigation sequence data)
     /// 2. NeedBack (open window don't close other window add to navigation sequence data)
     /// 3. NoNeedBack (open window close other window no need add to navigation sequence data)
-    /// 
+    /// 4. DoNoting (no close other window and not communication with navigation)
+
     /// 8.22 Divide UIWindowShowMode to UIWindowShowMode and new UIWindowNavigationMode
     /// ShowMode control the window show mode
     /// NavigationMode control the navigation system
     /// </summary>
     public enum UIWindowShowMode
     {
-        //DoNothing,
+        //DoNothing,     // Really do nothing
         //HideOther,     // 打开界面关闭其他界面
         //NeedBack,      // 打开界面不关闭其他界面
         //NoNeedBack,    // 打开界面关闭其他界面，不加入导航队列

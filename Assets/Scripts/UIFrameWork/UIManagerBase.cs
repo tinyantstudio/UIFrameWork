@@ -32,7 +32,6 @@ namespace TinyFrameWork
         protected bool isNeedWaitHideOver = false;
 
         // 管理的界面ID
-        // protected int managedWindowId = 0;
         // Managed windowIds
         protected List<int> managedWindowIds = new List<int>();
 
@@ -102,16 +101,17 @@ namespace TinyFrameWork
         /// </summary>
         /// <param name="delayTime"> delayTime</param>
         /// <param name="id"> WindowId</param>
-        /// <param name="data">show window data</param>
-        public virtual void ShowWindowDelay(float delayTime, WindowID id, ShowWindowData data = null)
+        /// <param name="showData">show window data</param>
+        public virtual void ShowWindowDelay(float delayTime, WindowID id, ShowWindowData showData = null)
         {
-            StartCoroutine(_ShowWindowDelay(delayTime, id, data));
+            StopAllCoroutines();
+            StartCoroutine(_ShowWindowDelay(delayTime, id, showData));
         }
 
-        private IEnumerator _ShowWindowDelay(float delayTime, WindowID id, ShowWindowData data = null)
+        private IEnumerator _ShowWindowDelay(float delayTime, WindowID id, ShowWindowData showData = null)
         {
             yield return new WaitForSeconds(delayTime);
-            ShowWindow(id, data);
+            ShowWindow(id, showData);
         }
 
         protected virtual UIBaseWindow ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
@@ -119,9 +119,10 @@ namespace TinyFrameWork
             return null;
         }
 
-        protected virtual void RealShowWindow(UIBaseWindow baseWindow, WindowID id)
+        protected virtual void RealShowWindow(UIBaseWindow baseWindow, WindowID id, ShowWindowData showData = null)
         {
-            baseWindow.ShowWindow();
+            BaseWindowContextData contextData = showData == null ? null : showData.contextData;
+            baseWindow.ShowWindow(contextData);
             shownWindows[(int)id] = baseWindow;
             if (baseWindow.windowData.windowType == UIWindowType.Normal)
             {
@@ -335,16 +336,12 @@ namespace TinyFrameWork
         // check window control
         protected bool IsWindowInControl(WindowID id)
         {
-            //int targetId = 1 << ((int)id);
-            //return ((managedWindowId & targetId) == targetId);
             return this.managedWindowIds.Contains((int)id);
         }
 
         // add window to target manager
         protected void AddWindowInControl(WindowID id)
         {
-            //int targetId = 1 << ((int)id);
-            //managedWindowId |= targetId;
             this.managedWindowIds.Add((int)id);
         }
 

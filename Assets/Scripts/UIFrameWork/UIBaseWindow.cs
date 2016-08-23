@@ -25,7 +25,7 @@ namespace TinyFrameWork
         // Try open preWindowID
         protected WindowID preWindowID = WindowID.WindowID_Invaild;
         // Core window data must be init before open the Window
-        public WindowData windowData = new WindowData();
+        public WindowCoreData windowData = new WindowCoreData();
 
         // Return Logic when leaving current window
         private event BoolDelegate returnPreLogic = null;
@@ -137,7 +137,7 @@ namespace TinyFrameWork
         {
         }
 
-        public virtual void ShowWindow()
+        public virtual void ShowWindow(BaseWindowContextData contextData = null)
         {
             isShown = true;
             NGUITools.SetActive(this.gameObject, true);

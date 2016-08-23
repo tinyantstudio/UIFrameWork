@@ -5,7 +5,7 @@ using System;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// RankWindow子界面
+    /// Rank system sub detail window
     /// </summary>
     public class UIRankDetail : UIBaseWindow, IWindowAnimation
     {
@@ -47,11 +47,10 @@ namespace TinyFrameWork
         protected override void InitWindowData()
         {
             base.InitWindowData();
-            // windowData.showMode = UIWindowShowMode.NeedBack;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             IsLock = true;
             EnterAnimation(delegate

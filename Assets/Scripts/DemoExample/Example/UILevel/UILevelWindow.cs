@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
     /// <summary>
-    /// 关卡界面
+    /// Level system window
     /// </summary>
     public class UILevelWindow : UIBaseWindow, IWindowAnimation
     {
@@ -34,7 +35,7 @@ namespace TinyFrameWork
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData levelContextData)
         {
             realReturnToMainMenu = false;
             ResetAnimation();
@@ -48,13 +49,14 @@ namespace TinyFrameWork
             });
         }
 
+        private List<string> levelNames = new List<string>() { "SkyBattle", "SkyCool", "SkyWorld", "SpaceWar", "ComeOn", "HellFight", "NewBattle", "King" };
         /// <summary>
         /// Test fill level items
         /// </summary>
         private void FillLevelItems()
         {
             int totalItemsCount = trsLevelItemsParent.childCount;
-            for (int i = 0; i < totalItemsCount;i++ )
+            for (int i = 0; i < totalItemsCount; i++)
             {
                 Transform trs = trsLevelItemsParent.GetChild(i);
 
@@ -62,7 +64,8 @@ namespace TinyFrameWork
                     continue;
                 GameObject item = NGUITools.AddChild(trs.gameObject, levelItem);
                 UILevelItem itemScript = item.GetComponent<UILevelItem>();
-                itemScript.SetData("Level" + trs.name);
+                // itemScript.SetData("Level" + trs.name);
+                itemScript.SetData(this.levelNames[i], Random.Range(0, 4));
             }
         }
 

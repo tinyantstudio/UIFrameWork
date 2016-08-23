@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
@@ -16,14 +17,14 @@ namespace TinyFrameWork
 
         private TweenPosition[] twPositions;
         private bool switchFlag = true;
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             this.gameObject.SetActive(true);
         }
 
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_MainMenu; 
+            this.windowID = WindowID.WindowID_MainMenu;
             base.InitWindowOnAwake();
             InitWindowData();
 
@@ -34,7 +35,7 @@ namespace TinyFrameWork
             btnSwitch = GameUtility.FindDeepChild(this.gameObject, "BottomRight/Btn_Switch").gameObject;
             btnSkill = GameUtility.FindDeepChild(this.gameObject, "LeftBottom/Btns/Btn_Skill").gameObject;
             lbSwitch = GameUtility.FindDeepChild<UILabel>(this.gameObject, "BottomRight/Btn_Switch/Label");
-            
+
             twPositions[0] = btnInfor.GetComponent<TweenPosition>();
             twPositions[1] = btnRank.GetComponent<TweenPosition>();
             twPositions[2] = btnLevel.GetComponent<TweenPosition>();
@@ -44,6 +45,24 @@ namespace TinyFrameWork
             {
                 ShowWindowData showData = new ShowWindowData();
                 showData.forceResetWindow = true;
+
+                string[] headIcons = new string[] { "Rambo", "Angry", "Smile", "Laugh", "Dead", "Frown", "Annoyed" };
+
+                // fill the rank data
+                ContextDataRank contextData = new ContextDataRank();
+                contextData.listRankItemDatas = new List<RankItemData>();
+
+                // rank list
+                for (int i = 0; i < 10; i++)
+                {
+                    RankItemData newData = new RankItemData();
+                    newData.playerName = headIcons[UnityEngine.Random.Range(0, headIcons.Length)];
+                    newData.headIcon = "Emoticon - " + newData.playerName;
+                    newData.playerName = "Mr." + newData.playerName;
+                    newData.playerDescription = string.Format("I'm {0}", newData.playerName);
+                    contextData.listRankItemDatas.Add(newData);
+                }
+                showData.contextData = contextData;
                 UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Rank, showData);
             };
 
@@ -76,15 +95,15 @@ namespace TinyFrameWork
         public void HideBtns()
         {
             lbSwitch.text = "Off";
-            for (int i = 0; i < twPositions.Length;i++ )
+            for (int i = 0; i < twPositions.Length; i++)
                 twPositions[i].PlayForward();
         }
 
         protected override void InitWindowData()
         {
             base.InitWindowData();
-            this.windowData.isStartWindow = true;
+            this.windowData.forceClearNavigation = true;
         }
-    } 
+    }
 }
 

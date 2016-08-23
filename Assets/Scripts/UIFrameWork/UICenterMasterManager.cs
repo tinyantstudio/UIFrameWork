@@ -52,26 +52,24 @@ namespace TinyFrameWork
             Debuger.Log("## UICenterMasterManager is call awake.");
         }
 
-        public override void ShowWindow(WindowID id, ShowWindowData data = null)
+        public override void ShowWindow(WindowID id, ShowWindowData showData = null)
         {
-            UIBaseWindow baseWindow = ReadyToShowBaseWindow(id, data);
+            UIBaseWindow baseWindow = ReadyToShowBaseWindow(id, showData);
             if (baseWindow != null)
             {
-                RealShowWindow(baseWindow, id);
-
+                RealShowWindow(baseWindow, id, showData);
                 // 是否清空当前导航信息(回到主菜单)
-                // If target window is mark as StartWindow force clear all the navigation sequence data
-                if (baseWindow.windowData.isStartWindow)
+                // If target window is mark as force clear all the navigation sequence data
+                if (baseWindow.windowData.forceClearNavigation)
                 {
                     Debuger.Log("[Enter the start window, reset the backSequenceData for the navigation system.]");
                     ClearBackSequence();
                 }
 
-                if (data != null && data.forceClearBackSeqData)
+                if (showData != null && showData.forceClearBackSeqData)
                     ClearBackSequence();
             }
         }
-
 
         protected override UIBaseWindow ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
         {
@@ -245,7 +243,7 @@ namespace TinyFrameWork
 
         public void RefreshBackSequenceData(UIBaseWindow baseWindow)
         {
-            WindowData windowData = baseWindow.windowData;
+            WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
                 bool dealBackSequence = true;
@@ -285,11 +283,11 @@ namespace TinyFrameWork
                                 removedKey = new List<WindowID>();
                             removedKey.Add((WindowID)window.Key);
 
-                            // HideOther Type(hide all window directly)
                             window.Value.HideWindowDirectly();
                         }
 
                         // 将Window添加到BackSequence中
+                        // Add to navigation sequence data
                         if (window.Value.CanAddedToBackSeq)
                             sortByMinDepth.Add(window.Value);
                     }
@@ -330,7 +328,7 @@ namespace TinyFrameWork
             // 如果当前存在BackSequence数据
             // 1.栈顶界面不是当前要显示的界面需要清空BackSequence(导航被重置)
             // 2.栈顶界面是当前显示界面,如果类型为(NeedBack)则需要显示所有backShowTargets界面
-            WindowData windowData = baseWindow.windowData;
+            WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
                 if (backSequence.Count > 0)

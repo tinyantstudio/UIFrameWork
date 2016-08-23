@@ -19,9 +19,9 @@ namespace TinyFrameWork
             instance = this;
         }
         /// <summary>
-        /// 初始化RankWindow界面管理类
-        /// 1.查找子界面
-        /// 2.初始化子界面
+        /// Init the rank sub window Manager
+        /// 1. Find the managed sub window
+        /// 2. init the managed sub window
         /// </summary>
         public override void InitWindowManager()
         {
@@ -29,7 +29,7 @@ namespace TinyFrameWork
             InitWindowControl();
             isNeedWaitHideOver = true;
 
-            // UIRankDetail子界面
+            // UIRankDetail sub window
             GameObject objRankDetail = GameUtility.FindDeepChild(this.gameObject, "DetailWindowContainer").gameObject;
             UIRankDetail rankDetailScript = objRankDetail.GetComponent<UIRankDetail>();
             if (rankDetailScript == null)
@@ -37,7 +37,7 @@ namespace TinyFrameWork
 
             allWindows[(int)WindowID.WindowID_Rank_Detail] = rankDetailScript;
 
-            // UIRankOwnDetail子界面
+            // UIRankOwnDetail sub window
             GameObject objRankOwnDetail = GameUtility.FindDeepChild(this.gameObject, "OwnDetailWindow").gameObject;
             UIRankOwnDetail rankOwnDetailScript = objRankOwnDetail.GetComponent<UIRankOwnDetail>();
             if (rankOwnDetailScript == null)
@@ -53,7 +53,7 @@ namespace TinyFrameWork
             AddWindowInControl(WindowID.WindowID_Rank_OwnDetail);
         }
 
-        public override void ShowWindow(WindowID id, ShowWindowData data)
+        public override void ShowWindow(WindowID id, ShowWindowData showData)
         {
             if (!IsWindowInControl(id))
             {
@@ -65,14 +65,14 @@ namespace TinyFrameWork
             if (allWindows.ContainsKey((int)id))
             {
                 UIBaseWindow baseWindow = allWindows[(int)id];
-                // if (baseWindow.windowData.showMode == UIWindowShowMode.NeedBack)
                 if(baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
                 {
                     BackWindowSequenceData backData = new BackWindowSequenceData();
                     backData.hideTargetWindow = baseWindow;
                     backSequence.Push(backData);
                 }
-                allWindows[(int)id].ShowWindow();
+                BaseWindowContextData contextData = showData == null ? null : showData.contextData;
+                allWindows[(int)id].ShowWindow(contextData);
                 shownWindows[(int)id] = allWindows[(int)id];
 
                 this.lastShownNormalWindow = this.curShownNormalWindow;

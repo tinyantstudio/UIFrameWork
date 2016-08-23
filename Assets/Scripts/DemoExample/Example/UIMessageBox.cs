@@ -85,7 +85,7 @@ namespace TinyFrameWork
             UIEventListener.Get(btnRight).onClick = callBack;
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             NGUITools.SetActive(this.gameObject, true);
             IsLock = true;

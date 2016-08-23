@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
@@ -21,7 +22,6 @@ namespace TinyFrameWork
 
         // test prefab Item
         public GameObject itemTemplate;
-        private string[] headIcons = new string[] { "Rambo", "Angry", "Smile", "Laugh", "Dead", "Frown", "Annoyed" };
 
         public override void InitWindowOnAwake()
         {
@@ -33,7 +33,7 @@ namespace TinyFrameWork
             trsAnimation = GameUtility.FindDeepChild(this.gameObject, "LeftAnchor/LeftMain");
             scrollView = GameUtility.FindDeepChild<UIScrollView>(this.gameObject, "LeftAnchor/LeftMain/Scroll View");
             btnGoToMatch = GameUtility.FindDeepChild(this.gameObject, "Btn_GotoMatch").gameObject;
-            
+
             rankWindowManager = this.gameObject.GetComponent<UIRankManager>();
             if (rankWindowManager == null)
             {
@@ -41,7 +41,7 @@ namespace TinyFrameWork
                 rankWindowManager.InitWindowManager();
             }
 
-            // Just go to Match logic
+            // Just go to Game scene logic
             UIEventListener.Get(btnGoToMatch).onClick = delegate
             {
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
@@ -70,18 +70,19 @@ namespace TinyFrameWork
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData rankContextData)
         {
             NGUITools.SetActive(this.gameObject, true);
-            // you can use Rank's window manager to show target child window
+            // you can also use Rank's window manager to show target child window
             // UIRankManager.GetInstance().ShowWindow(WindowID.WindowID_Rank_OwnDetail);
             EnterAnimation(delegate
             {
                 Debuger.Log("## UIRank window's enter animation is over.");
             });
 
-            // test
-            FillRankItem();
+            ContextDataRank data = rankContextData as ContextDataRank;
+            if (data != null)
+                FillRankItem(data.listRankItemDatas);
         }
 
         public override void HideWindow(Action onComplete)
@@ -119,12 +120,12 @@ namespace TinyFrameWork
                 twPosition.ResetToBeginningExtension(0.0f);
         }
 
-        private void FillRankItem()
+        private void FillRankItem(List<RankItemData> listData)
         {
-            StartCoroutine(_FileRankItem());
+            StartCoroutine(_FileRankItem(listData));
         }
 
-        IEnumerator _FileRankItem()
+        IEnumerator _FileRankItem(List<RankItemData> listData)
         {
             // Destroy all items
             for (int i = 0; i < itemsGrid.childCount; i++)
@@ -134,15 +135,15 @@ namespace TinyFrameWork
             yield return new WaitForEndOfFrame();
             itemsGrid.GetComponent<UIGrid>().Reposition();
 
-            // fill items by given data
-            for (int i = 0; i < 10; i++)
+            // fill items by context rank data
+            for (int i = 0; i < listData.Count; i++)
             {
                 GameObject item = NGUITools.AddChild(itemsGrid.gameObject, itemTemplate);
                 UIRankItem itemScript = item.GetComponent<UIRankItem>();
-
-                string playerName = headIcons[UnityEngine.Random.Range(0, headIcons.Length)];
-                string headIcon = "Emoticon - " + playerName;
-                itemScript.InitItem("Mr." + playerName, headIcon);
+                RankItemData itemData = listData[i];
+                string playerName = itemData.playerName;
+                string headIcon = itemData.headIcon;
+                itemScript.InitItem(playerName, headIcon);
             }
             itemsGrid.GetComponent<UIGrid>().Reposition();
         }

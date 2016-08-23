@@ -52,7 +52,7 @@ namespace TinyFrameWork
             };
         }
 
-        public override void ShowWindow()
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
             this.gameObject.SetActive(true);
         }

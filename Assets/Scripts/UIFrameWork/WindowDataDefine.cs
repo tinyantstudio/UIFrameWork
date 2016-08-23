@@ -11,11 +11,11 @@ namespace TinyFrameWork
     /// 3. colliderMode
     /// !!You must init the window's core data in the InitWindowData !!
     /// </summary>
-    public class WindowData
+    public class WindowCoreData
     {
-        // If target window is mark as StartWindow force clear all the navigation sequence data
-        // Your start Game MainMenu always the startWindow
-        public bool isStartWindow = false;
+        // If target window is mark as [forceClearNavigation] force clear all the navigation sequence data
+        // Your start Game MainMenu always the force clear navigation
+        public bool forceClearNavigation = false;
         public UIWindowType windowType = UIWindowType.Normal;
         public UIWindowShowMode showMode = UIWindowShowMode.DoNothing;
         public UIWindowColliderMode colliderMode = UIWindowColliderMode.None;
@@ -27,17 +27,6 @@ namespace TinyFrameWork
         public UIBaseWindow hideTargetWindow;
         public List<WindowID> backShowTargets;
     }
-
-    public class ShowWindowData
-    {
-        // Reset window
-        public bool forceResetWindow = false;
-        // force clear the navigation data
-        public bool forceClearBackSeqData = false;
-        // Object (pass data to target showed window)
-        public object data;
-    }
-
     public delegate bool BoolDelegate();
 }
 

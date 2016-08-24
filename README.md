@@ -29,7 +29,7 @@ A tiny and powerful UIFrameWork for Unity4.x
 2. Add a common Event system to this framework( Decoupled goal for communication between the window and your game logic)
 3. optimizing the code (such as GC problem, the code design and son on)
 4. thinking......
-5. Oh UGUI? Just change the window depth manager or something relevant to NGUI
+5. UGUI? Just change the window depth manager or something relevant to NGUI
 
 ## Updated
 
@@ -46,8 +46,8 @@ A tiny and powerful UIFrameWork for Unity4.x
 some attention
 
 
-## Last
-1. If you find some cool idea just share with using
+## Share and Idea
+1. If you find some cool idea just share with us (new issues or email)
 2. Edit the Issue page !!! or email me if you want some feed back(Really need feedback and your idea)
 
 Wish this simple tiny frame work can help some one who want to save his time develop the window logic

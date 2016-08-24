@@ -1,6 +1,8 @@
 # UIFrameWork
 A tiny and powerful UIFrameWork for Unity4.x
 
+**[中文介绍](https://github.com/tinyantstudio/UIFrameWork/blob/master/ChineseReadMe.md)**
+
 ## How to Start
 
 1. Click the **MainStart.scene** in Scenes folder
@@ -14,7 +16,7 @@ A tiny and powerful UIFrameWork for Unity4.x
 ## UIFrameWork Target:
 1. load window, Show, hide, close window
 2. Animation Interface for your window hide/show animation
-3. Window Depth, window common collider bg manaager
+3. Window Depth, window common collider bg manager
 4. (!!!maybe the most goal)Manager your window navigation (when you click the return/back button you need not to care which window I should Go)
 5. Add some very common MessageBox
 6. Give you a total game example(just the window logic)

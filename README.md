@@ -41,6 +41,11 @@ A tiny and powerful UIFrameWork for Unity4.x
 4. Add a new DebugSystem ,you can toggle the Console debug(use Debuger.Log("");Not the Debug.Log("");)
 5. rename all the example scenes for easy understanding
 
+**2016.8.31**
+
+1. Clear the code
+2. Rewrite the navigation system for easy understanding
+
 ## Attention
 
 some attention

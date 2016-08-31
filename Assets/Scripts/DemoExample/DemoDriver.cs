@@ -15,7 +15,7 @@ public class DemoDriver : MonoBehaviour
 
         // You can switch the Debuger state ON/OFF
 
-        TinyFrameWork.UICenterMasterManager.GetInstance().ShowWindow(TinyFrameWork.WindowID.WindowID_MainMenu);
-        TinyFrameWork.UICenterMasterManager.GetInstance().ShowWindow(TinyFrameWork.WindowID.WindowID_TopBar);
+        TinyFrameWork.UICenterMasterManager.Instance.ShowWindow(TinyFrameWork.WindowID.WindowID_MainMenu);
+        TinyFrameWork.UICenterMasterManager.Instance.ShowWindow(TinyFrameWork.WindowID.WindowID_TopBar);
     }
 }

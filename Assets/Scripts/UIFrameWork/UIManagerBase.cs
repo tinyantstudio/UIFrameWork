@@ -124,7 +124,8 @@ namespace TinyFrameWork
             BaseWindowContextData contextData = showData == null ? null : showData.contextData;
             baseWindow.ShowWindow(contextData);
             shownWindows[(int)id] = baseWindow;
-            if (baseWindow.windowData.windowType == UIWindowType.Normal)
+            // if (baseWindow.windowData.windowType == UIWindowType.Normal)
+            if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
             {
                 // 改变当前显示Normal窗口
                 lastShownNormalWindow = curShownNormalWindow;
@@ -147,7 +148,7 @@ namespace TinyFrameWork
 
             UIBaseWindow baseWindow = GetGameWindow(id);
             baseWindow.ShowWindow();
-            shownWindows[(int)baseWindow.GetID] = baseWindow;
+            shownWindows[(int)baseWindow.ID] = baseWindow;
         }
 
         /// <summary>
@@ -233,16 +234,16 @@ namespace TinyFrameWork
                 if (ReturnWindowManager(curShownNormalWindow))
                     return true;
 
-                WindowID preWindowId = curShownNormalWindow.GetPreWindowID;
+                WindowID preWindowId = curShownNormalWindow.PreWindowID;
                 if (preWindowId != WindowID.WindowID_Invaild)
                 {
-                    HideWindow(curShownNormalWindow.GetID, delegate
+                    HideWindow(curShownNormalWindow.ID, delegate
                     {
                         ShowWindow(preWindowId, null);
                     });
                 }
                 else
-                    Debug.LogWarning("## CurrentShownWindow " + curShownNormalWindow.GetID + " preWindowId is " + WindowID.WindowID_Invaild);
+                    Debuger.LogWarning("## CurrentShownWindow " + curShownNormalWindow.ID + " preWindowId is " + WindowID.WindowID_Invaild);
                 return false;
             }
             BackWindowSequenceData backData = backSequence.Peek();
@@ -251,7 +252,7 @@ namespace TinyFrameWork
                 if (ReturnWindowManager(backData.hideTargetWindow))
                     return true;
 
-                WindowID hideId = backData.hideTargetWindow.GetID;
+                WindowID hideId = backData.hideTargetWindow.ID;
                 if (backData.hideTargetWindow != null && shownWindows.ContainsKey((int)hideId))
                     HideWindow(hideId, delegate
                     {
@@ -264,10 +265,8 @@ namespace TinyFrameWork
                                 if (i == backData.backShowTargets.Count - 1)
                                 {
                                     Debuger.Log("##[UIFrameWork] Change currentShownNormalWindow : " + backId);
-                                    {
-                                        this.lastShownNormalWindow = this.curShownNormalWindow;
-                                        this.curShownNormalWindow = GetGameWindow(backId);
-                                    }
+                                    this.lastShownNormalWindow = this.curShownNormalWindow;
+                                    this.curShownNormalWindow = GetGameWindow(backId);
                                 }
                             }
                         }

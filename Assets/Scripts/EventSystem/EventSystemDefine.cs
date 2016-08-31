@@ -17,5 +17,8 @@ namespace TinyFrameWork
 
         // or other battle message.
         public const string EventPlayerHitByAI = "event_match_hitby_ai";
+
+        // UIFrameWork Message
+        public const string EventUIFrameWorkPopRootWindowAdded = "ufprw";
     }
 }

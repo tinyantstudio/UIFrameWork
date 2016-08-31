@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace TinyFrameWork
 {
@@ -12,10 +13,14 @@ namespace TinyFrameWork
         private GameObject objAnimation;
         private TweenPosition twPosition;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Rank_OwnDetail; 
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Rank_OwnDetail;
-            InitWindowData();
+            InitWindowCoreData();
             base.InitWindowOnAwake();
 
             spHeadIcon = GameUtility.FindDeepChild<UISprite>(this.gameObject, "Sprite");
@@ -25,10 +30,10 @@ namespace TinyFrameWork
             UIEventListener.Get(btnClose).onClick = OnBtnSwitch;
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
-
+            base.InitWindowCoreData();
+            this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
 
         public override void ResetWindow()
@@ -85,9 +90,9 @@ namespace TinyFrameWork
         private void OnBtnSwitch(GameObject obj)
         {
             if (base.isShown)
-                UIRankManager.GetInstance().HideWindow(windowID, null);
+                UIRankManager.GetInstance().HideWindow(this.ID, null);
             else
-                UIRankManager.GetInstance().ShowWindow(windowID, null);
+                UIRankManager.GetInstance().ShowWindow(this.ID, null);
         }
     }
 }

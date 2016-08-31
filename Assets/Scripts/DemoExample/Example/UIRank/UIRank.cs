@@ -23,11 +23,14 @@ namespace TinyFrameWork
         // test prefab Item
         public GameObject itemTemplate;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Rank;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Rank;
-            this.preWindowID = WindowID.WindowID_MainMenu;
-            InitWindowData();
+            InitWindowCoreData();
             base.InitWindowOnAwake();
             itemsGrid = GameUtility.FindDeepChild(this.gameObject, "LeftAnchor/LeftMain/Scroll View/Grid");
             trsAnimation = GameUtility.FindDeepChild(this.gameObject, "LeftAnchor/LeftMain");
@@ -47,8 +50,8 @@ namespace TinyFrameWork
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
                     delegate
                     {
-                        UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);
-                        UICenterMasterManager.GetInstance().GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.windowID);
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Matching);
+                        UICenterMasterManager.Instance.GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.ID);
                     });
             };
         }
@@ -60,13 +63,13 @@ namespace TinyFrameWork
             ResetAnimation();
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
-
+            base.InitWindowCoreData();
+            this.preWindowID = WindowID.WindowID_MainMenu;
+            windowData.windowType = UIWindowType.Normal;
             windowData.showMode = UIWindowShowMode.HideOtherWindow;
             windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
-            windowData.windowType = UIWindowType.Normal;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
 

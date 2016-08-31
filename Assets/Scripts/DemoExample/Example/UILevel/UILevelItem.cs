@@ -16,7 +16,6 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnLevelItem).onClick = delegate
             {
-                // UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
                 ShowWindowData showData = new ShowWindowData();
                 ContextDataLevelDetail context = new ContextDataLevelDetail();
                 context.levelDescription = "Hi Man cool things will be happen.Be busy living or be busy dying. - Fighting for the game world";
@@ -24,9 +23,7 @@ namespace TinyFrameWork
                 context.levelName = lbLevelName.text;
                 context.starCount = starCount;
                 showData.contextData = context;
-
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail, showData);
-                // UICenterMasterManager.GetInstance().ShowWindowDelay(1.0f, WindowID.WindowID_LevelDetail, showData);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_LevelDetail, showData);
             };
         }
 

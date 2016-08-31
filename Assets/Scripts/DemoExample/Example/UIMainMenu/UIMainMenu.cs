@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace TinyFrameWork
 {
@@ -17,6 +18,12 @@ namespace TinyFrameWork
 
         private TweenPosition[] twPositions;
         private bool switchFlag = true;
+
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_MainMenu;
+        }
+
         public override void ShowWindow(BaseWindowContextData contextData)
         {
             this.gameObject.SetActive(true);
@@ -24,9 +31,8 @@ namespace TinyFrameWork
 
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_MainMenu;
             base.InitWindowOnAwake();
-            InitWindowData();
+            InitWindowCoreData();
 
             twPositions = new TweenPosition[4];
             btnInfor = GameUtility.FindDeepChild(this.gameObject, "LeftBottom/Btns/Btn_Infor").gameObject;
@@ -63,7 +69,7 @@ namespace TinyFrameWork
                     contextData.listRankItemDatas.Add(newData);
                 }
                 showData.contextData = contextData;
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Rank, showData);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Rank, showData);
             };
 
             UIEventListener.Get(btnSwitch).onClick = delegate
@@ -77,12 +83,12 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnLevel).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Level);
             };
 
             UIEventListener.Get(btnSkill).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill);
             };
         }
 
@@ -99,9 +105,9 @@ namespace TinyFrameWork
                 twPositions[i].PlayForward();
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
+            base.InitWindowCoreData();
             this.windowData.forceClearNavigation = true;
         }
     }

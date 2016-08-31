@@ -30,18 +30,19 @@ namespace TinyFrameWork
         public Transform UIFixedWidowRoot;
 
         // Each Type window start Depth
-        private int fixedWindowDepth = 100;
-        private int popUpWindowDepth = 150;
-        private int normalWindowDepth = 2;
+        private const int fixedWindowDepth = 100;
+        private const int popUpWindowDepth = 150;
+        private const int normalWindowDepth = 2;
 
         // Atlas reference
         // Mask Atlas for sprite mask(Common Collider window background)
         public UIAtlas maskAtlas;
 
         private static UICenterMasterManager instance;
-        public static UICenterMasterManager GetInstance()
+        public static UICenterMasterManager Instance
         {
-            return instance;
+            get { return instance; }
+            private set { }
         }
 
         protected override void Awake()
@@ -175,6 +176,7 @@ namespace TinyFrameWork
             AddWindowInControl(WindowID.WindowID_Matching);
             AddWindowInControl(WindowID.WindowID_MatchResult);
             AddWindowInControl(WindowID.WindowID_Skill);
+            AddWindowInControl(WindowID.WindowID_Shop);
         }
 
         public override void ClearAllWindow()
@@ -210,7 +212,7 @@ namespace TinyFrameWork
             if (windowType == UIWindowType.Normal)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UINormalWindowRoot.gameObject, false) + 1, normalWindowDepth, int.MaxValue);
-                Debuger.Log("[UIWindowType.Normal] maxDepth is " + needDepth + baseWindow.GetID);
+                Debuger.Log("[UIWindowType.Normal] maxDepth is " + needDepth + baseWindow.ID);
             }
             else if (windowType == UIWindowType.PopUp)
             {
@@ -223,7 +225,14 @@ namespace TinyFrameWork
                 Debuger.Log("[UIWindowType.Fixed] max depth is " + needDepth);
             }
             if (baseWindow.MinDepth != needDepth)
-                GameUtility.SetTargetMinPanel(baseWindow.gameObject, needDepth);
+                GameUtility.SetTargetMinPanelDepth(baseWindow.gameObject, needDepth);
+
+            // send window added message to game client
+            if (baseWindow.windowData.windowType == UIWindowType.PopUp)
+            {
+                // trigger the window PopRoot added window event
+                EventDispatcher.GetInstance().UIFrameWorkEventManager.TriggerEvent(EventSystemDefine.EventUIFrameWorkPopRootWindowAdded);
+            }
             baseWindow.MinDepth = needDepth;
         }
 
@@ -235,10 +244,12 @@ namespace TinyFrameWork
             UIWindowColliderMode colliderMode = baseWindow.windowData.colliderMode;
             if (colliderMode == UIWindowColliderMode.None)
                 return;
+            GameObject bgObj = null;
             if (colliderMode == UIWindowColliderMode.Normal)
-                GameUtility.AddColliderBgToTarget(baseWindow.gameObject, "Mask02", maskAtlas, true);
+                bgObj = GameUtility.AddColliderBgToTarget(baseWindow.gameObject, "Mask02", maskAtlas, true);
             if (colliderMode == UIWindowColliderMode.WithBg)
-                GameUtility.AddColliderBgToTarget(baseWindow.gameObject, "Mask02", maskAtlas, false);
+                bgObj = GameUtility.AddColliderBgToTarget(baseWindow.gameObject, "Mask02", maskAtlas, false);
+            baseWindow.OnAddColliderBg(bgObj);
         }
 
         public void RefreshBackSequenceData(UIBaseWindow baseWindow)
@@ -249,13 +260,12 @@ namespace TinyFrameWork
                 bool dealBackSequence = true;
                 if (curShownNormalWindow != null)
                 {
-                    // if (curShownNormalWindow.windowData.showMode == UIWindowShowMode.NoNeedBack)
                     if (curShownNormalWindow.windowData.navigationMode == UIWindowNavigationMode.IgnoreNavigation)
                     {
                         dealBackSequence = false;
-                        HideWindow(curShownNormalWindow.GetID, null);
+                        HideWindow(curShownNormalWindow.ID, null);
                     }
-                    Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.GetID);
+                    Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.ID);
                 }
 
                 if (shownWindows.Count > 0 && dealBackSequence)
@@ -269,10 +279,6 @@ namespace TinyFrameWork
                     foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                     {
                         bool needToHide = true;
-                        //if (windowData.showMode == UIWindowShowMode.NeedBack
-                        //    || window.Value.windowData.windowType == UIWindowType.Fixed)
-                        //    needToHide = false;
-
                         if (windowData.showMode == UIWindowShowMode.DoNothing
                             || window.Value.windowData.windowType == UIWindowType.Fixed)
                             needToHide = false;
@@ -306,7 +312,7 @@ namespace TinyFrameWork
                         sortByMinDepth.Sort(new CompareBaseWindow());
                         for (int i = 0; i < sortByMinDepth.Count; i++)
                         {
-                            WindowID pushWindowId = sortByMinDepth[i].GetID;
+                            WindowID pushWindowId = sortByMinDepth[i].ID;
                             newPushList.Add(pushWindowId);
                         }
 
@@ -362,17 +368,14 @@ namespace TinyFrameWork
                         // HOW to Test
                         // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
 
-                        if (backData.hideTargetWindow.GetID != baseWindow.GetID)
+                        if (backData.hideTargetWindow.ID != baseWindow.ID)
                         {
                             Debuger.Log("## UICenterMasterManager : Need to clear all back window sequence data ##");
-                            Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.GetID + " != " + baseWindow.GetID);
+                            Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.ID + " != " + baseWindow.ID);
                             backSequence.Clear();
                         }
                         else
                         {
-                            // NeedBack类型要将backShowTargets界面显示
-                            //if (windowData.showMode == UIWindowShowMode.NeedBack
-                            //    && backData.backShowTargets != null)
                             if (windowData.navigationMode == UIWindowNavigationMode.NeedAdded
                                 && backData.backShowTargets != null)
                             {
@@ -382,12 +385,11 @@ namespace TinyFrameWork
                                     // 保证最上面为currentShownWindow
                                     if (i == backData.backShowTargets.Count - 1)
                                     {
-                                        Debug.Log("change currentShownNormalWindow : " + backId);
+                                        Debuger.Log("change currentShownNormalWindow : " + backId);
                                         // 改变当前活跃Normal窗口
                                         this.lastShownNormalWindow = this.curShownNormalWindow;
                                         this.curShownNormalWindow = GetGameWindow(backId);
                                     }
-                                    ShowWindowForNavigation(backId);
                                 }
                             }
                         }
@@ -398,7 +400,7 @@ namespace TinyFrameWork
             }
         }
 
-        public Transform GetTargetRoot(UIWindowType type)
+        private Transform GetTargetRoot(UIWindowType type)
         {
             if (type == UIWindowType.Fixed)
                 return UIFixedWidowRoot;
@@ -454,6 +456,26 @@ namespace TinyFrameWork
         public void CloseMessageBox(Action onClosed = null)
         {
             HideWindow(WindowID.WindowID_MessageBox);
+        }
+
+        // 
+        // Depth Helper Functions
+        // 
+
+        // Push target GameObject to top depth
+        // Case: when you open multi PopWindow
+        // You want one of these PopWindow stay at the Top 
+        // You can register the EventSystemDefine.EventUIFrameWorkPopRootWindowAdded 
+        // Call this method to push window to top
+        public static void AdjustTargetWindowDepthToTop(UIBaseWindow targetWindow)
+        {
+            if (targetWindow == null)
+                return;
+
+            Transform windowRoot = UICenterMasterManager.Instance.GetTargetRoot(targetWindow.windowData.windowType);
+            int needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(windowRoot.gameObject, true) + 1, popUpWindowDepth, int.MaxValue);
+            GameUtility.SetTargetMinPanelDepth(targetWindow.gameObject, needDepth);
+            targetWindow.MinDepth = needDepth;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 
 namespace TinyFrameWork
 {
@@ -15,12 +15,15 @@ namespace TinyFrameWork
         private GameObject btnWin;
         private GameObject btnLose;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Matching;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Matching;
             base.InitWindowOnAwake();
-
-            InitWindowData();
+            InitWindowCoreData();
 
             btnWin = GameUtility.FindDeepChild(this.gameObject, "BtnWin").gameObject;
             btnLose = GameUtility.FindDeepChild(this.gameObject, "BtnLose").gameObject;
@@ -35,8 +38,8 @@ namespace TinyFrameWork
                     // UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
                     // UIManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
 
-                    UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
-                    UIBaseWindow baseWindow = UICenterMasterManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_MatchResult);
+                    UIBaseWindow baseWindow = UICenterMasterManager.Instance.GetGameWindow(WindowID.WindowID_MatchResult);
                     ((UIMatchResult)baseWindow).SetMatchResult(true, targetBackWindowId);
                 });
             };
@@ -47,17 +50,16 @@ namespace TinyFrameWork
             {
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
-                    UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_MatchResult);
-                    UIBaseWindow baseWindow = UICenterMasterManager.GetInstance().GetGameWindow(WindowID.WindowID_MatchResult);
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_MatchResult);
+                    UIBaseWindow baseWindow = UICenterMasterManager.Instance.GetGameWindow(WindowID.WindowID_MatchResult);
                     ((UIMatchResult)baseWindow).SetMatchResult(false, targetBackWindowId);
                 });
             };
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
-            // this.windowData.showMode = UIWindowShowMode.NoNeedBack;
+            base.InitWindowCoreData();
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         }

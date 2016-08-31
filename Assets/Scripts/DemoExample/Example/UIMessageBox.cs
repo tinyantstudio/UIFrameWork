@@ -19,10 +19,14 @@ namespace TinyFrameWork
 
         private TweenScale twScale;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_MessageBox;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_MessageBox;
-            InitWindowData();
+            InitWindowCoreData();
             base.InitWindowOnAwake();
 
             lbMsg = GameUtility.FindDeepChild<UILabel>(this.gameObject, "Message");
@@ -37,13 +41,13 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnClose).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().CloseMessageBox();
+                UICenterMasterManager.Instance.CloseMessageBox();
             };
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
+            base.InitWindowCoreData();
             this.windowData.windowType = UIWindowType.PopUp;
             this.windowData.showMode = UIWindowShowMode.DoNothing;
             this.windowData.colliderMode = UIWindowColliderMode.WithBg;

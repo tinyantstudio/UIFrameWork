@@ -11,6 +11,8 @@ namespace TinyFrameWork
         private EventManager eventCommonManager = new EventManager();
         // battle event manager.
         private EventManager eventBattleManager = new EventManager();
+        // uiframework event manager.
+        private EventManager eventUIFrameworkManager = new EventManager();
 
         public static EventDispatcher GetInstance()
         {
@@ -28,6 +30,12 @@ namespace TinyFrameWork
         public EventManager BattleEventManager
         {
             get { return this.eventBattleManager; }
+            private set { }
+        }
+
+        public EventManager UIFrameWorkEventManager
+        {
+            get { return this.eventUIFrameworkManager; }
             private set { }
         }
     }

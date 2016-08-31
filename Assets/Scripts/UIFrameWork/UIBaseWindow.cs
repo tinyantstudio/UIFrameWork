@@ -5,9 +5,9 @@ using System;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// 窗口基类
+    /// Base window
     /// </summary>
-    public class UIBaseWindow : MonoBehaviour
+    public abstract class UIBaseWindow : MonoBehaviour
     {
         protected UIPanel originPanel;
 
@@ -19,7 +19,7 @@ namespace TinyFrameWork
         // in showing
         protected bool isShown = false;
         // Current windowID
-        protected WindowID windowID = WindowID.WindowID_Invaild;
+        private WindowID windowID = WindowID.WindowID_Invaild;
 
         // if there is no BackSequece Data just check the preWindowID
         // Try open preWindowID
@@ -35,6 +35,7 @@ namespace TinyFrameWork
         {
             this.gameObject.SetActive(true);
             mTrs = this.gameObject.transform;
+            SetWindowId();
             InitWindowOnAwake();
         }
 
@@ -51,7 +52,7 @@ namespace TinyFrameWork
             set { minDepth = value; }
         }
 
-        public WindowID GetID
+        public WindowID ID
         {
             get
             {
@@ -59,10 +60,10 @@ namespace TinyFrameWork
                     Debug.LogError("window id is " + WindowID.WindowID_Invaild);
                 return windowID;
             }
-            private set { windowID = value; }
+            protected set { windowID = value; }
         }
 
-        public WindowID GetPreWindowID
+        public WindowID PreWindowID
         {
             get { return preWindowID; }
             private set { preWindowID = value; }
@@ -73,43 +74,30 @@ namespace TinyFrameWork
         {
             get
             {
-                //if (this.windowData.windowType == UIWindowType.PopUp)
-                //    return false;
-                //if (this.windowData.windowType == UIWindowType.Fixed)
-                //    return false;
-                //if (this.windowData.showMode == UIWindowShowMode.NoNeedBack)
-                //    return false;
                 return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
-                // return true;
             }
         }
 
-        /// <summary>
-        /// 界面是否要刷新BackSequence数据
-        /// 1.显示NoNeedBack或者从NoNeedBack显示新界面 不更新BackSequenceData(隐藏自身即可)
-        /// 2.HideOther
-        /// 3.NeedBack
-        /// </summary>
+        // Need Refresh the back seq data
         public bool RefreshBackSeqData
         {
             get
             {
-                //if (this.windowData.showMode == UIWindowShowMode.HideOther
-                //    || this.windowData.showMode == UIWindowShowMode.NeedBack)
-                //    return true;
                 return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
-                // return false;
             }
         }
+
+
+        // Set the window Id use 
+        protected abstract void SetWindowId();
 
         /// <summary>
         /// Called on Awake() used for window data Init
         /// </summary>
         public virtual void InitWindowOnAwake()
         {
-
         }
-
+        
         /// <summary>
         /// Get the current window's manager
         /// </summary>
@@ -133,7 +121,7 @@ namespace TinyFrameWork
         /// <summary>
         /// Init the window core data
         /// </summary>
-        protected virtual void InitWindowData()
+        protected virtual void InitWindowCoreData()
         {
         }
 
@@ -167,6 +155,13 @@ namespace TinyFrameWork
 
         protected virtual void BeforeDestroyWindow()
         {
+        }
+
+        // On Add Collider bg to window
+        // Add collider bg click event
+        public virtual void OnAddColliderBg(GameObject obj)
+        {
+
         }
 
         /// <summary>

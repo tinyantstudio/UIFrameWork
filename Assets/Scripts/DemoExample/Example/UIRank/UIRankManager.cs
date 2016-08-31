@@ -6,7 +6,6 @@ namespace TinyFrameWork
 {
     public class UIRankManager : UIManagerBase
     {
-
         private static UIRankManager instance;
         public static UIRankManager GetInstance()
         {

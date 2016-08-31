@@ -18,11 +18,15 @@ namespace TinyFrameWork
         private GameObject gbLoseContent;
         private GameObject gbWinContent;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_MatchResult;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_MatchResult;
             base.InitWindowOnAwake();
-            InitWindowData();
+            InitWindowCoreData();
 
             gbWinContent = GameUtility.FindDeepChild(this.gameObject, "WinContent").gameObject;
             gbLoseContent = GameUtility.FindDeepChild(this.gameObject, "LoseContent").gameObject;
@@ -41,23 +45,22 @@ namespace TinyFrameWork
             {
                 //ShowWindowData windowData = new ShowWindowData();
                 //windowData.needClearBackSequence = true;
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Skill);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill);
             };
 
             UIEventListener.Get(btnRank).onClick = delegate
             {
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Level);
             };
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
-            // this.windowData.showMode = UIWindowShowMode.NoNeedBack;
+            base.InitWindowCoreData();
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             this.preWindowID = WindowID.WindowID_LevelDetail;
@@ -86,8 +89,8 @@ namespace TinyFrameWork
 
         private void OnContineBtn(GameObject obj)
         {
-            UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-            UICenterMasterManager.GetInstance().ShowWindow(targetBackWindowId, null);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+            UICenterMasterManager.Instance.ShowWindow(targetBackWindowId, null);
         }
     }
 }

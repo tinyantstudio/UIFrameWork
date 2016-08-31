@@ -6,6 +6,7 @@ namespace TinyFrameWork
 {
     /// <summary>
     /// 游戏工具类
+    /// Game Utility Tools
     /// </summary>
     public class GameUtility
     {
@@ -39,73 +40,6 @@ namespace TinyFrameWork
             return (T)((object)null);
         }
 
-        private class CompareSubPanels : IComparer<UIPanel>
-        {
-            public int Compare(UIPanel left, UIPanel right)
-            {
-                return left.depth - right.depth;
-            }
-        }
-
-        /// <summary>
-        /// Set the mini depth to target with given Sorted list
-        /// </summary>
-        public static void SetTargetMinPanel(GameObject obj, int depth)
-        {
-            List<UIPanel> lsPanels = GetPanelSorted(obj, true);
-            if (lsPanels != null)
-            {
-                int i = 0;
-                while (i < lsPanels.Count)
-                {
-                    lsPanels[i].depth = depth + i;
-                    i++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 获得指定目标最大depth值
-        /// Get the target Max depth
-        /// </summary>
-        public static int GetMaxTargetDepth(GameObject obj, bool includeInactive = false)
-        {
-            int minDepth = -1;
-            List<UIPanel> lsPanels = GetPanelSorted(obj, includeInactive);
-            if(lsPanels != null)
-                return lsPanels[lsPanels.Count - 1].depth;
-            return minDepth;
-        }
-
-        /// <summary>
-        /// 返回最大或者最小Depth界面
-        /// Get the max or min depth UIPanel
-        /// </summary>
-        public static GameObject GetPanelDepthMaxMin(GameObject target, bool maxDepth, bool includeInactive)
-        {
-            List<UIPanel> lsPanels = GetPanelSorted(target, includeInactive);
-            if(lsPanels != null)
-            {
-                if (maxDepth)
-                    return lsPanels[lsPanels.Count - 1].gameObject;
-                else
-                    return lsPanels[0].gameObject;
-            }
-            return null;
-        }
-
-        private static List<UIPanel> GetPanelSorted(GameObject target, bool includeInactive = false)
-        {
-            UIPanel[] panels = target.transform.GetComponentsInChildren<UIPanel>(includeInactive);
-            if (panels.Length > 0)
-            {
-                List<UIPanel> lsPanels = new List<UIPanel>(panels);
-                lsPanels.Sort(new CompareSubPanels());
-                return lsPanels;
-            }
-            return null;
-        }
-
         /// <summary>
         /// 添加子节点
         /// Add child to target
@@ -136,22 +70,89 @@ namespace TinyFrameWork
         }
 
         /// <summary>
+        /// 返回最大或者最小Depth界面
+        /// Get the max or min depth UIPanel
+        /// </summary>
+        public static GameObject GetPanelDepthMaxMin(GameObject target, bool maxDepth, bool includeInactive)
+        {
+            List<UIPanel> lsPanels = GetPanelSorted(target, includeInactive);
+            if (lsPanels != null)
+            {
+                if (maxDepth)
+                    return lsPanels[lsPanels.Count - 1].gameObject;
+                else
+                    return lsPanels[0].gameObject;
+            }
+            return null;
+        }
+
+        private class CompareSubPanels : IComparer<UIPanel>
+        {
+            public int Compare(UIPanel left, UIPanel right)
+            {
+                return left.depth - right.depth;
+            }
+        }
+
+        private static List<UIPanel> GetPanelSorted(GameObject target, bool includeInactive = false)
+        {
+            UIPanel[] panels = target.transform.GetComponentsInChildren<UIPanel>(includeInactive);
+            if (panels.Length > 0)
+            {
+                List<UIPanel> lsPanels = new List<UIPanel>(panels);
+                lsPanels.Sort(new CompareSubPanels());
+                return lsPanels;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Set the mini depth to target with given Sorted list
+        /// </summary>
+        public static void SetTargetMinPanelDepth(GameObject obj, int depth)
+        {
+            List<UIPanel> lsPanels = GameUtility.GetPanelSorted(obj, true);
+            if (lsPanels != null)
+            {
+                int i = 0;
+                while (i < lsPanels.Count)
+                {
+                    lsPanels[i].depth = depth + i;
+                    i++;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获得指定目标最大depth值
+        /// Get the target Max depth
+        /// </summary>
+        public static int GetMaxTargetDepth(GameObject obj, bool includeInactive = false)
+        {
+            int minDepth = -1;
+            List<UIPanel> lsPanels = GetPanelSorted(obj, includeInactive);
+            if (lsPanels != null)
+                return lsPanels[lsPanels.Count - 1].depth;
+            return minDepth;
+        }
+
+        // <summary>
         /// 给目标添加Collider背景
         /// Add Collider Background for target
         /// </summary>
-        public static void AddColliderBgToTarget(GameObject target, string maskName, UIAtlas altas, bool isTransparent)
+        public static GameObject AddColliderBgToTarget(GameObject target, string maskName, UIAtlas altas, bool isTransparent)
         {
             // 添加UIPaneldepth最小上面
             // 保证添加的Collider放置在屏幕中间
             Transform windowBg = GameUtility.FindDeepChild(target, "WindowBg");
             if (windowBg == null)
             {
-                GameObject targetParent = GetPanelDepthMaxMin(target, false, true);
+                GameObject targetParent = GameUtility.GetPanelDepthMaxMin(target, false, true);
                 if (targetParent == null)
                     targetParent = target;
 
                 windowBg = (new GameObject("WindowBg")).transform;
-                AddChildToTarget(targetParent.transform, windowBg);
+                GameUtility.AddChildToTarget(targetParent.transform, windowBg);
             }
 
             Transform bg = GameUtility.FindDeepChild(target, "WindowColliderBg(Cool)");
@@ -166,7 +167,7 @@ namespace TinyFrameWork
 
                 widget.name = "WindowColliderBg(Cool)";
                 bg = widget.transform;
-                
+
                 // fill the screen
                 // You can use the new Anchor system
                 UIStretch stretch = bg.gameObject.AddComponent<UIStretch>();
@@ -182,8 +183,8 @@ namespace TinyFrameWork
 
                 // add collider
                 NGUITools.AddWidgetCollider(bg.gameObject);
-
             }
+            return bg.gameObject;
         }
     }
 }

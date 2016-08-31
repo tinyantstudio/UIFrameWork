@@ -19,6 +19,7 @@ namespace TinyFrameWork
         WindowID_MainMenu,              // 主界面
         WindowID_TopBar,                // 顶部界面
         WindowID_MessageBox,            // 通用弹框
+        WindowID_Shop,                  // 商城弹框
     }
 
     public enum UIWindowType
@@ -78,7 +79,8 @@ namespace TinyFrameWork
             { (int)WindowID.WindowID_LevelDetail, "UILevelDetailWindow" },
             { (int)WindowID.WindowID_Matching,    "UIMatching" },
             { (int)WindowID.WindowID_MatchResult, "UIMatchResult" },
-            { (int)WindowID.WindowID_Skill,       "UISkill" }
+            { (int)WindowID.WindowID_Skill,       "UISkill" },
+            { (int)WindowID.WindowID_Shop,        "UIShopPopWindow"},
         };
 
         // Main folder

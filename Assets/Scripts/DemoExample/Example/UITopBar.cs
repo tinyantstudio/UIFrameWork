@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace TinyFrameWork
 {
@@ -8,9 +9,13 @@ namespace TinyFrameWork
         private GameObject btnReturn;
         private GameObject btnShowMsg;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_TopBar;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_TopBar;
             this.windowData.windowType = UIWindowType.Fixed;
 
             base.InitWindowOnAwake();
@@ -19,36 +24,20 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnReturn).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().ReturnWindow();
+                UICenterMasterManager.Instance.ReturnWindow();
             };
 
             // message box Test.
             UIEventListener.Get(btnShowMsg).onClick = delegate
             {
-                // UIManager.GetInstance().ShowMessageBox("Hello World!");
-                
-                //UIManager.GetInstance().ShowMessageBox(
-                //    "Do you want to quit this game?", 
-                //    "Yes",
-                //    delegate
-                //    {
-                //        Debug.Log("Message Box click YES.");
-                //        UIManager.GetInstance().CloseMessageBox();
-                //    },
-                //    "No",
-                //    delegate
-                //    {
-                //        Debug.Log("Message Box click NO.");
-                //        UIManager.GetInstance().CloseMessageBox();
-                //    });
-
-                UICenterMasterManager.GetInstance().ShowMessageBox(
-                    "You are yourself, please don't lose confidence.",
+                UICenterMasterManager.Instance.ShowMessageBox(
+                    "You are yourself, Just Don't lose confidence.",
                     "Sure!",
                     delegate
                     {
-                        UICenterMasterManager.GetInstance().CloseMessageBox();
+                        UICenterMasterManager.Instance.CloseMessageBox();
                     });
+                // UICenterMasterManager.Instance.ShowMessageBox("Hello World!");
             };
         }
 
@@ -56,6 +45,17 @@ namespace TinyFrameWork
         {
             this.gameObject.SetActive(true);
         }
+
+        void Update()
+        {
+            // test for PopWindow
+            if (Input.GetKeyDown(KeyCode.P))
+                UICenterMasterManager.Instance.ShowMessageBox("Oh press P show me!");
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
+                Debuger.Log("## show the pop window shop ##");
+            }
+        }
     }
 }
-

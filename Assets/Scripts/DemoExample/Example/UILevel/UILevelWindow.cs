@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace TinyFrameWork
 {
@@ -15,21 +16,24 @@ namespace TinyFrameWork
 
         private bool realReturnToMainMenu = false;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Level;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Level;
-            InitWindowData();
+            InitWindowCoreData();
             base.InitWindowOnAwake();
             // this.RegisterReturnLogic(RetrunPreLogic);
             trsLevelItemsParent = GameUtility.FindDeepChild(this.gameObject, "LevelItems/Items");
             twAlpha = gameObject.GetComponent<TweenAlpha>();
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
+            base.InitWindowCoreData();
             this.preWindowID = WindowID.WindowID_MainMenu;
-            // this.windowData.showMode = UIWindowShowMode.HideOther;
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
@@ -47,6 +51,10 @@ namespace TinyFrameWork
             {
                 IsLock = false;
             });
+
+            // When exit the window execute logic
+            // Just register the return logic
+            this.RegisterReturnLogic(this.RetrunPreLogic);
         }
 
         private List<string> levelNames = new List<string>() { "SkyBattle", "SkyCool", "SkyWorld", "SpaceWar", "ComeOn", "HellFight", "NewBattle", "King" };
@@ -64,8 +72,7 @@ namespace TinyFrameWork
                     continue;
                 GameObject item = NGUITools.AddChild(trs.gameObject, levelItem);
                 UILevelItem itemScript = item.GetComponent<UILevelItem>();
-                // itemScript.SetData("Level" + trs.name);
-                itemScript.SetData(this.levelNames[i], Random.Range(0, 4));
+                itemScript.SetData(this.levelNames[i], UnityEngine.Random.Range(0, 4));
             }
         }
 
@@ -115,24 +122,25 @@ namespace TinyFrameWork
         {
             if (!realReturnToMainMenu)
             {
-                UICenterMasterManager.GetInstance().ShowMessageBox(
-                    "Do you want to leave level window?",
+                UICenterMasterManager.Instance.ShowMessageBox(
+                    "Do you want to leave level window?\n退出关卡界面?",
                     "Yes",
                     delegate
                     {
-                        Debug.Log("Message Box click YES to leave level window.");
-                        UICenterMasterManager.GetInstance().CloseMessageBox();
+                        Debuger.Log("Message Box click YES to leave level window.");
+                        UICenterMasterManager.Instance.CloseMessageBox();
                         realReturnToMainMenu = true;
-                        UICenterMasterManager.GetInstance().ReturnWindow();
+                        UICenterMasterManager.Instance.ReturnWindow();
                     },
                     "No",
                     delegate
                     {
-                        Debug.Log("Message Box click NO.");
-                        UICenterMasterManager.GetInstance().CloseMessageBox();
+                        Debuger.Log("Message Box click NO.");
+                        UICenterMasterManager.Instance.CloseMessageBox();
                     });
+                return true;
             }
-            return !realReturnToMainMenu;
+            return false;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace TinyFrameWork
 {
@@ -17,11 +18,15 @@ namespace TinyFrameWork
 
         private List<GameObject> listStarts = new List<GameObject>();
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_LevelDetail;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_LevelDetail;
             base.InitWindowOnAwake();
-            InitWindowData();
+            InitWindowCoreData();
 
             btnStart = GameUtility.FindDeepChild(this.gameObject, "LevelDetailRight/BtnEnter").gameObject;
             this.lbLevelDes = GameUtility.FindDeepChild<UILabel>(this.gameObject, "LevelDetailRight/Content/des");
@@ -39,15 +44,15 @@ namespace TinyFrameWork
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
                     delegate
                     {
-                        UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Matching);
-                        UICenterMasterManager.GetInstance().GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.windowID);
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Matching);
+                        UICenterMasterManager.Instance.GetGameWindowScript<UIMatching>(WindowID.WindowID_Matching).SetMatchingData(this.ID);
                     });
             };
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
+            base.InitWindowCoreData();
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;

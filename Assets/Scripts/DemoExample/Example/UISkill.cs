@@ -9,13 +9,15 @@ namespace TinyFrameWork
         private GameObject btnGoToLevel;
         private TweenPosition twPosition;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Skill;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Skill;
-            this.preWindowID = WindowID.WindowID_MainMenu;
-
             base.InitWindowOnAwake();
-            InitWindowData();
+            InitWindowCoreData();
 
             gbAnimation = GameUtility.FindDeepChild(this.gameObject, "Center/Sprite").gameObject;
             btnGoToLevel = GameUtility.FindDeepChild(this.gameObject, "RightAnchor/BtnLevel").gameObject;
@@ -24,13 +26,14 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnGoToLevel).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Level);
             };
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
+            base.InitWindowCoreData();
+            this.preWindowID = WindowID.WindowID_MainMenu;
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
             this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
@@ -79,6 +82,6 @@ namespace TinyFrameWork
         {
             twPosition.ResetToBeginningExtension(0.0f);
         }
-    } 
+    }
 }
 

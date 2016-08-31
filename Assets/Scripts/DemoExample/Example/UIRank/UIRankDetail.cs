@@ -19,10 +19,14 @@ namespace TinyFrameWork
         // animation content
         private TweenPosition twPosition;
 
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WindowID_Rank_Detail;
+        }
+
         public override void InitWindowOnAwake()
         {
-            this.windowID = WindowID.WindowID_Rank_Detail;
-            InitWindowData();
+            InitWindowCoreData();
             base.InitWindowOnAwake();
 
             lbDetail = GameUtility.FindDeepChild(this.gameObject, "Move/Label").GetComponent<UILabel>();
@@ -35,7 +39,7 @@ namespace TinyFrameWork
             // Go to the Level Window
             UIEventListener.Get(btnGoToLevel).onClick = delegate
             {
-                UICenterMasterManager.GetInstance().ShowWindow(WindowID.WindowID_Level);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Level);
             };
         }
 
@@ -44,10 +48,9 @@ namespace TinyFrameWork
             ResetAnimation();
         }
 
-        protected override void InitWindowData()
+        protected override void InitWindowCoreData()
         {
-            base.InitWindowData();
-            windowData.showMode = UIWindowShowMode.DoNothing;
+            base.InitWindowCoreData();
             windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
         }
         public override void ShowWindow(BaseWindowContextData contextData)
@@ -94,7 +97,7 @@ namespace TinyFrameWork
 
         private void OnBtnClose(GameObject gb)
         {
-           UIRankManager.GetInstance().HideWindow(windowID);
+           UIRankManager.GetInstance().HideWindow(this.ID);
         }
 
         public void UpdateDetailData(string playerName, string iconName)

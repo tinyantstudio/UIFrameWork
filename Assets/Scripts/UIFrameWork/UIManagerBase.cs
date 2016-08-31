@@ -124,8 +124,7 @@ namespace TinyFrameWork
             BaseWindowContextData contextData = showData == null ? null : showData.contextData;
             baseWindow.ShowWindow(contextData);
             shownWindows[(int)id] = baseWindow;
-            // if (baseWindow.windowData.windowType == UIWindowType.Normal)
-            if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
+            if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
             {
                 // 改变当前显示Normal窗口
                 lastShownNormalWindow = curShownNormalWindow;

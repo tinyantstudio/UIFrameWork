@@ -54,7 +54,7 @@ namespace TinyFrameWork
     public enum UIWindowNavigationMode
     {
         IgnoreNavigation = 0,
-        NeedAdded,
+        NormalNavigation,
     }
 
     public enum UIWindowColliderMode

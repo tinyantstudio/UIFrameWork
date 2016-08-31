@@ -59,16 +59,6 @@ namespace TinyFrameWork
             if (baseWindow != null)
             {
                 RealShowWindow(baseWindow, id, showData);
-                // 是否清空当前导航信息(回到主菜单)
-                // If target window is mark as force clear all the navigation sequence data
-                if (baseWindow.windowData.forceClearNavigation)
-                {
-                    Debuger.Log("[Enter the start window, reset the backSequenceData for the navigation system.]");
-                    ClearBackSequence();
-                }
-
-                if (showData != null && showData.forceClearBackSeqData)
-                    ClearBackSequence();
             }
         }
 
@@ -125,7 +115,7 @@ namespace TinyFrameWork
                 baseWindow.ResetWindow();
 
             // refresh the navigation data
-            RefreshBackSequenceData(baseWindow);
+            ExecuteNavigationLogic(baseWindow, showData);
 
             // Adjust the window depth
             AdjustBaseWindowDepth(baseWindow);
@@ -256,88 +246,122 @@ namespace TinyFrameWork
             baseWindow.OnAddColliderBg(bgObj);
         }
 
-        public void RefreshBackSequenceData(UIBaseWindow baseWindow)
+        private void ExecuteNavigationLogic(UIBaseWindow baseWindow, ShowWindowData showData)
         {
             WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
-                bool dealBackSequence = true;
-                if (curShownNormalWindow != null)
-                {
-                    if (curShownNormalWindow.windowData.navigationMode == UIWindowNavigationMode.IgnoreNavigation)
-                    {
-                        dealBackSequence = false;
-                        HideWindow(curShownNormalWindow.ID, null);
-                    }
-                    Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.ID);
-                }
-
-                if (shownWindows.Count > 0 && dealBackSequence)
-                {
-                    List<WindowID> removedKey = null;
-                    List<WindowID> newPushList = new List<WindowID>();
-                    List<UIBaseWindow> sortByMinDepth = new List<UIBaseWindow>();
-
-                    BackWindowSequenceData backData = new BackWindowSequenceData();
-
-                    foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
-                    {
-                        bool needToHide = true;
-                        if (windowData.showMode == UIWindowShowMode.DoNothing
-                            || window.Value.windowData.windowType == UIWindowType.Fixed)
-                            needToHide = false;
-
-                        if (needToHide)
-                        {
-                            if (removedKey == null)
-                                removedKey = new List<WindowID>();
-                            removedKey.Add((WindowID)window.Key);
-
-                            window.Value.HideWindowDirectly();
-                        }
-
-                        // 将Window添加到BackSequence中
-                        // Add to navigation sequence data
-                        if (window.Value.CanAddedToBackSeq)
-                            sortByMinDepth.Add(window.Value);
-                    }
-
-                    if (removedKey != null)
-                    {
-                        for (int i = 0; i < removedKey.Count; i++)
-                            shownWindows.Remove((int)removedKey[i]);
-                    }
-
-                    // push to backToShowWindows stack
-                    if (sortByMinDepth.Count > 0)
-                    {
-                        // 按照层级顺序存入显示List中 
-                        // Add to return show target list
-                        sortByMinDepth.Sort(new CompareBaseWindow());
-                        for (int i = 0; i < sortByMinDepth.Count; i++)
-                        {
-                            WindowID pushWindowId = sortByMinDepth[i].ID;
-                            newPushList.Add(pushWindowId);
-                        }
-
-                        backData.hideTargetWindow = baseWindow;
-                        backData.backShowTargets = newPushList;
-                        backSequence.Push(backData);
-                    }
-                }
+                this.RefreshBackSequenceData(baseWindow);
             }
-            // else if (windowData.showMode == UIWindowShowMode.NoNeedBack)
             else if (windowData.showMode == UIWindowShowMode.HideOtherWindow)
+            {
                 HideAllShownWindow(true);
+            }
 
-            CheckBackSequenceData(baseWindow);
+            // If target window is mark as force clear all the navigation sequence data
+            // Show data need force clear the back seq data
+            if (baseWindow.windowData.forceClearNavigation || (showData != null && showData.forceClearBackSeqData))
+            {
+                Debuger.Log("## [Enter the start window, reset the backSequenceData for the navigation system.]##");
+                ClearBackSequence();
+            }
+            else
+                CheckBackSequenceData(baseWindow);
         }
 
+        private void RefreshBackSequenceData(UIBaseWindow targetWindow)
+        {
+            WindowCoreData coreData = targetWindow.windowData;
+            bool dealBackSequence = true;
+            if (curShownNormalWindow != null)
+            {
+                if (curShownNormalWindow.windowData.navigationMode == UIWindowNavigationMode.IgnoreNavigation)
+                {
+                    dealBackSequence = false;
+                    HideWindow(curShownNormalWindow.ID, null);
+                }
+                Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.ID);
+            }
+
+            if (shownWindows.Count > 0 && dealBackSequence)
+            {
+                List<WindowID> removedKey = null;
+                List<WindowID> navHiddenWindows = new List<WindowID>();
+                List<UIBaseWindow> sortedHiddenWindows = new List<UIBaseWindow>();
+
+                BackWindowSequenceData backData = new BackWindowSequenceData();
+
+                foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
+                {
+                    bool needToHide = (coreData.showMode == UIWindowShowMode.DoNothing || window.Value.windowData.windowType == UIWindowType.Fixed ? false : true);
+                    if (needToHide)
+                    {
+                        if (removedKey == null)
+                            removedKey = new List<WindowID>();
+                        removedKey.Add((WindowID)window.Key);
+                        window.Value.HideWindowDirectly();
+                    }
+
+                    // Add to navigation sequence data
+                    if (window.Value.CanAddedToBackSeq)
+                        sortedHiddenWindows.Add(window.Value);
+                }
+
+                if (removedKey != null)
+                {
+                    for (int i = 0; i < removedKey.Count; i++)
+                        shownWindows.Remove((int)removedKey[i]);
+                }
+
+                // push to backToShowWindows stack
+                if (sortedHiddenWindows.Count > 0)
+                {
+                    // 按照层级顺序存入显示List中 
+                    // Add to return show target list
+                    sortedHiddenWindows.Sort(new CompareBaseWindow());
+                    for (int i = 0; i < sortedHiddenWindows.Count; i++)
+                    {
+                        WindowID pushWindowId = sortedHiddenWindows[i].ID;
+                        navHiddenWindows.Add(pushWindowId);
+                    }
+                    backData.hideTargetWindow = targetWindow;
+                    backData.backShowTargets = navHiddenWindows;
+                    backSequence.Push(backData);
+                }
+            }
+        }
+
+        // 如果当前存在BackSequence数据
+        // 1.栈顶界面不是当前要显示的界面需要清空BackSequence(导航被重置)
+        // 2.栈顶界面是当前显示界面,如果类型为(NeedBack)则需要显示所有backShowTargets界面
+
+        // 栈顶不是即将显示界面(导航序列被打断)
+        // 如果当前导航队列顶部元素和当前显示的界面一致，表示和当前的导航数衔接上，后续导航直接使用导航数据
+        // 不一致则表示，导航已经失效，下次点击返回按钮，我们直接根据window的preWindowId确定跳转到哪一个界面
+
+        // 如果测试：进入到demo的 关卡详情，点击失败按钮，然后你可以选择从游戏中跳转到哪一个界面，查看导航输出信息
+        // 可以知道是否破坏了导航数据
+
+        // if the navigation stack top window not equals to current show window just clear the navigation stack
+        // check whether the navigation is broken
+
+        // Example:(we from mainmenu to uilevelwindow to uileveldetailwindow)
+        // UILevelDetailWindow <- UILevelWindow <- UIMainMenu   (current navigation stack top element is UILevelDetailWindow)
+
+        // click the GotoGame in UILevelDetailWindow to enter the real Game
+
+        // 1. Exit game we want to enter UILevelDetailWindow(OK, the same as navigation stack top UILevelDetailWindow) so we not break the navigation
+        // when we enter the UILevelDetailWindow our system will follow the navigation system
+
+        // 2. Exit game we want to enter UISkillWindow(OK, not the same as navigation stack top UILevelDetailWindow)so we break the navigation
+        // reset the navigation data 
+        // when we click return Button in the UISkillWindow we will find UISkillWindow's preWindowId to navigation because our navigation data is empty
+        // we should use preWindowId for navigating to next window
+
+        // HOW to Test
+        // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
         private void CheckBackSequenceData(UIBaseWindow baseWindow)
         {
-            // 如果当前存在BackSequence数据
-            // 1.栈顶界面不是当前要显示的界面需要清空BackSequence(导航被重置)
-            // 2.栈顶界面是当前显示界面,如果类型为(NeedBack)则需要显示所有backShowTargets界面
             WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
@@ -346,56 +370,11 @@ namespace TinyFrameWork
                     BackWindowSequenceData backData = backSequence.Peek();
                     if (backData.hideTargetWindow != null)
                     {
-                        // 栈顶不是即将显示界面(导航序列被打断)
-                        // 如果当前导航队列顶部元素和当前显示的界面一致，表示和当前的导航数衔接上，后续导航直接使用导航数据
-                        // 不一致则表示，导航已经失效，下次点击返回按钮，我们直接根据window的preWindowId确定跳转到哪一个界面
-
-                        // 如果测试：进入到demo的 关卡详情，点击失败按钮，然后你可以选择从游戏中跳转到哪一个界面，查看导航输出信息
-                        // 可以知道是否破坏了导航数据
-
-                        // if the navigation stack top window not equals to current show window just clear the navigation stack
-                        // check whether the navigation is broken
-
-                        // Example:(we from mainmenu to uilevelwindow to uileveldetailwindow)
-                        // UILevelDetailWindow <- UILevelWindow <- UIMainMenu   (current navigation stack top element is UILevelDetailWindow)
-
-                        // click the GotoGame in UILevelDetailWindow to enter the real Game
-
-                        // 1. Exit game we want to enter UILevelDetailWindow(OK, the same as navigation stack top UILevelDetailWindow) so we not break the navigation
-                        // when we enter the UILevelDetailWindow our system will follow the navigation system
-
-                        // 2. Exit game we want to enter UISkillWindow(OK, not the same as navigation stack top UILevelDetailWindow)so we break the navigation
-                        // reset the navigation data 
-                        // when we click return Button in the UISkillWindow we will find UISkillWindow's preWindowId to navigation because our navigation data is empty
-                        // we should use preWindowId for navigating to next window
-
-                        // HOW to Test
-                        // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
-
                         if (backData.hideTargetWindow.ID != baseWindow.ID)
                         {
                             Debuger.Log("## UICenterMasterManager : Need to clear all back window sequence data ##");
                             Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.ID + " != " + baseWindow.ID);
-                            backSequence.Clear();
-                        }
-                        else
-                        {
-                            if (windowData.navigationMode == UIWindowNavigationMode.NeedAdded
-                                && backData.backShowTargets != null)
-                            {
-                                for (int i = 0; i < backData.backShowTargets.Count; i++)
-                                {
-                                    WindowID backId = backData.backShowTargets[i];
-                                    // 保证最上面为currentShownWindow
-                                    if (i == backData.backShowTargets.Count - 1)
-                                    {
-                                        Debuger.Log("change currentShownNormalWindow : " + backId);
-                                        // 改变当前活跃Normal窗口
-                                        this.lastShownNormalWindow = this.curShownNormalWindow;
-                                        this.curShownNormalWindow = GetGameWindow(backId);
-                                    }
-                                }
-                            }
+                            ClearBackSequence();
                         }
                     }
                     else

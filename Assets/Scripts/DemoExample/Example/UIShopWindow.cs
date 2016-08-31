@@ -23,7 +23,7 @@ namespace TinyFrameWork
             this.preWindowID = WindowID.WindowID_MainMenu;
 
             this.windowData.windowType = UIWindowType.PopUp;
-            this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
+            this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.WithBg;
         }
 

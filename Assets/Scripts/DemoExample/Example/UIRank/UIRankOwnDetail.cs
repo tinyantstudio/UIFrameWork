@@ -33,7 +33,7 @@ namespace TinyFrameWork
         protected override void InitWindowCoreData()
         {
             base.InitWindowCoreData();
-            this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
+            this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
         }
 
         public override void ResetWindow()

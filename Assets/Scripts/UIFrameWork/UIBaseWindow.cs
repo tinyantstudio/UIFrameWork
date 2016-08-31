@@ -72,19 +72,13 @@ namespace TinyFrameWork
         // Need to added to back seq data
         public bool CanAddedToBackSeq
         {
-            get
-            {
-                return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
-            }
+            get { return this.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation; }
         }
 
         // Need Refresh the back seq data
         public bool RefreshBackSeqData
         {
-            get
-            {
-                return this.windowData.navigationMode == UIWindowNavigationMode.NeedAdded;
-            }
+            get { return this.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation; }
         }
 
 
@@ -97,7 +91,7 @@ namespace TinyFrameWork
         public virtual void InitWindowOnAwake()
         {
         }
-        
+
         /// <summary>
         /// Get the current window's manager
         /// </summary>

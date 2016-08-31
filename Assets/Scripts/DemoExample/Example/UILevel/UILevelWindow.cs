@@ -25,7 +25,6 @@ namespace TinyFrameWork
         {
             InitWindowCoreData();
             base.InitWindowOnAwake();
-            // this.RegisterReturnLogic(RetrunPreLogic);
             trsLevelItemsParent = GameUtility.FindDeepChild(this.gameObject, "LevelItems/Items");
             twAlpha = gameObject.GetComponent<TweenAlpha>();
         }
@@ -34,8 +33,8 @@ namespace TinyFrameWork
         {
             base.InitWindowCoreData();
             this.preWindowID = WindowID.WindowID_MainMenu;
-            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
-            this.windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
+            this.windowData.showMode = UIWindowShowMode.DoNothing;
+            this.windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
 
@@ -54,7 +53,7 @@ namespace TinyFrameWork
 
             // When exit the window execute logic
             // Just register the return logic
-            this.RegisterReturnLogic(this.RetrunPreLogic);
+            // this.RegisterReturnLogic(this.RetrunPreLogic);
         }
 
         private List<string> levelNames = new List<string>() { "SkyBattle", "SkyCool", "SkyWorld", "SpaceWar", "ComeOn", "HellFight", "NewBattle", "King" };

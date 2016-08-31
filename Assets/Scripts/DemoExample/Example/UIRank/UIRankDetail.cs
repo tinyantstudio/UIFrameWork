@@ -50,7 +50,7 @@ namespace TinyFrameWork
         protected override void InitWindowCoreData()
         {
             base.InitWindowCoreData();
-            windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
+            windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
         }
         public override void ShowWindow(BaseWindowContextData contextData)
         {

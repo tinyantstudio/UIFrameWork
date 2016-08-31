@@ -69,7 +69,7 @@ namespace TinyFrameWork
                     Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
                     return;
                 }
-                if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
+                if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
                 {
                     BackWindowSequenceData backData = new BackWindowSequenceData();
                     backData.hideTargetWindow = baseWindow;

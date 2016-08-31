@@ -69,7 +69,7 @@ namespace TinyFrameWork
             this.preWindowID = WindowID.WindowID_MainMenu;
             windowData.windowType = UIWindowType.Normal;
             windowData.showMode = UIWindowShowMode.HideOtherWindow;
-            windowData.navigationMode = UIWindowNavigationMode.NeedAdded;
+            windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
 
@@ -125,10 +125,10 @@ namespace TinyFrameWork
 
         private void FillRankItem(List<RankItemData> listData)
         {
-            StartCoroutine(_FileRankItem(listData));
+            StartCoroutine(_FillRankItem(listData));
         }
 
-        IEnumerator _FileRankItem(List<RankItemData> listData)
+        IEnumerator _FillRankItem(List<RankItemData> listData)
         {
             // Destroy all items
             for (int i = 0; i < itemsGrid.childCount; i++)

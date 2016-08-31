@@ -100,10 +100,14 @@ namespace TinyFrameWork
                     {
                         GameObject uiObject = (GameObject)GameObject.Instantiate(prefab);
                         NGUITools.SetActive(uiObject, true);
-
                         // NOTE: You can add component to the window in the inspector
                         // Or just AddComponent<UIxxxxWindow>() to the target
                         baseWindow = uiObject.GetComponent<UIBaseWindow>();
+                        if (baseWindow.ID != id)
+                        {
+                            Debuger.LogError(string.Format("[BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
+                            return null;
+                        }
                         // Get the window target root parent
                         Transform targetRoot = GetTargetRoot(baseWindow.windowData.windowType);
                         GameUtility.AddChildToTarget(targetRoot, baseWindow.gameObject.transform);
@@ -113,7 +117,7 @@ namespace TinyFrameWork
             }
 
             if (baseWindow == null)
-                Debug.LogError("[window instance is null.]" + id.ToString());
+                Debuger.LogError("[window instance is null.]" + id.ToString());
 
             // Call reset window when first load new window
             // Or get forceResetWindow param

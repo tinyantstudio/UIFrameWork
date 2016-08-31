@@ -8,6 +8,7 @@ namespace TinyFrameWork
     {
         private GameObject btnReturn;
         private GameObject btnShowMsg;
+        private GameObject btnShop;
 
         protected override void SetWindowId()
         {
@@ -21,10 +22,15 @@ namespace TinyFrameWork
             base.InitWindowOnAwake();
             btnReturn = GameUtility.FindDeepChild(this.gameObject, "TopLeft/Btn_Rtn").gameObject;
             btnShowMsg = GameUtility.FindDeepChild(this.gameObject, "TopRight/Meg/Sprite").gameObject;
-
+            btnShop = GameUtility.FindDeepChild(this.gameObject, "TopRight/BtnShop").gameObject;
             UIEventListener.Get(btnReturn).onClick = delegate
             {
                 UICenterMasterManager.Instance.ReturnWindow();
+            };
+
+            UIEventListener.Get(btnShop).onClick = delegate
+            {
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
             };
 
             // message box Test.
@@ -44,18 +50,6 @@ namespace TinyFrameWork
         public override void ShowWindow(BaseWindowContextData contextData)
         {
             this.gameObject.SetActive(true);
-        }
-
-        void Update()
-        {
-            // test for PopWindow
-            if (Input.GetKeyDown(KeyCode.P))
-                UICenterMasterManager.Instance.ShowMessageBox("Oh press P show me!");
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
-                Debuger.Log("## show the pop window shop ##");
-            }
         }
     }
 }

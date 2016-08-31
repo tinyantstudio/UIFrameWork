@@ -11,7 +11,7 @@ namespace TinyFrameWork
         {
             return instance;
         }
-         
+
         protected override void Awake()
         {
             base.Awake();
@@ -57,14 +57,19 @@ namespace TinyFrameWork
             if (!IsWindowInControl(id))
             {
                 Debuger.Log("UIRankManager has no control power of " + id.ToString());
-                return; 
+                return;
             }
             if (shownWindows.ContainsKey((int)id))
                 return;
             if (allWindows.ContainsKey((int)id))
             {
                 UIBaseWindow baseWindow = allWindows[(int)id];
-                if(baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
+                if (baseWindow.ID != id)
+                {
+                    Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
+                    return;
+                }
+                if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NeedAdded)
                 {
                     BackWindowSequenceData backData = new BackWindowSequenceData();
                     backData.hideTargetWindow = baseWindow;
@@ -88,7 +93,7 @@ namespace TinyFrameWork
         {
             foreach (KeyValuePair<int, UIBaseWindow> childWindow in allWindows)
             {
-                childWindow.Value.ResetWindow(); 
+                childWindow.Value.ResetWindow();
             }
             shownWindows.Clear();
         }

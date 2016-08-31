@@ -13,7 +13,6 @@ namespace TinyFrameWork
         private UISprite spHeadIcon;
         private GameObject objAnimation;
         private GameObject btnClose;
-
         private GameObject btnGoToLevel;
 
         // animation content
@@ -75,7 +74,7 @@ namespace TinyFrameWork
 
         public void EnterAnimation(EventDelegate.Callback onComplete)
         {
-            if(twPosition== null)
+            if (twPosition == null)
                 twPosition = objAnimation.GetComponent<TweenPosition>();
             twPosition.PlayForward();
             EventDelegate.Set(twPosition.onFinished, onComplete);
@@ -97,7 +96,7 @@ namespace TinyFrameWork
 
         private void OnBtnClose(GameObject gb)
         {
-           UIRankManager.GetInstance().HideWindow(this.ID);
+            UIRankManager.GetInstance().HideWindow(this.ID);
         }
 
         public void UpdateDetailData(string playerName, string iconName)
@@ -105,6 +104,5 @@ namespace TinyFrameWork
             lbDetail.text = playerName;
             spHeadIcon.spriteName = iconName;
         }
-
     }
 }

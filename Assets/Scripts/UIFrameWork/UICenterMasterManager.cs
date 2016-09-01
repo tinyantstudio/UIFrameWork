@@ -114,8 +114,11 @@ namespace TinyFrameWork
             if (newAdded || (showData != null && showData.forceResetWindow))
                 baseWindow.ResetWindow();
 
-            // refresh the navigation data
-            ExecuteNavigationLogic(baseWindow, showData);
+            if (showData == null || (showData != null && showData.executeNavLogic))
+            {
+                // refresh the navigation data
+                ExecuteNavigationLogic(baseWindow, showData);
+            }
 
             // Adjust the window depth
             AdjustBaseWindowDepth(baseWindow);
@@ -186,9 +189,9 @@ namespace TinyFrameWork
         /// </summary>
         public override bool ReturnWindow()
         {
-            if (curShownNormalWindow != null)
+            if (curNavigationWindow != null)
             {
-                bool needReturn = curShownNormalWindow.ExecuteReturnLogic();
+                bool needReturn = curNavigationWindow.ExecuteReturnLogic();
                 if (needReturn)
                     return false;
             }
@@ -251,7 +254,7 @@ namespace TinyFrameWork
             WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
-                this.RefreshBackSequenceData(baseWindow);
+                this.RefreshBackSequenceData(baseWindow, showData);
             }
             else if (windowData.showMode == UIWindowShowMode.HideOtherWindow)
             {
@@ -266,21 +269,19 @@ namespace TinyFrameWork
                 ClearBackSequence();
             }
             else
-                CheckBackSequenceData(baseWindow);
+            {
+                if ((showData != null && showData.checkNavigation))
+                    CheckBackSequenceData(baseWindow);
+            }
         }
 
-        private void RefreshBackSequenceData(UIBaseWindow targetWindow)
+        private void RefreshBackSequenceData(UIBaseWindow targetWindow, ShowWindowData showData)
         {
             WindowCoreData coreData = targetWindow.windowData;
             bool dealBackSequence = true;
-            if (curShownNormalWindow != null)
+            if (curNavigationWindow != null)
             {
-                if (curShownNormalWindow.windowData.navigationMode == UIWindowNavigationMode.IgnoreNavigation)
-                {
-                    dealBackSequence = false;
-                    HideWindow(curShownNormalWindow.ID, null);
-                }
-                Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curShownNormalWindow.ID);
+                Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curNavigationWindow.ID);
             }
 
             if (shownWindows.Count > 0 && dealBackSequence)
@@ -290,7 +291,6 @@ namespace TinyFrameWork
                 List<UIBaseWindow> sortedHiddenWindows = new List<UIBaseWindow>();
 
                 BackWindowSequenceData backData = new BackWindowSequenceData();
-
                 foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
                 {
                     bool needToHide = (coreData.showMode == UIWindowShowMode.DoNothing || window.Value.windowData.windowType == UIWindowType.Fixed ? false : true);
@@ -301,10 +301,8 @@ namespace TinyFrameWork
                         removedKey.Add((WindowID)window.Key);
                         window.Value.HideWindowDirectly();
                     }
-
+                    sortedHiddenWindows.Add(window.Value);
                     // Add to navigation sequence data
-                    if (window.Value.CanAddedToBackSeq)
-                        sortedHiddenWindows.Add(window.Value);
                 }
 
                 if (removedKey != null)
@@ -314,9 +312,9 @@ namespace TinyFrameWork
                 }
 
                 // push to backToShowWindows stack
-                if (sortedHiddenWindows.Count > 0)
+                if(coreData.navigationMode == UIWindowNavigationMode.NormalNavigation && (showData == null || (!showData.ignoreAddNavData)))
                 {
-                    // 按照层级顺序存入显示List中 
+                    // 按照层级顺序存入显示List中
                     // Add to return show target list
                     sortedHiddenWindows.Sort(new CompareBaseWindow());
                     for (int i = 0; i < sortedHiddenWindows.Count; i++)
@@ -327,6 +325,7 @@ namespace TinyFrameWork
                     backData.hideTargetWindow = targetWindow;
                     backData.backShowTargets = navHiddenWindows;
                     backSequence.Push(backData);
+                    Debuger.Log("### Push new Navigation data ###");
                 }
             }
         }
@@ -362,7 +361,6 @@ namespace TinyFrameWork
         // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
         private void CheckBackSequenceData(UIBaseWindow baseWindow)
         {
-            WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
                 if (backSequence.Count > 0)

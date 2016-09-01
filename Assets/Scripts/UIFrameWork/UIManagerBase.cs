@@ -17,25 +17,20 @@ namespace TinyFrameWork
         protected Dictionary<int, UIBaseWindow> allWindows;
         protected Dictionary<int, UIBaseWindow> shownWindows;
         protected Stack<BackWindowSequenceData> backSequence;
-        // current active base window
-        protected UIBaseWindow curShownNormalWindow = null;
-        // last active base window
-        protected UIBaseWindow lastShownNormalWindow = null;
-
-        // 是否等待关闭结束
-        // 开启:等待界面关闭结束,处理后续逻辑
-        // 关闭:不等待界面关闭结束，处理后续逻辑
-
+        // current active navigation window
+        protected UIBaseWindow curNavigationWindow = null;
+        // last active navigation window
+        protected UIBaseWindow lastNavigationWindow = null;
+        // current shown window
+        protected WindowID curShownWindowId = WindowID.WindowID_Invaild;
         // Wait HideAnimation over
         // True: wait the window hide animation over
         // False: immediately call the complete animation finish the hide process
         protected bool isNeedWaitHideOver = false;
 
-        // 管理的界面ID
         // Managed windowIds
         protected List<int> managedWindowIds = new List<int>();
 
-        // 界面按MinDepth排序
         // Compare with panel depth
         protected class CompareBaseWindow : IComparer<UIBaseWindow>
         {
@@ -45,7 +40,7 @@ namespace TinyFrameWork
             }
         }
 
-        // Cached list avoid (avoid always new List<WindowID>)
+        // Cached list (avoid always new List<WindowID>)
         private List<WindowID> listCached = new List<WindowID>();
 
         protected virtual void Awake()
@@ -126,10 +121,11 @@ namespace TinyFrameWork
             shownWindows[(int)id] = baseWindow;
             if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
             {
-                // 改变当前显示Normal窗口
-                lastShownNormalWindow = curShownNormalWindow;
-                curShownNormalWindow = baseWindow;
+                lastNavigationWindow = curNavigationWindow;
+                curNavigationWindow = baseWindow;
             }
+            Debug.Log("#### Show the window : " + baseWindow.ID.ToString());
+            this.curShownWindowId = baseWindow.ID;
         }
 
         /// <summary>
@@ -165,7 +161,7 @@ namespace TinyFrameWork
         {
             if (!IsWindowInControl(id))
             {
-                Debug.Log("## Current UI Manager has no control power of " + id.ToString());
+                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
             if (!shownWindows.ContainsKey((int)id))
@@ -222,27 +218,29 @@ namespace TinyFrameWork
         {
             if (backSequence.Count == 0)
             {
-                // 如果当前BackSequenceData 不存在返回数据
-                // 检测当前Window的preWindowId是否指向上一级合法指定菜单
-
-                // if BackSequenceData is null
-                // Check window's preWindowId
-                // if preWindowId defined just move to target Window(preWindowId)
-                if (curShownNormalWindow == null)
+                if (curNavigationWindow == null)
                     return false;
-                if (ReturnWindowManager(curShownNormalWindow))
+                if (ReturnWindowManager(curNavigationWindow))
                     return true;
 
-                WindowID preWindowId = curShownNormalWindow.PreWindowID;
+                // if curNavigationWindow BackSequenceData is null
+                // Check window's preWindowId
+                // if preWindowId defined just move to target Window(preWindowId)
+                WindowID preWindowId = curNavigationWindow.PreWindowID;
                 if (preWindowId != WindowID.WindowID_Invaild)
                 {
-                    HideWindow(curShownNormalWindow.ID, delegate
+                    Debuger.LogWarning(string.Format(string.Format("## Current nav window {0} need show pre window {1}.", curNavigationWindow.ID.ToString(), preWindowId.ToString())));
+                    HideWindow(curNavigationWindow.ID, delegate
                     {
-                        ShowWindow(preWindowId, null);
+                        ShowWindowData showData = new ShowWindowData();
+                        showData.executeNavLogic = false;
+                        ShowWindow(preWindowId, showData);
                     });
                 }
                 else
-                    Debuger.LogWarning("## CurrentShownWindow " + curShownNormalWindow.ID + " preWindowId is " + WindowID.WindowID_Invaild);
+                {
+                    Debuger.LogWarning("## CurrentShownWindow " + curNavigationWindow.ID + " preWindowId is " + WindowID.WindowID_Invaild);
+                }
                 return false;
             }
             BackWindowSequenceData backData = backSequence.Peek();
@@ -264,8 +262,8 @@ namespace TinyFrameWork
                                 if (i == backData.backShowTargets.Count - 1)
                                 {
                                     Debuger.Log("##[UIFrameWork] Change currentShownNormalWindow : " + backId);
-                                    this.lastShownNormalWindow = this.curShownNormalWindow;
-                                    this.curShownNormalWindow = GetGameWindow(backId);
+                                    this.lastNavigationWindow = this.curNavigationWindow;
+                                    this.curNavigationWindow = GetGameWindow(backId);
                                 }
                             }
                         }

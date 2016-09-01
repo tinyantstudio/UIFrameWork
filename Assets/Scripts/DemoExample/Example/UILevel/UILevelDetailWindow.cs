@@ -53,6 +53,7 @@ namespace TinyFrameWork
         protected override void InitWindowCoreData()
         {
             base.InitWindowCoreData();
+            this.preWindowID = WindowID.WindowID_Level;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
             this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;

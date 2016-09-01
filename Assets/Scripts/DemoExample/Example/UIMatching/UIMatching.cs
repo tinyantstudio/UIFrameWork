@@ -6,7 +6,7 @@ using System;
 namespace TinyFrameWork
 {
     /// <summary>
-    /// 比赛界面
+    /// Matching Window
     /// </summary>
     public class UIMatching : UIBaseWindow
     {
@@ -32,6 +32,9 @@ namespace TinyFrameWork
             // load new scene to show target window
             UIEventListener.Get(btnWin).onClick = delegate
             {
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
+                return;
+
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
                     // 是否需要一个退出比赛单独接口?

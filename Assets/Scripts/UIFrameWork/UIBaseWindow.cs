@@ -81,7 +81,6 @@ namespace TinyFrameWork
             get { return this.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation; }
         }
 
-
         // Set the window Id use 
         protected abstract void SetWindowId();
 

@@ -46,7 +46,10 @@ namespace TinyFrameWork
                 //ShowWindowData windowData = new ShowWindowData();
                 //windowData.needClearBackSequence = true;
                 UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill);
+                ShowWindowData showData = new ShowWindowData();
+                showData.checkNavigation = true;
+                showData.ignoreAddNavData = true;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill, showData);
             };
 
             UIEventListener.Get(btnRank).onClick = delegate
@@ -54,7 +57,10 @@ namespace TinyFrameWork
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
                 //UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Level);
+                ShowWindowData showData = new ShowWindowData();
+                showData.checkNavigation = true;
+                showData.ignoreAddNavData = true;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_LevelDetail, showData);
             };
         }
 
@@ -90,7 +96,10 @@ namespace TinyFrameWork
         private void OnContineBtn(GameObject obj)
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-            UICenterMasterManager.Instance.ShowWindow(targetBackWindowId, null);
+            ShowWindowData showData = new ShowWindowData();
+            showData.checkNavigation = true;
+            showData.ignoreAddNavData = true;
+            UICenterMasterManager.Instance.ShowWindow(targetBackWindowId, showData);
         }
     }
 }

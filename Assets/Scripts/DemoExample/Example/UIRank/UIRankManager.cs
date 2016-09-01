@@ -79,8 +79,8 @@ namespace TinyFrameWork
                 allWindows[(int)id].ShowWindow(contextData);
                 shownWindows[(int)id] = allWindows[(int)id];
 
-                this.lastShownNormalWindow = this.curShownNormalWindow;
-                curShownNormalWindow = baseWindow;
+                this.lastNavigationWindow = this.curNavigationWindow;
+                curNavigationWindow = baseWindow;
             }
         }
 

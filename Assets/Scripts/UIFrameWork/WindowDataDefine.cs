@@ -29,4 +29,3 @@ namespace TinyFrameWork
     }
     public delegate bool BoolDelegate();
 }
-

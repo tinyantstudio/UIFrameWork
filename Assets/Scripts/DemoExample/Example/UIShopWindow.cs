@@ -20,9 +20,8 @@ namespace TinyFrameWork
         protected override void InitWindowCoreData()
         {
             base.InitWindowCoreData();
-            this.preWindowID = WindowID.WindowID_MainMenu;
-
             this.windowData.windowType = UIWindowType.PopUp;
+            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.WithBg;
         }

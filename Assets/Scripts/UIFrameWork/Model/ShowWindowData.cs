@@ -9,4 +9,10 @@ public class ShowWindowData
     public bool forceClearBackSeqData = false;
     // Object (pass data to target showed window)
     public BaseWindowContextData contextData;
+    // Execute the navigation logic
+    public bool executeNavLogic = true;
+    // Check navigation 
+    public bool checkNavigation = false;
+    // force ingore add nav data
+    public bool ignoreAddNavData = false;
 }

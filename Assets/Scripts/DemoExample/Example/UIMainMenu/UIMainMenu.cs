@@ -109,6 +109,7 @@ namespace TinyFrameWork
         {
             base.InitWindowCoreData();
             this.windowData.forceClearNavigation = true;
+            this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
         }
     }
 }

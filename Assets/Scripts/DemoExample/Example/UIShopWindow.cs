@@ -21,7 +21,7 @@ namespace TinyFrameWork
         {
             base.InitWindowCoreData();
             this.windowData.windowType = UIWindowType.PopUp;
-            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
+            this.windowData.showMode = UIWindowShowMode.DoNothing;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.WithBg;
         }

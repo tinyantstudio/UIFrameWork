@@ -34,7 +34,7 @@ namespace TinyFrameWork
             if (rankDetailScript == null)
                 rankDetailScript = objRankDetail.AddComponent<UIRankDetail>();
 
-            allWindows[(int)WindowID.WindowID_Rank_Detail] = rankDetailScript;
+            dicAllWindows[(int)WindowID.WindowID_Rank_Detail] = rankDetailScript;
 
             // UIRankOwnDetail sub window
             GameObject objRankOwnDetail = GameUtility.FindDeepChild(this.gameObject, "OwnDetailWindow").gameObject;
@@ -42,7 +42,7 @@ namespace TinyFrameWork
             if (rankOwnDetailScript == null)
                 rankOwnDetailScript = objRankOwnDetail.AddComponent<UIRankOwnDetail>();
 
-            allWindows[(int)WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
+            dicAllWindows[(int)WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
         }
 
         protected override void InitWindowControl()
@@ -59,11 +59,11 @@ namespace TinyFrameWork
                 Debuger.Log("UIRankManager has no control power of " + id.ToString());
                 return;
             }
-            if (shownWindows.ContainsKey((int)id))
+            if (dicShownWindows.ContainsKey((int)id))
                 return;
-            if (allWindows.ContainsKey((int)id))
+            if (dicAllWindows.ContainsKey((int)id))
             {
-                UIBaseWindow baseWindow = allWindows[(int)id];
+                UIBaseWindow baseWindow = dicAllWindows[(int)id];
                 if (baseWindow.ID != id)
                 {
                     Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
@@ -76,8 +76,8 @@ namespace TinyFrameWork
                     backSequence.Push(backData);
                 }
                 BaseWindowContextData contextData = showData == null ? null : showData.contextData;
-                allWindows[(int)id].ShowWindow(contextData);
-                shownWindows[(int)id] = allWindows[(int)id];
+                dicAllWindows[(int)id].ShowWindow(contextData);
+                dicShownWindows[(int)id] = dicAllWindows[(int)id];
 
                 this.lastNavigationWindow = this.curNavigationWindow;
                 curNavigationWindow = baseWindow;
@@ -91,11 +91,11 @@ namespace TinyFrameWork
 
         public override void ResetAllInControlWindows()
         {
-            foreach (KeyValuePair<int, UIBaseWindow> childWindow in allWindows)
+            foreach (KeyValuePair<int, UIBaseWindow> childWindow in dicAllWindows)
             {
                 childWindow.Value.ResetWindow();
             }
-            shownWindows.Clear();
+            dicShownWindows.Clear();
         }
 
         public override bool ReturnWindow()

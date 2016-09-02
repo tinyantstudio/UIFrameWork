@@ -14,6 +14,7 @@ namespace TinyFrameWork
 
         private GameObject btnWin;
         private GameObject btnLose;
+        private GameObject btnShop;
 
         protected override void SetWindowId()
         {
@@ -27,20 +28,14 @@ namespace TinyFrameWork
 
             btnWin = GameUtility.FindDeepChild(this.gameObject, "BtnWin").gameObject;
             btnLose = GameUtility.FindDeepChild(this.gameObject, "BtnLose").gameObject;
+            btnShop = GameUtility.FindDeepChild(this.gameObject, "BtnShop").gameObject;
 
             // win the game
             // load new scene to show target window
             UIEventListener.Get(btnWin).onClick = delegate
             {
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
-                return;
-
                 GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
                 {
-                    // 是否需要一个退出比赛单独接口?
-                    // UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                    // UIManager.GetInstance().ShowWindow(WindowID.WindowID_LevelDetail);
-
                     UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_MatchResult);
                     UIBaseWindow baseWindow = UICenterMasterManager.Instance.GetGameWindow(WindowID.WindowID_MatchResult);
                     ((UIMatchResult)baseWindow).SetMatchResult(true, targetBackWindowId);
@@ -58,6 +53,12 @@ namespace TinyFrameWork
                     ((UIMatchResult)baseWindow).SetMatchResult(false, targetBackWindowId);
                 });
             };
+
+            // show navigation window shop
+            UIEventListener.Get(btnShop).onClick = delegate
+            {
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Shop);
+            };
         }
 
         protected override void InitWindowCoreData()
@@ -67,6 +68,11 @@ namespace TinyFrameWork
             this.windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         }
 
+        public override void ShowWindow(BaseWindowContextData contextData = null)
+        {
+            base.ShowWindow(contextData);
+            UICenterMasterManager.Instance.HideWindow(WindowID.WindowID_TopBar);
+        }
         public void SetMatchingData(WindowID backIWindowId)
         {
             targetBackWindowId = backIWindowId;

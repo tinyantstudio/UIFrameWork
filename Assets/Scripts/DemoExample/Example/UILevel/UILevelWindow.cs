@@ -34,7 +34,7 @@ namespace TinyFrameWork
             base.InitWindowCoreData();
             this.preWindowID = WindowID.WindowID_MainMenu;
 
-            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
+            this.windowData.showMode = UIWindowShowMode.DoNothing;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }

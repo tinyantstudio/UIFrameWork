@@ -13,6 +13,6 @@ public class ShowWindowData
     public bool executeNavLogic = true;
     // Check navigation 
     public bool checkNavigation = false;
-    // force ingore add nav data
+    // force ignore add nav data
     public bool ignoreAddNavData = false;
 }

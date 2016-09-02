@@ -43,8 +43,6 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnSkill).onClick = delegate
             {
-                //ShowWindowData windowData = new ShowWindowData();
-                //windowData.needClearBackSequence = true;
                 UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
                 ShowWindowData showData = new ShowWindowData();
                 showData.checkNavigation = true;
@@ -54,8 +52,6 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnRank).onClick = delegate
             {
-                //UIManager.GetInstance().ShowWindow(WindowID.WindowID_TopBar);
-                //UIManager.GetInstance().ShowWindow(WindowID.WindowID_Rank);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
                 ShowWindowData showData = new ShowWindowData();
                 showData.checkNavigation = true;

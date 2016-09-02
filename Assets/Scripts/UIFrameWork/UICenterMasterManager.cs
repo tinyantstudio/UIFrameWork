@@ -72,7 +72,7 @@ namespace TinyFrameWork
             }
 
             // If the window in shown list just return
-            if (shownWindows.ContainsKey((int)id))
+            if (dicShownWindows.ContainsKey((int)id))
                 return null;
 
             UIBaseWindow baseWindow = GetGameWindow(id);
@@ -95,13 +95,13 @@ namespace TinyFrameWork
                         baseWindow = uiObject.GetComponent<UIBaseWindow>();
                         if (baseWindow.ID != id)
                         {
-                            Debuger.LogError(string.Format("[BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
+                            Debuger.LogError(string.Format("<color=cyan>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
                         // Get the window target root parent
                         Transform targetRoot = GetTargetRoot(baseWindow.windowData.windowType);
                         GameUtility.AddChildToTarget(targetRoot, baseWindow.gameObject.transform);
-                        allWindows[(int)id] = baseWindow;
+                        dicAllWindows[(int)id] = baseWindow;
                     }
                 }
             }
@@ -189,12 +189,6 @@ namespace TinyFrameWork
         /// </summary>
         public override bool ReturnWindow()
         {
-            if (curNavigationWindow != null)
-            {
-                bool needReturn = curNavigationWindow.ExecuteReturnLogic();
-                if (needReturn)
-                    return false;
-            }
             return RealReturnWindow();
         }
 
@@ -209,17 +203,17 @@ namespace TinyFrameWork
             if (windowType == UIWindowType.Normal)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UINormalWindowRoot.gameObject, false) + 1, normalWindowDepth, int.MaxValue);
-                Debuger.Log("[UIWindowType.Normal] maxDepth is " + needDepth + baseWindow.ID);
+                Debuger.Log(string.Format("<color=cyan>[UIWindowType.Normal] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.PopUp)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UIPopUpWindowRoot.gameObject) + 1, popUpWindowDepth, int.MaxValue);
-                Debuger.Log("[UIWindowType.PopUp] maxDepth is " + needDepth);
+                Debuger.Log(string.Format("<color=cyan>[UIWindowType.PopUp] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.Fixed)
             {
                 needDepth = Mathf.Clamp(GameUtility.GetMaxTargetDepth(UIFixedWidowRoot.gameObject) + 1, fixedWindowDepth, int.MaxValue);
-                Debuger.Log("[UIWindowType.Fixed] max depth is " + needDepth);
+                Debuger.Log(string.Format("<color=cyan>[UIWindowType.Fixed] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             if (baseWindow.MinDepth != needDepth)
                 GameUtility.SetTargetMinPanelDepth(baseWindow.gameObject, needDepth);
@@ -258,14 +252,14 @@ namespace TinyFrameWork
             }
             else if (windowData.showMode == UIWindowShowMode.HideOtherWindow)
             {
-                HideAllShownWindow(true);
+                HideAllShownWindow();
             }
 
             // If target window is mark as force clear all the navigation sequence data
             // Show data need force clear the back seq data
             if (baseWindow.windowData.forceClearNavigation || (showData != null && showData.forceClearBackSeqData))
             {
-                Debuger.Log("## [Enter the start window, reset the backSequenceData for the navigation system.]##");
+                Debuger.Log("<color=cyan>## [Enter the start window, reset the backSequenceData for the navigation system.]##</color>");
                 ClearBackSequence();
             }
             else
@@ -279,19 +273,14 @@ namespace TinyFrameWork
         {
             WindowCoreData coreData = targetWindow.windowData;
             bool dealBackSequence = true;
-            if (curNavigationWindow != null)
-            {
-                Debuger.Log("## UICenterMasterManager : current shown Normal Window is " + curNavigationWindow.ID);
-            }
-
-            if (shownWindows.Count > 0 && dealBackSequence)
+            if (dicShownWindows.Count > 0 && dealBackSequence)
             {
                 List<WindowID> removedKey = null;
                 List<WindowID> navHiddenWindows = new List<WindowID>();
                 List<UIBaseWindow> sortedHiddenWindows = new List<UIBaseWindow>();
 
                 BackWindowSequenceData backData = new BackWindowSequenceData();
-                foreach (KeyValuePair<int, UIBaseWindow> window in shownWindows)
+                foreach (KeyValuePair<int, UIBaseWindow> window in dicShownWindows)
                 {
                     bool needToHide = (coreData.showMode == UIWindowShowMode.DoNothing || window.Value.windowData.windowType == UIWindowType.Fixed ? false : true);
                     if (needToHide)
@@ -302,19 +291,18 @@ namespace TinyFrameWork
                         window.Value.HideWindowDirectly();
                     }
                     sortedHiddenWindows.Add(window.Value);
-                    // Add to navigation sequence data
                 }
 
                 if (removedKey != null)
                 {
                     for (int i = 0; i < removedKey.Count; i++)
-                        shownWindows.Remove((int)removedKey[i]);
+                        dicShownWindows.Remove((int)removedKey[i]);
                 }
 
                 // push to backToShowWindows stack
-                if(coreData.navigationMode == UIWindowNavigationMode.NormalNavigation && (showData == null || (!showData.ignoreAddNavData)))
+                if (coreData.navigationMode == UIWindowNavigationMode.NormalNavigation &&
+                    (showData == null || (!showData.ignoreAddNavData)))
                 {
-                    // 按照层级顺序存入显示List中
                     // Add to return show target list
                     sortedHiddenWindows.Sort(new CompareBaseWindow());
                     for (int i = 0; i < sortedHiddenWindows.Count; i++)
@@ -325,7 +313,7 @@ namespace TinyFrameWork
                     backData.hideTargetWindow = targetWindow;
                     backData.backShowTargets = navHiddenWindows;
                     backSequence.Push(backData);
-                    Debuger.Log("### Push new Navigation data ###");
+                    Debuger.Log("<color=cyan>### !!!Push new Navigation data!!! ###</color>");
                 }
             }
         }
@@ -370,7 +358,7 @@ namespace TinyFrameWork
                     {
                         if (backData.hideTargetWindow.ID != baseWindow.ID)
                         {
-                            Debuger.Log("## UICenterMasterManager : Need to clear all back window sequence data ##");
+                            Debuger.Log("<color=cyan>## UICenterMasterManager : Need to clear all back window sequence data ##</color>");
                             Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.ID + " != " + baseWindow.ID);
                             ClearBackSequence();
                         }

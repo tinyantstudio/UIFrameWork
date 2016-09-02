@@ -282,15 +282,18 @@ namespace TinyFrameWork
                 BackWindowSequenceData backData = new BackWindowSequenceData();
                 foreach (KeyValuePair<int, UIBaseWindow> window in dicShownWindows)
                 {
-                    bool needToHide = (coreData.showMode == UIWindowShowMode.DoNothing || window.Value.windowData.windowType == UIWindowType.Fixed ? false : true);
-                    if (needToHide)
+                    if (coreData.showMode != UIWindowShowMode.DoNothing)
                     {
+                        if (window.Value.windowData.windowType == UIWindowType.Fixed)
+                            continue;
                         if (removedKey == null)
                             removedKey = new List<WindowID>();
                         removedKey.Add((WindowID)window.Key);
                         window.Value.HideWindowDirectly();
                     }
-                    sortedHiddenWindows.Add(window.Value);
+
+                    if (window.Value.windowData.windowType != UIWindowType.Fixed)
+                        sortedHiddenWindows.Add(window.Value);
                 }
 
                 if (removedKey != null)

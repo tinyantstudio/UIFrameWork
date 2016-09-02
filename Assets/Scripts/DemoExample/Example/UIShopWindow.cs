@@ -22,7 +22,7 @@ namespace TinyFrameWork
             base.InitWindowCoreData();
             this.windowData.windowType = UIWindowType.PopUp;
             this.windowData.showMode = UIWindowShowMode.DoNothing;
-            this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
+            this.windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.WithBg;
         }
 
@@ -30,8 +30,9 @@ namespace TinyFrameWork
         {
             UIEventListener.Get(obj).onClick = delegate
             {
-                UICenterMasterManager.Instance.ReturnWindow();
-                Debuger.Log("## On click Shop window's background collider ##");
+                // UICenterMasterManager.Instance.PopNavigationWindow();
+                UICenterMasterManager.Instance.CloseWindow(this.ID);
+                Debuger.Log("<color=green>## [UIShop] ##</color> On click Shop window's background collider ##");
             };
         }
     }

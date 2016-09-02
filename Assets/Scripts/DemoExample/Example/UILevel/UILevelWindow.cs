@@ -34,7 +34,7 @@ namespace TinyFrameWork
             base.InitWindowCoreData();
             this.preWindowID = WindowID.WindowID_MainMenu;
 
-            this.windowData.showMode = UIWindowShowMode.DoNothing;
+            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
         }
@@ -130,7 +130,7 @@ namespace TinyFrameWork
                         Debuger.Log("Message Box click YES to leave level window.");
                         UICenterMasterManager.Instance.CloseMessageBox();
                         realReturnToMainMenu = true;
-                        UICenterMasterManager.Instance.ReturnWindow();
+                        UICenterMasterManager.Instance.PopNavigationWindow();
                     },
                     "No",
                     delegate

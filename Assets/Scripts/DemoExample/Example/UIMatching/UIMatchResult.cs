@@ -43,20 +43,26 @@ namespace TinyFrameWork
 
             UIEventListener.Get(btnSkill).onClick = delegate
             {
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-                ShowWindowData showData = new ShowWindowData();
-                showData.checkNavigation = true;
-                showData.ignoreAddNavData = true;
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill, showData);
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", true, delegate
+                {
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+                    ShowWindowData showData = new ShowWindowData();
+                    showData.checkNavigation = true;
+                    showData.ignoreAddNavData = true;
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Skill, showData);
+                });
             };
 
             UIEventListener.Get(btnRank).onClick = delegate
             {
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-                ShowWindowData showData = new ShowWindowData();
-                showData.checkNavigation = true;
-                showData.ignoreAddNavData = true;
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_LevelDetail, showData);
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", true, delegate
+                {
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+                    ShowWindowData showData = new ShowWindowData();
+                    showData.checkNavigation = true;
+                    showData.ignoreAddNavData = true;
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_LevelDetail, showData);
+                });
             };
         }
 
@@ -91,11 +97,15 @@ namespace TinyFrameWork
 
         private void OnContineBtn(GameObject obj)
         {
-            UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
-            ShowWindowData showData = new ShowWindowData();
-            showData.checkNavigation = true;
-            showData.ignoreAddNavData = true;
-            UICenterMasterManager.Instance.ShowWindow(targetBackWindowId, showData);
+            GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", true, delegate
+            {
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_TopBar);
+                ShowWindowData showData = new ShowWindowData();
+                showData.checkNavigation = true;
+                showData.ignoreAddNavData = true;
+                UICenterMasterManager.Instance.ShowWindow(targetBackWindowId, showData);
+            });
+
         }
     }
 }

@@ -187,9 +187,9 @@ namespace TinyFrameWork
         /// If true just execute the return logic
         /// If false just immediately enter the RealReturnWindow() logic
         /// </summary>
-        public override bool ReturnWindow()
+        public override bool PopNavigationWindow()
         {
-            return RealReturnWindow();
+            return RealPopNavigationWindow();
         }
 
         /// <summary>
@@ -276,7 +276,6 @@ namespace TinyFrameWork
             if (dicShownWindows.Count > 0 && dealBackSequence)
             {
                 List<WindowID> removedKey = null;
-                List<WindowID> navHiddenWindows = new List<WindowID>();
                 List<UIBaseWindow> sortedHiddenWindows = new List<UIBaseWindow>();
 
                 BackWindowSequenceData backData = new BackWindowSequenceData();
@@ -302,12 +301,13 @@ namespace TinyFrameWork
                         dicShownWindows.Remove((int)removedKey[i]);
                 }
 
-                // push to backToShowWindows stack
+                // Push new navigation data
                 if (coreData.navigationMode == UIWindowNavigationMode.NormalNavigation &&
                     (showData == null || (!showData.ignoreAddNavData)))
                 {
                     // Add to return show target list
-                    sortedHiddenWindows.Sort(new CompareBaseWindow());
+                    sortedHiddenWindows.Sort(this.compareWindowFun);
+                    List<WindowID> navHiddenWindows = new List<WindowID>();
                     for (int i = 0; i < sortedHiddenWindows.Count; i++)
                     {
                         WindowID pushWindowId = sortedHiddenWindows[i].ID;
@@ -361,7 +361,7 @@ namespace TinyFrameWork
                     {
                         if (backData.hideTargetWindow.ID != baseWindow.ID)
                         {
-                            Debuger.Log("<color=cyan>## UICenterMasterManager : Need to clear all back window sequence data ##</color>");
+                            Debuger.Log("<color=cyan>## UICenterMasterManager : clear sequence data ##</color>");
                             Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.hideTargetWindow.ID + " != " + baseWindow.ID);
                             ClearBackSequence();
                         }

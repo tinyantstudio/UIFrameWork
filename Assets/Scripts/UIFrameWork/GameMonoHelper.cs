@@ -20,23 +20,23 @@ namespace TinyFrameWork
             DontDestroyOnLoad(this.gameObject);
         }
 
-        public void LoadGameScene(string strSceneName, Action callBack)
+        public void LoadGameScene(string strSceneName, bool closeAllUI, Action callBack)
         {
-            StartCoroutine(_LoadGameScene(strSceneName, callBack));
+            StartCoroutine(_LoadGameScene(strSceneName, closeAllUI, callBack));
         }
 
-        IEnumerator _LoadGameScene(string strSceneName, Action callBack)
+        IEnumerator _LoadGameScene(string strSceneName, bool closeAllUI, Action callBack)
         {
             op = Application.LoadLevelAsync(strSceneName);
             while (!op.isDone)
                 yield return 0;
 
+            if (closeAllUI)
+                UICenterMasterManager.Instance.HideAllShownWindow(true);
+
             if (callBack != null)
                 callBack();
-
-            // http://answers.unity3d.com/questions/348974/edit-camera-culling-mask.html
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
-    } 
+    }
 }
-

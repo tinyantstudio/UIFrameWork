@@ -75,13 +75,18 @@ namespace TinyFrameWork
                     backData.hideTargetWindow = baseWindow;
                     backSequence.Push(backData);
                 }
-                BaseWindowContextData contextData = showData == null ? null : showData.contextData;
-                dicAllWindows[(int)id].ShowWindow(contextData);
-                dicShownWindows[(int)id] = dicAllWindows[(int)id];
-
-                this.lastNavigationWindow = this.curNavigationWindow;
-                curNavigationWindow = baseWindow;
+                this.RealShowWindow(baseWindow, baseWindow.ID, showData);
             }
+        }
+
+        protected override int GetCurrenShownWindow()
+        {
+            if (backSequence.Count > 0)
+            {
+                BackWindowSequenceData data = backSequence.Peek();
+                return (int)data.hideTargetWindow.ID;
+            }
+            return (int)WindowID.WindowID_Invaild;
         }
 
         public override void HideWindow(WindowID id, System.Action onComplete)
@@ -98,9 +103,9 @@ namespace TinyFrameWork
             dicShownWindows.Clear();
         }
 
-        public override bool ReturnWindow()
+        public override bool PopNavigationWindow()
         {
-            bool isValidBack = RealReturnWindow();
+            bool isValidBack = RealPopNavigationWindow();
             return isValidBack;
         }
     }

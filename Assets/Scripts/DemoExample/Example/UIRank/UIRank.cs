@@ -47,7 +47,7 @@ namespace TinyFrameWork
             // Just go to Game scene logic
             UIEventListener.Get(btnGoToMatch).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve", false,
                     delegate
                     {
                         UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Matching);

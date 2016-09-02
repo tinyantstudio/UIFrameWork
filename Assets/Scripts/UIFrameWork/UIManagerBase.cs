@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TinyFrameWork
 {
@@ -21,8 +22,6 @@ namespace TinyFrameWork
         protected UIBaseWindow curNavigationWindow = null;
         // last active navigation window
         protected UIBaseWindow lastNavigationWindow = null;
-        // current shown window
-        protected WindowID curShownWindowId = WindowID.WindowID_Invaild;
         // Wait HideAnimation over
         // True: wait the window hide animation over
         // False: immediately call the complete animation finish the hide process
@@ -123,10 +122,8 @@ namespace TinyFrameWork
             {
                 lastNavigationWindow = curNavigationWindow;
                 curNavigationWindow = baseWindow;
-                Debuger.Log("<color=red>### current Navigation window </color>" + baseWindow.ID.ToString());
+                Debuger.Log("<color=magenta>### current Navigation window </color>" + baseWindow.ID.ToString());
             }
-            Debug.Log("<color=red>### Current show the window </color>" + baseWindow.ID.ToString());
-            this.curShownWindowId = baseWindow.ID;
         }
 
         /// <summary>
@@ -155,10 +152,36 @@ namespace TinyFrameWork
             CheckDirectlyHide(id, onCompleted);
         }
 
+        public void CloseWindow(WindowID wndId)
+        {
+            if (!IsWindowInControl(wndId))
+            {
+                Debuger.LogError("## Current UI Manager has no control power of " + wndId.ToString());
+                return;
+            }
+
+            if (!dicShownWindows.ContainsKey((int)wndId))
+                return;
+
+            UIBaseWindow window = dicShownWindows[(int)wndId];
+            if (this.backSequence.Count > 0)
+            {
+                BackWindowSequenceData seqData = this.backSequence.Peek();
+                if (seqData != null && seqData.hideTargetWindow == window)
+                {
+                    PopNavigationWindow();
+                    Debuger.Log("<color=magenta>## close window use PopNavigationWindow() ##</color>");
+                    return;
+                }
+            }
+            HideWindow(wndId);
+            Debuger.Log("<color=magenta>## close window without PopNavigationWindow() ##</color>");
+        }
+
         /// <summary>
         /// Check condition to hide the target window
         /// </summary>
-        protected virtual void CheckDirectlyHide(WindowID id, Action onComplete)
+        protected void CheckDirectlyHide(WindowID id, Action onComplete)
         {
             if (!IsWindowInControl(id))
             {
@@ -199,29 +222,29 @@ namespace TinyFrameWork
         /// <summary>
         /// Each UI manager's return window logic
         /// </summary>
-        public virtual bool ReturnWindow()
+        public virtual bool PopNavigationWindow()
         {
             return false;
         }
 
-        private bool ReturnWindowManager(UIBaseWindow baseWindow)
+        private bool PopUpWindowManager(UIBaseWindow baseWindow)
         {
             // Recursion call to return windowManager
-            // if the current window has windowManager just call current's windowManager ReturnWindowManager
+            // if the current window has windowManager just call current's windowManager PopUpWindowManager
             UIManagerBase baseWindowManager = baseWindow.GetWindowManager;
             bool isValid = false;
             if (baseWindowManager != null)
-                isValid = baseWindowManager.ReturnWindow();
+                isValid = baseWindowManager.PopNavigationWindow();
             return isValid;
         }
 
-        protected bool RealReturnWindow()
+        protected bool RealPopNavigationWindow()
         {
             if (backSequence.Count == 0)
             {
                 if (curNavigationWindow == null)
                     return false;
-                if (ReturnWindowManager(curNavigationWindow))
+                if (PopUpWindowManager(curNavigationWindow))
                     return true;
 
                 // if curNavigationWindow BackSequenceData is null
@@ -247,37 +270,51 @@ namespace TinyFrameWork
             BackWindowSequenceData backData = backSequence.Peek();
             if (backData != null)
             {
-                if (ReturnWindowManager(backData.hideTargetWindow))
+                // check the current back data
+
+                int curId = this.GetCurrenShownWindow();
+                if (curId != (int)backData.hideTargetWindow.ID)
+                {
+                    Debuger.Log("<color=red>Can't PopUp seq data [backData.hideTargetWindow.ID != this.curShownWindowId]</color>");
+                    return false;
+                }
+
+                if (PopUpWindowManager(backData.hideTargetWindow))
                     return true;
 
                 WindowID hideId = backData.hideTargetWindow.ID;
-                if (backData.hideTargetWindow != null && dicShownWindows.ContainsKey((int)hideId))
+                if (!dicShownWindows.ContainsKey((int)hideId))
+                    ExectuteBackSeqData(backData);
+                else
                     HideWindow(hideId, delegate
                     {
-                        if (backData.backShowTargets != null)
-                        {
-                            for (int i = 0; i < backData.backShowTargets.Count; i++)
-                            {
-                                WindowID backId = backData.backShowTargets[i];
-                                ShowWindowForNavigation(backId);
-                                if (i == backData.backShowTargets.Count - 1)
-                                {
-                                    UIBaseWindow window = GetGameWindow(backId);
-                                    if (window.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
-                                    {
-                                        this.lastNavigationWindow = this.curNavigationWindow;
-                                        this.curNavigationWindow = window;
-                                        Debuger.Log("##[UIFrameWork] Change currentShownNormalWindow : " + backId);
-                                    }
-                                }
-                            }
-                        }
-                        backSequence.Pop();
+                        ExectuteBackSeqData(backData);
                     });
-                else
-                    return false;
             }
             return true;
+        }
+
+        private void ExectuteBackSeqData(BackWindowSequenceData backData)
+        {
+            if (backData.backShowTargets != null)
+            {
+                for (int i = 0; i < backData.backShowTargets.Count; i++)
+                {
+                    WindowID backId = backData.backShowTargets[i];
+                    ShowWindowForNavigation(backId);
+                    if (i == backData.backShowTargets.Count - 1)
+                    {
+                        UIBaseWindow window = GetGameWindow(backId);
+                        if (window.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
+                        {
+                            this.lastNavigationWindow = this.curNavigationWindow;
+                            this.curNavigationWindow = window;
+                            Debuger.Log("<color=magenta>##[UIManagerBase return window]##</color> Change currentShownNormalWindow : " + backId);
+                        }
+                    }
+                }
+            }
+            backSequence.Pop();
         }
 
         /// <summary>
@@ -287,6 +324,20 @@ namespace TinyFrameWork
         {
             if (backSequence != null)
                 backSequence.Clear();
+        }
+
+        protected CompareBaseWindow compareWindowFun = new CompareBaseWindow();
+        protected virtual int GetCurrenShownWindow()
+        {
+            // default window min depth
+            List<UIBaseWindow> listWnds = this.dicShownWindows.Values.ToList();
+            listWnds.Sort(this.compareWindowFun);
+            for (int i = listWnds.Count - 1; i >= 0; i--)
+            {
+                if (listWnds[i].windowData.windowType != UIWindowType.Fixed)
+                    return (int)(listWnds[i].ID);
+            }
+            return (int)WindowID.WindowID_Invaild;
         }
 
         /// <summary>
@@ -307,12 +358,12 @@ namespace TinyFrameWork
             }
         }
 
-        protected void HideAllShownWindow()
+        public void HideAllShownWindow(bool includeFixed = false)
         {
             listCached.Clear();
             foreach (KeyValuePair<int, UIBaseWindow> window in dicShownWindows)
             {
-                if (window.Value.windowData.windowType == UIWindowType.Fixed)
+                if (window.Value.windowData.windowType == UIWindowType.Fixed && !includeFixed)
                     continue;
                 listCached.Add((WindowID)window.Key);
                 window.Value.HideWindowDirectly();

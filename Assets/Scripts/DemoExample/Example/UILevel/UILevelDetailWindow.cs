@@ -41,7 +41,7 @@ namespace TinyFrameWork
             UIEventListener.Get(btnStart).onClick = delegate
             {
                 // Application.LoadLevel("AnimationCurve");
-                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve",
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-AnimationCurve", false,
                     delegate
                     {
                         UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_Matching);
@@ -55,7 +55,7 @@ namespace TinyFrameWork
             base.InitWindowCoreData();
             this.preWindowID = WindowID.WindowID_Level;
             this.windowData.colliderMode = UIWindowColliderMode.Normal;
-            this.windowData.showMode = UIWindowShowMode.DoNothing;
+            this.windowData.showMode = UIWindowShowMode.HideOtherWindow;
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
         }
 

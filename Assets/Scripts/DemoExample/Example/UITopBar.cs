@@ -25,7 +25,7 @@ namespace TinyFrameWork
             btnShop = GameUtility.FindDeepChild(this.gameObject, "TopRight/BtnShop").gameObject;
             UIEventListener.Get(btnReturn).onClick = delegate
             {
-                UICenterMasterManager.Instance.ReturnWindow();
+                UICenterMasterManager.Instance.PopNavigationWindow();
             };
 
             UIEventListener.Get(btnShop).onClick = delegate

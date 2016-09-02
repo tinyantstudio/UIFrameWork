@@ -34,7 +34,7 @@ namespace TinyFrameWork
             // load new scene to show target window
             UIEventListener.Get(btnWin).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", false, delegate
                 {
                     UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_MatchResult);
                     UIBaseWindow baseWindow = UICenterMasterManager.Instance.GetGameWindow(WindowID.WindowID_MatchResult);
@@ -46,7 +46,7 @@ namespace TinyFrameWork
             // load new scene to show target window
             UIEventListener.Get(btnLose).onClick = delegate
             {
-                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", delegate
+                GameMonoHelper.GetInstance().LoadGameScene("RealGame-EmptyScene", false, delegate
                 {
                     UICenterMasterManager.Instance.ShowWindow(WindowID.WindowID_MatchResult);
                     UIBaseWindow baseWindow = UICenterMasterManager.Instance.GetGameWindow(WindowID.WindowID_MatchResult);
@@ -79,4 +79,3 @@ namespace TinyFrameWork
         }
     }
 }
-

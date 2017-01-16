@@ -78,7 +78,7 @@ namespace TinyFrameWork
                 this.RealShowWindow(baseWindow, baseWindow.ID, showData);
             }
         }
-        protected override int GetCurrenShownWindow()
+        protected override int GetCurrentShownWindow()
         {
             if (backSequence.Count > 0)
             {

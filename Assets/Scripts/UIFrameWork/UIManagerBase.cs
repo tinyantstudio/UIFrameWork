@@ -272,7 +272,7 @@ namespace TinyFrameWork
             {
                 // check the current back data
 
-                int curId = this.GetCurrenShownWindow();
+                int curId = this.GetCurrentShownWindow();
                 if (curId != (int)backData.hideTargetWindow.ID)
                 {
                     Debuger.Log("<color=red>Can't PopUp seq data [backData.hideTargetWindow.ID != this.curShownWindowId]</color>");
@@ -327,7 +327,7 @@ namespace TinyFrameWork
         }
 
         protected CompareBaseWindow compareWindowFun = new CompareBaseWindow();
-        protected virtual int GetCurrenShownWindow()
+        protected virtual int GetCurrentShownWindow()
         {
             // default window min depth
             List<UIBaseWindow> listWnds = this.dicShownWindows.Values.ToList();

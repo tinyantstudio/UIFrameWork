@@ -90,7 +90,6 @@ namespace TinyFrameWork
         public override void HideWindow(Action onComplete)
         {
             // Hide target child window
-            UIRankManager.GetInstance().HideWindow(WindowID.WindowID_Rank_OwnDetail, null);
             QuitAnimation(delegate
             {
                 NGUITools.SetActive(this.gameObject, false);

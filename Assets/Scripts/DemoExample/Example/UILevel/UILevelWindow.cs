@@ -54,7 +54,7 @@ namespace TinyFrameWork
 
             // When exit the window execute logic
             // Just register the return logic
-            // this.RegisterReturnLogic(this.RetrunPreLogic);
+            this.RegisterReturnLogic(this.RetrunPreLogic);
         }
 
         private List<string> levelNames = new List<string>() { "SkyBattle", "SkyCool", "SkyWorld", "SpaceWar", "ComeOn", "HellFight", "NewBattle", "King" };
@@ -116,7 +116,6 @@ namespace TinyFrameWork
             if (twAlpha != null)
                 twAlpha.ResetToBeginningExtension(0.0f);
         }
-
 
         private bool RetrunPreLogic()
         {

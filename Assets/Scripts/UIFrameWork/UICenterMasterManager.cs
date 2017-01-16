@@ -185,10 +185,16 @@ namespace TinyFrameWork
         /// Return logic 
         /// When return back navigation check current window's Return Logic
         /// If true just execute the return logic
-        /// If false just immediately enter the RealReturnWindow() logic
+        /// If false immediately enter the RealReturnWindow() logic
         /// </summary>
         public override bool PopNavigationWindow()
         {
+            if(curNavigationWindow != null)
+            {
+                bool needReturn = curNavigationWindow.ExecuteReturnLogic();
+                if(needReturn)
+                    return false;
+            }
             return RealPopNavigationWindow();
         }
 

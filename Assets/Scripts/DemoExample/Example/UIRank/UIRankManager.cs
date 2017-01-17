@@ -72,10 +72,8 @@ namespace TinyFrameWork
 
                 // 
                 // Fixed Bug : When you close the navigation window by CloseBtn may cause the Navigation Data add more time
-                // Check Navigation data when Call Manager's PopNavigationWindow, move to PopNavigationWindow method.
-                // Compare with pre version code
+                // Check Navigation data when Call Manager's PopNavigationWindow, we just add DealWithNavigationWhenPopWindow method for deal with navigation when pop up window
                 // 
-
                 this.RealShowWindow(baseWindow, baseWindow.ID, showData);
             }
         }
@@ -105,24 +103,7 @@ namespace TinyFrameWork
 
         public override bool PopNavigationWindow ()
         {
-            if (dicShownWindows.Count > 0)
-            {
-                for (int i = 0; i < this.managedWindowIds.Count; i++)
-                {
-                    int wndId = managedWindowIds[i];
-                    if (!dicShownWindows.ContainsKey(wndId))
-                        continue;
-                    UIWindowBase wnd = dicShownWindows[wndId];
-                    if (wnd.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
-                    {
-                        NavigationData nd = new NavigationData();
-                        nd.hideTargetWindow = wnd;
-                        backSequence.Push(nd);
-                        Debuger.Log("## Push new navigation data " + ((WindowID) wndId).ToString());
-                        break;
-                    }
-                }
-            }
+            DealWithNavigationWhenPopWindow();
             bool isValidBack = RealPopNavigationWindow();
             return isValidBack;
         }

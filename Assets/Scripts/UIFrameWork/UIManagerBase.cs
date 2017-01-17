@@ -33,7 +33,7 @@ namespace TinyFrameWork
         // Compare with panel depth
         protected class CompareBaseWindow : IComparer<UIWindowBase>
         {
-            public int Compare(UIWindowBase left, UIWindowBase right)
+            public int Compare ( UIWindowBase left, UIWindowBase right )
             {
                 return left.MinDepth - right.MinDepth;
             }
@@ -42,7 +42,7 @@ namespace TinyFrameWork
         // Cached list (avoid always new List<WindowID>)
         private List<WindowID> listCached = new List<WindowID>();
 
-        protected virtual void Awake()
+        protected virtual void Awake ()
         {
             if (dicAllWindows == null)
                 dicAllWindows = new Dictionary<int, UIWindowBase>();
@@ -52,28 +52,28 @@ namespace TinyFrameWork
                 backSequence = new Stack<NavigationData>();
         }
 
-        public virtual UIWindowBase GetGameWindow(WindowID id)
+        public virtual UIWindowBase GetGameWindow ( WindowID id )
         {
             if (!IsWindowInControl(id))
                 return null;
-            if (dicAllWindows.ContainsKey((int)id))
-                return dicAllWindows[(int)id];
+            if (dicAllWindows.ContainsKey((int) id))
+                return dicAllWindows[(int) id];
             else
                 return null;
         }
 
-        public virtual T GetGameWindowScript<T>(WindowID id) where T : UIWindowBase
+        public virtual T GetGameWindowScript<T> ( WindowID id ) where T : UIWindowBase
         {
             UIWindowBase baseWindow = GetGameWindow(id);
             if (baseWindow != null)
-                return (T)baseWindow;
-            return (T)((object)null);
+                return (T) baseWindow;
+            return (T) ((object) null);
         }
 
         /// <summary>
         /// Init the window Manager
         /// </summary>
-        public virtual void InitWindowManager()
+        public virtual void InitWindowManager ()
         {
             if (dicAllWindows != null)
                 dicAllWindows.Clear();
@@ -86,7 +86,7 @@ namespace TinyFrameWork
         /// <summary>
         /// Show target Window
         /// </summary>
-        public virtual void ShowWindow(WindowID id, ShowWindowData data = null)
+        public virtual void ShowWindow ( WindowID id, ShowWindowData data = null )
         {
         }
 
@@ -96,28 +96,28 @@ namespace TinyFrameWork
         /// <param name="delayTime"> delayTime</param>
         /// <param name="id"> WindowId</param>
         /// <param name="showData">show window data</param>
-        public virtual void ShowWindowDelay(float delayTime, WindowID id, ShowWindowData showData = null)
+        public virtual void ShowWindowDelay ( float delayTime, WindowID id, ShowWindowData showData = null )
         {
             StopAllCoroutines();
             StartCoroutine(_ShowWindowDelay(delayTime, id, showData));
         }
 
-        private IEnumerator _ShowWindowDelay(float delayTime, WindowID id, ShowWindowData showData = null)
+        private IEnumerator _ShowWindowDelay ( float delayTime, WindowID id, ShowWindowData showData = null )
         {
             yield return new WaitForSeconds(delayTime);
             ShowWindow(id, showData);
         }
 
-        protected virtual UIWindowBase ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
+        protected virtual UIWindowBase ReadyToShowBaseWindow ( WindowID id, ShowWindowData showData = null )
         {
             return null;
         }
 
-        protected virtual void RealShowWindow(UIWindowBase baseWindow, WindowID id, ShowWindowData showData = null)
+        protected virtual void RealShowWindow ( UIWindowBase baseWindow, WindowID id, ShowWindowData showData = null )
         {
             BaseWindowContextData contextData = showData == null ? null : showData.contextData;
             baseWindow.ShowWindow(contextData);
-            dicShownWindows[(int)id] = baseWindow;
+            dicShownWindows[(int) id] = baseWindow;
             if (baseWindow.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
             {
                 lastNavigationWindow = curNavigationWindow;
@@ -129,30 +129,30 @@ namespace TinyFrameWork
         /// <summary>
         /// Navigation reShow target windows
         /// </summary>
-        protected void ShowWindowForNavigation(WindowID id)
+        protected void ShowWindowForNavigation ( WindowID id )
         {
             if (!this.IsWindowInControl(id))
             {
                 Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
-            if (dicShownWindows.ContainsKey((int)id))
+            if (dicShownWindows.ContainsKey((int) id))
                 return;
 
             UIWindowBase baseWindow = GetGameWindow(id);
             baseWindow.ShowWindow();
-            dicShownWindows[(int)baseWindow.ID] = baseWindow;
+            dicShownWindows[(int) baseWindow.ID] = baseWindow;
         }
 
         /// <summary>
         /// Hide target window
         /// </summary>
-        public virtual void HideWindow(WindowID id, Action onCompleted = null)
+        public virtual void HideWindow ( WindowID id, Action onCompleted = null )
         {
             CheckDirectlyHide(id, onCompleted);
         }
 
-        public void CloseWindow(WindowID wndId)
+        public void CloseWindow ( WindowID wndId )
         {
             if (!IsWindowInControl(wndId))
             {
@@ -160,10 +160,10 @@ namespace TinyFrameWork
                 return;
             }
 
-            if (!dicShownWindows.ContainsKey((int)wndId))
+            if (!dicShownWindows.ContainsKey((int) wndId))
                 return;
 
-            UIWindowBase window = dicShownWindows[(int)wndId];
+            UIWindowBase window = dicShownWindows[(int) wndId];
             if (this.backSequence.Count > 0)
             {
                 NavigationData seqData = this.backSequence.Peek();
@@ -181,14 +181,14 @@ namespace TinyFrameWork
         /// <summary>
         /// Check condition to hide the target window
         /// </summary>
-        protected void CheckDirectlyHide(WindowID id, Action onComplete)
+        protected void CheckDirectlyHide ( WindowID id, Action onComplete )
         {
             if (!IsWindowInControl(id))
             {
                 Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
-            if (!dicShownWindows.ContainsKey((int)id))
+            if (!dicShownWindows.ContainsKey((int) id))
                 return;
 
             if (!isNeedWaitHideOver)
@@ -196,25 +196,25 @@ namespace TinyFrameWork
                 if (onComplete != null)
                     onComplete();
 
-                dicShownWindows[(int)id].HideWindow(null);
-                dicShownWindows.Remove((int)id);
+                dicShownWindows[(int) id].HideWindow(null);
+                dicShownWindows.Remove((int) id);
                 return;
             }
 
-            if (dicShownWindows.ContainsKey((int)id))
+            if (dicShownWindows.ContainsKey((int) id))
             {
                 if (onComplete != null)
                 {
                     onComplete += delegate
                     {
-                        dicShownWindows.Remove((int)id);
+                        dicShownWindows.Remove((int) id);
                     };
-                    dicShownWindows[(int)id].HideWindow(onComplete);
+                    dicShownWindows[(int) id].HideWindow(onComplete);
                 }
                 else
                 {
-                    dicShownWindows[(int)id].HideWindow(onComplete);
-                    dicShownWindows.Remove((int)id);
+                    dicShownWindows[(int) id].HideWindow(onComplete);
+                    dicShownWindows.Remove((int) id);
                 }
             }
         }
@@ -222,12 +222,12 @@ namespace TinyFrameWork
         /// <summary>
         /// Each UI manager's return window logic
         /// </summary>
-        public virtual bool PopNavigationWindow()
+        public virtual bool PopNavigationWindow ()
         {
             return false;
         }
 
-        private bool PopUpWindowManager(UIWindowBase baseWindow)
+        private bool PopUpWindowManager ( UIWindowBase baseWindow )
         {
             // Recursion call to return windowManager
             // if the current window has windowManager just call current's windowManager PopUpWindowManager
@@ -238,7 +238,7 @@ namespace TinyFrameWork
             return isValid;
         }
 
-        protected bool RealPopNavigationWindow()
+        protected bool RealPopNavigationWindow ()
         {
             if (backSequence.Count == 0)
             {
@@ -273,7 +273,7 @@ namespace TinyFrameWork
                 // check the current back data
 
                 int curId = this.GetCurrentShownWindow();
-                if (curId != (int)backData.hideTargetWindow.ID)
+                if (curId != (int) backData.hideTargetWindow.ID)
                 {
                     Debuger.Log("<color=red>Can't PopUp seq data [backData.hideTargetWindow.ID != this.curShownWindowId]</color>");
                     return false;
@@ -283,7 +283,7 @@ namespace TinyFrameWork
                     return true;
 
                 WindowID hideId = backData.hideTargetWindow.ID;
-                if (!dicShownWindows.ContainsKey((int)hideId))
+                if (!dicShownWindows.ContainsKey((int) hideId))
                     ExectuteBackSeqData(backData);
                 else
                     HideWindow(hideId, delegate
@@ -294,7 +294,7 @@ namespace TinyFrameWork
             return true;
         }
 
-        private void ExectuteBackSeqData(NavigationData backData)
+        private void ExectuteBackSeqData ( NavigationData backData )
         {
             if (backData.backShowTargets != null)
             {
@@ -320,14 +320,14 @@ namespace TinyFrameWork
         /// <summary>
         /// Clear the back sequence data
         /// </summary>
-        public void ClearBackSequence()
+        public void ClearBackSequence ()
         {
             if (backSequence != null)
                 backSequence.Clear();
         }
 
         protected CompareBaseWindow compareWindowFun = new CompareBaseWindow();
-        protected virtual int GetCurrentShownWindow()
+        protected virtual int GetCurrentShownWindow ()
         {
             // default window min depth
             List<UIWindowBase> listWnds = this.dicShownWindows.Values.ToList();
@@ -335,15 +335,15 @@ namespace TinyFrameWork
             for (int i = listWnds.Count - 1; i >= 0; i--)
             {
                 if (listWnds[i].windowData.windowType != UIWindowType.Fixed)
-                    return (int)(listWnds[i].ID);
+                    return (int) (listWnds[i].ID);
             }
-            return (int)WindowID.WindowID_Invaild;
+            return (int) WindowID.WindowID_Invaild;
         }
 
         /// <summary>
         /// Destroy all window
         /// </summary>
-        public virtual void ClearAllWindow()
+        public virtual void ClearAllWindow ()
         {
             if (dicAllWindows != null)
             {
@@ -358,40 +358,72 @@ namespace TinyFrameWork
             }
         }
 
-        public void HideAllShownWindow(bool includeFixed = false)
+        public void HideAllShownWindow ( bool includeFixed = false )
         {
             listCached.Clear();
             foreach (KeyValuePair<int, UIWindowBase> window in dicShownWindows)
             {
                 if (window.Value.windowData.windowType == UIWindowType.Fixed && !includeFixed)
                     continue;
-                listCached.Add((WindowID)window.Key);
+                listCached.Add((WindowID) window.Key);
                 window.Value.HideWindowDirectly();
             }
 
             if (listCached.Count > 0)
             {
                 for (int i = 0; i < listCached.Count; i++)
-                    dicShownWindows.Remove((int)listCached[i]);
+                    dicShownWindows.Remove((int) listCached[i]);
             }
         }
 
         // check window control
-        protected bool IsWindowInControl(WindowID id)
+        protected bool IsWindowInControl ( WindowID id )
         {
-            return this.managedWindowIds.Contains((int)id);
+            return this.managedWindowIds.Contains((int) id);
         }
 
         // add window to target manager
-        protected void AddWindowInControl(WindowID id)
+        protected void AddWindowInControl ( WindowID id )
         {
-            this.managedWindowIds.Add((int)id);
+            this.managedWindowIds.Add((int) id);
         }
 
         // init the Manager's control window
-        protected abstract void InitWindowControl();
-        public virtual void ResetAllInControlWindows()
+        protected abstract void InitWindowControl ();
+        public virtual void ResetAllInControlWindows ()
         {
+        }
+
+        // Deal with Navigation sequence data Look At UIRankManager example
+        // you can change Navigation data when pop up window 
+        // !! Not used for UICenterMasterManager !!
+        // Just for Sub window Manager
+
+        // 
+        // Fixed Bug : When you close the navigation window by CloseBtn may cause the Navigation Data add more time
+        // Check Navigation data when Call Manager's PopNavigationWindow, we just add DealWithNavigationWhenPopWindow method for deal with navigation when pop up window
+        // 
+
+        protected virtual void DealWithNavigationWhenPopWindow ()
+        {
+            if (dicShownWindows.Count <= 0)
+                return;
+
+            for (int i = 0; i < this.managedWindowIds.Count; i++)
+            {
+                int wndId = managedWindowIds[i];
+                if (!dicShownWindows.ContainsKey(wndId))
+                    continue;
+                UIWindowBase wnd = dicShownWindows[wndId];
+                if (wnd.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
+                {
+                    NavigationData nd = new NavigationData();
+                    nd.hideTargetWindow = wnd;
+                    backSequence.Push(nd);
+                    Debuger.Log("## Push new navigation data " + ((WindowID) wndId).ToString());
+                    break;
+                }
+            }
         }
     }
 }

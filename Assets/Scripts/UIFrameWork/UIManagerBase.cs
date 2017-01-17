@@ -127,55 +127,11 @@ namespace TinyFrameWork
         }
 
         /// <summary>
-        /// Navigation reShow target windows
-        /// </summary>
-        protected void ShowWindowForNavigation ( WindowID id )
-        {
-            if (!this.IsWindowInControl(id))
-            {
-                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
-                return;
-            }
-            if (dicShownWindows.ContainsKey((int) id))
-                return;
-
-            UIWindowBase baseWindow = GetGameWindow(id);
-            baseWindow.ShowWindow();
-            dicShownWindows[(int) baseWindow.ID] = baseWindow;
-        }
-
-        /// <summary>
         /// Hide target window
         /// </summary>
         public virtual void HideWindow ( WindowID id, Action onCompleted = null )
         {
             CheckDirectlyHide(id, onCompleted);
-        }
-
-        public void CloseWindow ( WindowID wndId )
-        {
-            if (!IsWindowInControl(wndId))
-            {
-                Debuger.LogError("## Current UI Manager has no control power of " + wndId.ToString());
-                return;
-            }
-
-            if (!dicShownWindows.ContainsKey((int) wndId))
-                return;
-
-            UIWindowBase window = dicShownWindows[(int) wndId];
-            if (this.backSequence.Count > 0)
-            {
-                NavigationData seqData = this.backSequence.Peek();
-                if (seqData != null && seqData.hideTargetWindow == window)
-                {
-                    PopNavigationWindow();
-                    Debuger.Log("<color=magenta>## close window use PopNavigationWindow() ##</color>");
-                    return;
-                }
-            }
-            HideWindow(wndId);
-            Debuger.Log("<color=magenta>## close window without PopNavigationWindow() ##</color>");
         }
 
         /// <summary>
@@ -296,25 +252,42 @@ namespace TinyFrameWork
 
         private void ExectuteBackSeqData ( NavigationData backData )
         {
-            if (backData.backShowTargets != null)
+            if (backData.backShowTargets == null)
+                return;
+            for (int i = 0; i < backData.backShowTargets.Count; i++)
             {
-                for (int i = 0; i < backData.backShowTargets.Count; i++)
+                WindowID backId = backData.backShowTargets[i];
+                ShowWindowForNavigation(backId);
+                if (i == backData.backShowTargets.Count - 1)
                 {
-                    WindowID backId = backData.backShowTargets[i];
-                    ShowWindowForNavigation(backId);
-                    if (i == backData.backShowTargets.Count - 1)
+                    UIWindowBase window = GetGameWindow(backId);
+                    if (window.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
                     {
-                        UIWindowBase window = GetGameWindow(backId);
-                        if (window.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
-                        {
-                            this.lastNavigationWindow = this.curNavigationWindow;
-                            this.curNavigationWindow = window;
-                            Debuger.Log("<color=magenta>##[UIManagerBase return window]##</color> Change currentShownNormalWindow : " + backId);
-                        }
+                        this.lastNavigationWindow = this.curNavigationWindow;
+                        this.curNavigationWindow = window;
+                        Debuger.Log("<color=magenta>##[UIManagerBase return window]##</color> Change currentShownNormalWindow : " + backId);
                     }
                 }
             }
             backSequence.Pop();
+        }
+
+        /// <summary>
+        /// Navigation reShow target windows
+        /// </summary>
+        private void ShowWindowForNavigation ( WindowID id )
+        {
+            if (!this.IsWindowInControl(id))
+            {
+                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
+                return;
+            }
+            if (dicShownWindows.ContainsKey((int) id))
+                return;
+
+            UIWindowBase baseWindow = GetGameWindow(id);
+            baseWindow.ShowWindow();
+            dicShownWindows[(int) baseWindow.ID] = baseWindow;
         }
 
         /// <summary>

@@ -198,6 +198,32 @@ namespace TinyFrameWork
             return RealPopNavigationWindow();
         }
 
+        public void CloseWindow ( WindowID wndId )
+        {
+            if (!IsWindowInControl(wndId))
+            {
+                Debuger.LogError("## Current UI Manager has no control power of " + wndId.ToString());
+                return;
+            }
+
+            if (!dicShownWindows.ContainsKey((int) wndId))
+                return;
+
+            UIWindowBase window = dicShownWindows[(int) wndId];
+            if (this.backSequence.Count > 0)
+            {
+                NavigationData seqData = this.backSequence.Peek();
+                if (seqData != null && seqData.hideTargetWindow == window)
+                {
+                    PopNavigationWindow();
+                    Debuger.Log("<color=magenta>## close window use PopNavigationWindow() ##</color>");
+                    return;
+                }
+            }
+            HideWindow(wndId);
+            Debuger.Log("<color=magenta>## close window without PopNavigationWindow() ##</color>");
+        }
+
         /// <summary>
         /// Calculate right depth with windowType
         /// </summary>

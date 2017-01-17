@@ -226,8 +226,7 @@ namespace TinyFrameWork
             NavigationData backData = backSequence.Peek();
             if (backData != null)
             {
-                // check the current back data
-
+                // check the current navigation data
                 int curId = this.GetCurrentShownWindow();
                 if (curId != (int) backData.hideTargetWindow.ID)
                 {
@@ -368,16 +367,16 @@ namespace TinyFrameWork
         {
         }
 
+
+        #region Methods for Other Window except !!UICenterMasterManager!!
         // Deal with Navigation sequence data Look At UIRankManager example
         // you can change Navigation data when pop up window 
         // !! Not used for UICenterMasterManager !!
         // Just for Sub window Manager
-
         // 
         // Fixed Bug : When you close the navigation window by CloseBtn may cause the Navigation Data add more time
         // Check Navigation data when Call Manager's PopNavigationWindow, we just add DealWithNavigationWhenPopWindow method for deal with navigation when pop up window
         // 
-
         protected virtual void DealWithNavigationWhenPopWindow ()
         {
             if (dicShownWindows.Count <= 0)
@@ -399,5 +398,27 @@ namespace TinyFrameWork
                 }
             }
         }
+
+        protected void ShowWindowForOtherWindowManager ( WindowID id, ShowWindowData showData )
+        {
+            if (!IsWindowInControl(id))
+            {
+                Debuger.Log("UIRankManager has no control power of " + id.ToString());
+                return;
+            }
+            if (dicShownWindows.ContainsKey((int) id))
+                return;
+            if (dicAllWindows.ContainsKey((int) id))
+            {
+                UIWindowBase baseWindow = dicAllWindows[(int) id];
+                if (baseWindow.ID != id)
+                {
+                    Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
+                    return;
+                }
+                this.RealShowWindow(baseWindow, baseWindow.ID, showData);
+            }
+        }
+        #endregion
     }
 }

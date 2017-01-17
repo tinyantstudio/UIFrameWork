@@ -54,29 +54,9 @@ namespace TinyFrameWork
 
         public override void ShowWindow ( WindowID id, ShowWindowData showData )
         {
-            if (!IsWindowInControl(id))
-            {
-                Debuger.Log("UIRankManager has no control power of " + id.ToString());
-                return;
-            }
-            if (dicShownWindows.ContainsKey((int) id))
-                return;
-            if (dicAllWindows.ContainsKey((int) id))
-            {
-                UIWindowBase baseWindow = dicAllWindows[(int) id];
-                if (baseWindow.ID != id)
-                {
-                    Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
-                    return;
-                }
-
-                // 
-                // Fixed Bug : When you close the navigation window by CloseBtn may cause the Navigation Data add more time
-                // Check Navigation data when Call Manager's PopNavigationWindow, we just add DealWithNavigationWhenPopWindow method for deal with navigation when pop up window
-                // 
-                this.RealShowWindow(baseWindow, baseWindow.ID, showData);
-            }
+            ShowWindowForOtherWindowManager(id, showData);
         }
+
         protected override int GetCurrentShownWindow ()
         {
             if (backSequence.Count > 0)

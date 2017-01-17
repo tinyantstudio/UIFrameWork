@@ -55,14 +55,14 @@ namespace TinyFrameWork
 
         public override void ShowWindow(WindowID id, ShowWindowData showData = null)
         {
-            UIBaseWindow baseWindow = ReadyToShowBaseWindow(id, showData);
+            UIWindowBase baseWindow = ReadyToShowBaseWindow(id, showData);
             if (baseWindow != null)
             {
                 RealShowWindow(baseWindow, id, showData);
             }
         }
 
-        protected override UIBaseWindow ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
+        protected override UIWindowBase ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
         {
             // Check the window control state
             if (!this.IsWindowInControl(id))
@@ -75,7 +75,7 @@ namespace TinyFrameWork
             if (dicShownWindows.ContainsKey((int)id))
                 return null;
 
-            UIBaseWindow baseWindow = GetGameWindow(id);
+            UIWindowBase baseWindow = GetGameWindow(id);
 
             // If window not in scene start Instantiate new window to scene
             bool newAdded = false;
@@ -92,7 +92,7 @@ namespace TinyFrameWork
                         NGUITools.SetActive(uiObject, true);
                         // NOTE: You can add component to the window in the inspector
                         // Or just AddComponent<UIxxxxWindow>() to the target
-                        baseWindow = uiObject.GetComponent<UIBaseWindow>();
+                        baseWindow = uiObject.GetComponent<UIWindowBase>();
                         if (baseWindow.ID != id)
                         {
                             Debuger.LogError(string.Format("<color=cyan>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
@@ -202,7 +202,7 @@ namespace TinyFrameWork
         /// Calculate right depth with windowType
         /// </summary>
         /// <param name="baseWindow"></param>
-        private void AdjustBaseWindowDepth(UIBaseWindow baseWindow)
+        private void AdjustBaseWindowDepth(UIWindowBase baseWindow)
         {
             UIWindowType windowType = baseWindow.windowData.windowType;
             int needDepth = 1;
@@ -236,7 +236,7 @@ namespace TinyFrameWork
         /// <summary>
         /// Add Collider and BgTexture for target window
         /// </summary>
-        private void AddColliderBgForWindow(UIBaseWindow baseWindow)
+        private void AddColliderBgForWindow(UIWindowBase baseWindow)
         {
             UIWindowColliderMode colliderMode = baseWindow.windowData.colliderMode;
             if (colliderMode == UIWindowColliderMode.None)
@@ -249,7 +249,7 @@ namespace TinyFrameWork
             baseWindow.OnAddColliderBg(bgObj);
         }
 
-        private void ExecuteNavigationLogic(UIBaseWindow baseWindow, ShowWindowData showData)
+        private void ExecuteNavigationLogic(UIWindowBase baseWindow, ShowWindowData showData)
         {
             WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
@@ -275,17 +275,17 @@ namespace TinyFrameWork
             }
         }
 
-        private void RefreshBackSequenceData(UIBaseWindow targetWindow, ShowWindowData showData)
+        private void RefreshBackSequenceData(UIWindowBase targetWindow, ShowWindowData showData)
         {
             WindowCoreData coreData = targetWindow.windowData;
             bool dealBackSequence = true;
             if (dicShownWindows.Count > 0 && dealBackSequence)
             {
                 List<WindowID> removedKey = null;
-                List<UIBaseWindow> sortedHiddenWindows = new List<UIBaseWindow>();
+                List<UIWindowBase> sortedHiddenWindows = new List<UIWindowBase>();
 
-                BackWindowSequenceData backData = new BackWindowSequenceData();
-                foreach (KeyValuePair<int, UIBaseWindow> window in dicShownWindows)
+                NavigationData backData = new NavigationData();
+                foreach (KeyValuePair<int, UIWindowBase> window in dicShownWindows)
                 {
                     if (coreData.showMode != UIWindowShowMode.DoNothing)
                     {
@@ -356,13 +356,13 @@ namespace TinyFrameWork
 
         // HOW to Test
         // when you in the MatchResultWindow , you need click the lose button choose to different window and check the ConsoleLog find something useful
-        private void CheckBackSequenceData(UIBaseWindow baseWindow)
+        private void CheckBackSequenceData(UIWindowBase baseWindow)
         {
             if (baseWindow.RefreshBackSeqData)
             {
                 if (backSequence.Count > 0)
                 {
-                    BackWindowSequenceData backData = backSequence.Peek();
+                    NavigationData backData = backSequence.Peek();
                     if (backData.hideTargetWindow != null)
                     {
                         if (backData.hideTargetWindow.ID != baseWindow.ID)
@@ -395,7 +395,7 @@ namespace TinyFrameWork
         /// 
         public void ShowMessageBox(string msg)
         {
-            UIBaseWindow msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
+            UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
             if (msgWindow != null)
             {
                 ((UIMessageBox)msgWindow).SetMsg(msg);
@@ -406,7 +406,7 @@ namespace TinyFrameWork
 
         public void ShowMessageBox(string msg, string centerStr, UIEventListener.VoidDelegate callBack)
         {
-            UIBaseWindow msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
+            UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
             if (msgWindow != null)
             {
                 UIMessageBox messageBoxWindow = ((UIMessageBox)msgWindow);
@@ -419,7 +419,7 @@ namespace TinyFrameWork
 
         public void ShowMessageBox(string msg, string leftStr, UIEventListener.VoidDelegate leftCallBack, string rightStr, UIEventListener.VoidDelegate rightCallBack)
         {
-            UIBaseWindow msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
+            UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
             if (msgWindow != null)
             {
                 UIMessageBox messageBoxWindow = ((UIMessageBox)msgWindow);
@@ -445,7 +445,7 @@ namespace TinyFrameWork
         // You want one of these PopWindow stay at the Top 
         // You can register the EventSystemDefine.EventUIFrameWorkPopRootWindowAdded 
         // Call this method to push window to top
-        public static void AdjustTargetWindowDepthToTop(UIBaseWindow targetWindow)
+        public static void AdjustTargetWindowDepthToTop(UIWindowBase targetWindow)
         {
             if (targetWindow == null)
                 return;

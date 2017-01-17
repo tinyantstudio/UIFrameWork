@@ -8,7 +8,7 @@ namespace TinyFrameWork
     /// <summary>
     /// Level system window
     /// </summary>
-    public class UILevelWindow : UIBaseWindow, IWindowAnimation
+    public class UILevelWindow : UIWindowBase, IWindowAnimation
     {
         public GameObject levelItem;
         private Transform trsLevelItemsParent;

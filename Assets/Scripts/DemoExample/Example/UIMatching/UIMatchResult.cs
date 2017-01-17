@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace TinyFrameWork
 {
-    public class UIMatchResult : UIBaseWindow
+    public class UIMatchResult : UIWindowBase
     {
         private WindowID targetBackWindowId = WindowID.WindowID_LevelDetail;
 

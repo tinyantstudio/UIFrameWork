@@ -5,7 +5,7 @@ using System;
 
 namespace TinyFrameWork
 {
-    public class UIMainMenu : UIBaseWindow
+    public class UIMainMenu : UIWindowBase
     {
         private GameObject btnInfor;
         private GameObject btnRank;

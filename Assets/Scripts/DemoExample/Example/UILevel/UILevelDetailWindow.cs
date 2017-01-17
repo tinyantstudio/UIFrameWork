@@ -8,7 +8,7 @@ namespace TinyFrameWork
     /// <summary>
     /// Demo level detail window to show the Level Detail
     /// </summary>
-    public class UILevelDetailWindow : UIBaseWindow, IWindowAnimation
+    public class UILevelDetailWindow : UIWindowBase, IWindowAnimation
     {
         private GameObject btnStart;
         private TweenAlpha twAlpha;

@@ -22,9 +22,9 @@ namespace TinyFrameWork
         public UIWindowNavigationMode navigationMode = UIWindowNavigationMode.IgnoreNavigation;
     }
 
-    public class BackWindowSequenceData
+    public class NavigationData
     {
-        public UIBaseWindow hideTargetWindow;
+        public UIWindowBase hideTargetWindow;
         public List<WindowID> backShowTargets;
     }
     public delegate bool BoolDelegate();

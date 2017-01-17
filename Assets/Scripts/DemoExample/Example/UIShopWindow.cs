@@ -4,7 +4,7 @@ using System;
 
 namespace TinyFrameWork
 {
-    public class UIShopWindow : UIBaseWindow
+    public class UIShopWindow : UIWindowBase
     {
         protected override void SetWindowId()
         {

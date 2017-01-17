@@ -7,7 +7,7 @@ namespace TinyFrameWork
     /// <summary>
     /// Rank system sub detail window
     /// </summary>
-    public class UIRankDetail : UIBaseWindow, IWindowAnimation
+    public class UIRankDetail : UIWindowBase, IWindowAnimation
     {
         private UILabel lbDetail;
         private UISprite spHeadIcon;

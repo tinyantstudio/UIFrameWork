@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace TinyFrameWork
 {
-    public class UIMessageBox : UIBaseWindow, IWindowAnimation
+    public class UIMessageBox : UIWindowBase, IWindowAnimation
     {
         private UILabel lbMsg;
         private UILabel lbCenter;

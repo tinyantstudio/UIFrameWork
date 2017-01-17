@@ -7,7 +7,7 @@ namespace TinyFrameWork
     /// <summary>
     /// Base window
     /// </summary>
-    public abstract class UIBaseWindow : MonoBehaviour
+    public abstract class UIWindowBase : MonoBehaviour
     {
         protected UIPanel originPanel;
 

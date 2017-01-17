@@ -4,7 +4,7 @@ using System;
 
 namespace TinyFrameWork
 {
-    public class UIRankOwnDetail : UIBaseWindow, IWindowAnimation
+    public class UIRankOwnDetail : UIWindowBase, IWindowAnimation
     {
         private GameObject btnClose;
         private UISprite spHeadIcon;

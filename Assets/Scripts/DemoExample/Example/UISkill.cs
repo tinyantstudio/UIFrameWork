@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 namespace TinyFrameWork
 {
-    public class UISkill : UIBaseWindow, IWindowAnimation
+    public class UISkill : UIWindowBase, IWindowAnimation
     {
         private GameObject gbAnimation;
         private GameObject btnGoToLevel;

@@ -8,7 +8,7 @@ namespace TinyFrameWork
     /// <summary>
     /// UIRank window 
     /// </summary>
-    public class UIRank : UIBaseWindow, IWindowAnimation
+    public class UIRank : UIWindowBase, IWindowAnimation
     {
         private UIRankManager rankWindowManager;
         private Transform itemsGrid;

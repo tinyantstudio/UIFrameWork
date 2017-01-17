@@ -4,7 +4,7 @@ using System;
 
 namespace TinyFrameWork
 {
-    public class UITopBar : UIBaseWindow
+    public class UITopBar : UIWindowBase
     {
         private GameObject btnReturn;
         private GameObject btnShowMsg;

@@ -1,5 +1,5 @@
 # UIFrameWork
-A tiny and powerful UIFrameWork for Unity4.x
+A tiny and powerful UIFrameWork for Unity4.x and Unity5.x
 
 **[中文介绍](https://github.com/tinyantstudio/UIFrameWork/blob/master/ChineseReadMe.md)**
 

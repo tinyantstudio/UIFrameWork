@@ -31,7 +31,7 @@ namespace TinyFrameWork
         private event BoolDelegate returnPreLogic = null;
 
         protected Transform mTrs;
-        protected virtual void Awake()
+        protected virtual void Awake ()
         {
             this.gameObject.SetActive(true);
             mTrs = this.gameObject.transform;
@@ -82,12 +82,12 @@ namespace TinyFrameWork
         }
 
         // Set the window Id use 
-        protected abstract void SetWindowId();
+        protected abstract void SetWindowId ();
 
         /// <summary>
         /// Called on Awake() used for window data Init
         /// </summary>
-        public virtual void InitWindowOnAwake()
+        public virtual void InitWindowOnAwake ()
         {
         }
 
@@ -107,52 +107,53 @@ namespace TinyFrameWork
         /// <summary>
         /// Reset the window
         /// </summary>
-        public virtual void ResetWindow()
+        public virtual void ResetWindow ()
         {
         }
 
         /// <summary>
         /// Init the window core data
         /// </summary>
-        protected virtual void InitWindowCoreData()
+        protected virtual void InitWindowCoreData ()
         {
         }
 
-        public virtual void ShowWindow(BaseWindowContextData contextData = null)
+        public virtual void ShowWindow ( BaseWindowContextData contextData = null )
         {
             isShown = true;
+            isLock = false;
             NGUITools.SetActive(this.gameObject, true);
         }
 
-        public virtual void HideWindow(Action action = null)
+        public virtual void HideWindow ( Action action = null )
         {
-            IsLock = true;
+            IsLock = false;
             isShown = false;
             NGUITools.SetActive(this.gameObject, false);
             if (action != null)
                 action();
         }
 
-        public void HideWindowDirectly()
+        public void HideWindowDirectly ()
         {
-            IsLock = true;
+            IsLock = false;
             isShown = false;
             NGUITools.SetActive(this.gameObject, false);
         }
 
-        public virtual void DestroyWindow()
+        public virtual void DestroyWindow ()
         {
             BeforeDestroyWindow();
             GameObject.Destroy(this.gameObject);
         }
 
-        protected virtual void BeforeDestroyWindow()
+        protected virtual void BeforeDestroyWindow ()
         {
         }
 
         // On Add Collider bg to window
         // Add collider bg click event
-        public virtual void OnAddColliderBg(GameObject obj)
+        public virtual void OnAddColliderBg ( GameObject obj )
         {
 
         }
@@ -161,12 +162,12 @@ namespace TinyFrameWork
         /// Register call back method before the window returned(closed)
         /// Case: when you exit a window to pop up a confirm MessageBox
         /// </summary>
-        protected void RegisterReturnLogic(BoolDelegate newLogic)
+        protected void RegisterReturnLogic ( BoolDelegate newLogic )
         {
             returnPreLogic = newLogic;
         }
 
-        public bool ExecuteReturnLogic()
+        public bool ExecuteReturnLogic ()
         {
             if (returnPreLogic == null)
                 return false;

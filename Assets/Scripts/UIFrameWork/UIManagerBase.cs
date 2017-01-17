@@ -251,7 +251,11 @@ namespace TinyFrameWork
 
         private void ExectuteBackSeqData ( NavigationData nd )
         {
-            backSequence.Pop();
+            // 
+            // stack count check
+            ///
+            if (backSequence.Count > 0)
+                backSequence.Pop();
             if (nd.backShowTargets == null)
                 return;
 
@@ -388,12 +392,13 @@ namespace TinyFrameWork
                 if (!dicShownWindows.ContainsKey(wndId))
                     continue;
                 UIWindowBase wnd = dicShownWindows[wndId];
-                if (wnd.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
+                if (wnd.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation &&
+                    !wnd.IsLock)
                 {
                     NavigationData nd = new NavigationData();
                     nd.hideTargetWindow = wnd;
                     backSequence.Push(nd);
-                    Debuger.Log("## Push new navigation data " + ((WindowID) wndId).ToString());
+                    Debug.Log("## Push new navigation data " + ((WindowID) wndId).ToString());
                     break;
                 }
             }

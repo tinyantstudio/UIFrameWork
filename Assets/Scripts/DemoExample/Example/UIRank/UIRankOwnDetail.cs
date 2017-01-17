@@ -13,12 +13,12 @@ namespace TinyFrameWork
         private GameObject objAnimation;
         private TweenPosition twPosition;
 
-        protected override void SetWindowId()
+        protected override void SetWindowId ()
         {
-            this.ID = WindowID.WindowID_Rank_OwnDetail; 
+            this.ID = WindowID.WindowID_Rank_OwnDetail;
         }
 
-        public override void InitWindowOnAwake()
+        public override void InitWindowOnAwake ()
         {
             InitWindowCoreData();
             base.InitWindowOnAwake();
@@ -30,38 +30,40 @@ namespace TinyFrameWork
             UIEventListener.Get(btnClose).onClick = OnBtnSwitch;
         }
 
-        protected override void InitWindowCoreData()
+        protected override void InitWindowCoreData ()
         {
             base.InitWindowCoreData();
             this.windowData.navigationMode = UIWindowNavigationMode.NormalNavigation;
         }
 
-        public override void ResetWindow()
+        public override void ResetWindow ()
         {
             isShown = false;
             ResetAnimation();
         }
 
-        public override void ShowWindow(BaseWindowContextData contextData)
+        public override void ShowWindow ( BaseWindowContextData contextData )
         {
             isShown = true;
-            EnterAnimation(delegate 
+            EnterAnimation(delegate
             {
                 TweenColor.Begin(spHeadIcon.gameObject, 0.35f, new Color(1.0f, 1.0f, 1.0f));
             });
         }
 
-        public override void HideWindow(System.Action onComplete)
+        public override void HideWindow ( System.Action onComplete )
         {
             isShown = false;
+            IsLock = true;
             QuitAnimation(delegate
             {
                 if (onComplete != null)
                     onComplete();
+                IsLock = false;
             });
         }
 
-        public void EnterAnimation(EventDelegate.Callback onComplete)
+        public void EnterAnimation ( EventDelegate.Callback onComplete )
         {
             if (twPosition == null)
                 twPosition = objAnimation.GetComponent<TweenPosition>();
@@ -69,7 +71,7 @@ namespace TinyFrameWork
             EventDelegate.Set(twPosition.onFinished, onComplete);
         }
 
-        public void QuitAnimation(EventDelegate.Callback onComplete)
+        public void QuitAnimation ( EventDelegate.Callback onComplete )
         {
             if (twPosition == null)
                 twPosition = objAnimation.GetComponent<TweenPosition>();
@@ -77,17 +79,17 @@ namespace TinyFrameWork
             EventDelegate.Set(twPosition.onFinished, onComplete);
         }
 
-        public void ResetAnimation()
+        public void ResetAnimation ()
         {
             if (twPosition != null)
                 twPosition.ResetToBeginningExtension(0.0f);
         }
 
-        public void UpdateOwnDetail()
+        public void UpdateOwnDetail ()
         {
         }
 
-        private void OnBtnSwitch(GameObject obj)
+        private void OnBtnSwitch ( GameObject obj )
         {
             if (base.isShown)
                 UIRankManager.GetInstance().HideWindow(this.ID, null);

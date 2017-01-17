@@ -67,7 +67,7 @@ namespace TinyFrameWork
             return (int) WindowID.WindowID_Invaild;
         }
 
-        public override void HideWindow ( WindowID id, System.Action onComplete )
+        public override void HideWindow ( WindowID id, System.Action onComplete  = null)
         {
             CheckDirectlyHide(id, onComplete);
         }

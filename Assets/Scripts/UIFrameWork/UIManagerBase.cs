@@ -250,15 +250,17 @@ namespace TinyFrameWork
             return true;
         }
 
-        private void ExectuteBackSeqData ( NavigationData backData )
+        private void ExectuteBackSeqData ( NavigationData nd )
         {
-            if (backData.backShowTargets == null)
+            backSequence.Pop();
+            if (nd.backShowTargets == null)
                 return;
-            for (int i = 0; i < backData.backShowTargets.Count; i++)
+
+            for (int i = 0; i < nd.backShowTargets.Count; i++)
             {
-                WindowID backId = backData.backShowTargets[i];
+                WindowID backId = nd.backShowTargets[i];
                 ShowWindowForNavigation(backId);
-                if (i == backData.backShowTargets.Count - 1)
+                if (i == nd.backShowTargets.Count - 1)
                 {
                     UIWindowBase window = GetGameWindow(backId);
                     if (window.windowData.navigationMode == UIWindowNavigationMode.NormalNavigation)
@@ -269,7 +271,6 @@ namespace TinyFrameWork
                     }
                 }
             }
-            backSequence.Pop();
         }
 
         /// <summary>

@@ -70,7 +70,6 @@ namespace TinyFrameWork
                 if (onComplete != null)
                     onComplete();
             });
-            Debug.Log("## hide UIRankDetail window ##");
         }
 
         public void EnterAnimation ( EventDelegate.Callback onComplete )

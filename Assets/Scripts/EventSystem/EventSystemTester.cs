@@ -14,42 +14,42 @@ namespace TinyFrameWork
     public class EventSystemTester : MonoBehaviour, IEventListener
     {
 
-        void OnEnable()
+        void OnEnable ()
         {
             RegisterEvent();
         }
 
-        void OnDisable()
+        void OnDisable ()
         {
             UnRegisterEvent();
         }
         /// <summary>
         /// register the target event message, set the call back method with params and event name.
         /// </summary>
-        public void RegisterEvent()
+        public void RegisterEvent ()
         {
-            EventDispatcher.GetInstance().MainEventManager.AddEventListener<string>(EventSystemDefine.EventTestUserInput, this.OnUserInput);
+            EventDispatcher.GetInstance().MainEventManager.AddEventListener<string>(EventId.TestUserInput, this.OnUserInput);
         }
 
         /// <summary>
         /// unregister the target event message.
         /// </summary>
-        public void UnRegisterEvent()
+        public void UnRegisterEvent ()
         {
-            EventDispatcher.GetInstance().MainEventManager.RemoveEventListener<string>(EventSystemDefine.EventTestUserInput, this.OnUserInput);
+            EventDispatcher.GetInstance().MainEventManager.RemoveEventListener<string>(EventId.TestUserInput, this.OnUserInput);
         }
 
-        private void OnUserInput(string msg)
+        private void OnUserInput ( string msg )
         {
             Debug.Log("[on User input message:" + msg + "]");
         }
 
-        void Update()
+        void Update ()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 // trigger the event.
-                EventDispatcher.GetInstance().MainEventManager.TriggerEvent<string>(EventSystemDefine.EventTestUserInput, "Hello World!");
+                EventDispatcher.GetInstance().MainEventManager.TriggerEvent<string>(EventId.TestUserInput, "Hello World!");
             }
         }
     }

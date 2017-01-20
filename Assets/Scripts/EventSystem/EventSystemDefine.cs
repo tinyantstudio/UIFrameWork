@@ -1,24 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TinyFrameWork
 {
+    public enum HandleType
+    {
+        Add = 0,
+        Remove = 1,
+    }
+
     public class EventSystemDefine
     {
-        // test message.
-        public const string EventTestUserInput = "event_test_user_input";
+        public static Dictionary<int, string> dicHandleType = new Dictionary<int, string>()
+        {
+            { (int)HandleType.Add, "Add"},
+            { (int)HandleType.Remove, "Remove"},
+        };
+    }
 
-        // player common message.
-        public const string EventCommonCoinChange = "event_coin_change";
-        public const string EventCommonDiamondChange = "event_diamond_change";
-
-        // update UI when receive net message.
-        public const string EventNetUpdateMailContent = "event_update_mail_content";
-
-        // or other battle message.
-        public const string EventPlayerHitByAI = "event_match_hitby_ai";
-
-        // UIFrameWork Message
-        public const string EventUIFrameWorkPopRootWindowAdded = "ufprw";
+    public enum EventId
+    {
+        None = 0,
+        // Test User Input
+        TestUserInput,
+        // UIFrameWork Event id
+        PopRootWindowAdded,
+        // Common Event id
+        CoinChange,
+        DiamondChange,
+        // Player Common Event id
+        PlayerHitByAI,
+        // Net message
+        NetUpdateMailContent,
     }
 }

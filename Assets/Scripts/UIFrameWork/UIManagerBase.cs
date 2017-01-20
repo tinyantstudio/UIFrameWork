@@ -398,7 +398,6 @@ namespace TinyFrameWork
                     NavigationData nd = new NavigationData();
                     nd.hideTargetWindow = wnd;
                     backSequence.Push(nd);
-                    Debug.Log("## Push new navigation data " + ((WindowID) wndId).ToString());
                     break;
                 }
             }

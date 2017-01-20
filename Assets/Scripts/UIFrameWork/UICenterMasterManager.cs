@@ -254,7 +254,7 @@ namespace TinyFrameWork
             if (baseWindow.windowData.windowType == UIWindowType.PopUp)
             {
                 // trigger the window PopRoot added window event
-                EventDispatcher.GetInstance().UIFrameWorkEventManager.TriggerEvent(EventSystemDefine.EventUIFrameWorkPopRootWindowAdded);
+                EventDispatcher.GetInstance().UIFrameWorkEventManager.TriggerEvent(EventId.PopRootWindowAdded);
             }
             baseWindow.MinDepth = needDepth;
         }

@@ -2,7 +2,7 @@
 using System.Collections;
 
 // Base window data context for Refresh window or show window
-public class BaseWindowContextData
+public abstract class BaseWindowContextData
 {
 
 }

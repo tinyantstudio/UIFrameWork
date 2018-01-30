@@ -1,6 +1,6 @@
-﻿//----------------------------------------------
+//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -9,7 +9,6 @@ using UnityEngine;
 /// This script automatically changes the color of the specified sprite based on the value of the slider.
 /// </summary>
 
-[RequireComponent(typeof(UIProgressBar))]
 [AddComponentMenu("NGUI/Examples/Slider Colors")]
 public class UISliderColors : MonoBehaviour
 {
@@ -18,14 +17,20 @@ public class UISliderColors : MonoBehaviour
 	public Color[] colors = new Color[] { Color.red, Color.yellow, Color.green };
 
 	UIProgressBar mBar;
+	UIBasicSprite mSprite;
 
-	void Start () { mBar = GetComponent<UIProgressBar>(); Update(); }
+	void Start ()
+	{
+		mBar = GetComponent<UIProgressBar>();
+		mSprite = GetComponent<UIBasicSprite>();
+		Update();
+	}
 
 	void Update ()
 	{
 		if (sprite == null || colors.Length == 0) return;
 
-		float val = mBar.value;
+		float val = (mBar != null) ? mBar.value : mSprite.fillAmount;
 		val *= (colors.Length - 1);
 		int startIndex = Mathf.FloorToInt(val);
 

@@ -23,7 +23,7 @@ public class PanWithMouse : MonoBehaviour
 	void Update ()
 	{
 		float delta = RealTime.deltaTime;
-		Vector3 pos = Input.mousePosition;
+		Vector3 pos = UICamera.lastEventPosition;
 
 		float halfWidth = Screen.width * 0.5f;
 		float halfHeight = Screen.height * 0.5f;

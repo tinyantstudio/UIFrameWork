@@ -7,12 +7,12 @@ namespace TinyFrameWork
     public class UIRankManager : UIManagerBase
     {
         private static UIRankManager instance;
-        public static UIRankManager GetInstance ()
+        public static UIRankManager GetInstance()
         {
             return instance;
         }
 
-        protected override void Awake ()
+        protected override void Awake()
         {
             base.Awake();
             instance = this;
@@ -22,7 +22,7 @@ namespace TinyFrameWork
         /// 1. Find the managed sub window
         /// 2. init the managed sub window
         /// </summary>
-        public override void InitWindowManager ()
+        public override void InitWindowManager()
         {
             base.InitWindowManager();
             InitWindowControl();
@@ -34,7 +34,7 @@ namespace TinyFrameWork
             if (rankDetailScript == null)
                 rankDetailScript = objRankDetail.AddComponent<UIRankDetail>();
 
-            dicAllWindows[(int) WindowID.WindowID_Rank_Detail] = rankDetailScript;
+            dicAllWindows[(int)WindowID.WindowID_Rank_Detail] = rankDetailScript;
 
             // UIRankOwnDetail sub window
             GameObject objRankOwnDetail = GameUtility.FindDeepChild(this.gameObject, "OwnDetailWindow").gameObject;
@@ -42,37 +42,37 @@ namespace TinyFrameWork
             if (rankOwnDetailScript == null)
                 rankOwnDetailScript = objRankOwnDetail.AddComponent<UIRankOwnDetail>();
 
-            dicAllWindows[(int) WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
+            dicAllWindows[(int)WindowID.WindowID_Rank_OwnDetail] = rankOwnDetailScript;
         }
 
-        protected override void InitWindowControl ()
+        protected override void InitWindowControl()
         {
             this.managedWindowIds.Clear();
             AddWindowInControl(WindowID.WindowID_Rank_Detail);
             AddWindowInControl(WindowID.WindowID_Rank_OwnDetail);
         }
 
-        public override void ShowWindow ( WindowID id, ShowWindowData showData )
+        public override void ShowWindow(WindowID id, ShowWindowData showData = null)
         {
             ShowWindowForOtherWindowManager(id, showData);
         }
 
-        protected override int GetCurrentShownWindow ()
+        protected override int GetCurrentShownWindow()
         {
             if (backSequence.Count > 0)
             {
                 NavigationData data = backSequence.Peek();
-                return (int) data.hideTargetWindow.ID;
+                return (int)data.hideTargetWindow.ID;
             }
-            return (int) WindowID.WindowID_Invaild;
+            return (int)WindowID.WindowID_Invaild;
         }
 
-        public override void HideWindow ( WindowID id, System.Action onComplete  = null)
+        public override void HideWindow(WindowID id, System.Action onComplete = null)
         {
             CheckDirectlyHide(id, onComplete);
         }
 
-        public override void ResetAllInControlWindows ()
+        public override void ResetAllInControlWindows()
         {
             foreach (KeyValuePair<int, UIWindowBase> childWindow in dicAllWindows)
             {
@@ -81,7 +81,7 @@ namespace TinyFrameWork
             dicShownWindows.Clear();
         }
 
-        public override bool PopNavigationWindow ()
+        public override bool PopNavigationWindow()
         {
             DealWithNavigationWhenPopWindow();
             bool isValidBack = RealPopNavigationWindow();

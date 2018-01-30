@@ -1,6 +1,8 @@
 # UIFrameWork
 A tiny and powerful UIFrameWork for Unity4.x and Unity5.x
 
+2018.1.30 -> Update Project to Unity5.6.2f1 with NGUI version 3.11.4.
+
 **[中文介绍](https://github.com/tinyantstudio/UIFrameWork/blob/master/ChineseReadMe.md)**
 
 ## How to Start
@@ -12,6 +14,7 @@ A tiny and powerful UIFrameWork for Unity4.x and Unity5.x
 
 ## Attention
 1. Unity4.x & NGUI3.6.7(If you want using Unity3d 5.x version, just update the NGUI's right version too)
+2. **2018.1.30 -> Update Project to Unity5.6.2f1 with NGUI version 3.11.4.**
 
 ## UIFrameWork Target:
 1. load window, Show, hide, close window

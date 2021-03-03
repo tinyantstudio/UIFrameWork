@@ -36,5 +36,5 @@ Wish this simple tiny frame work can help some one who want to save his time dev
 
 ## Show the result 
 
-[See old result Click Link](http://7xp9wk.com1.z0.glb.clouddn.com/UIFramework.gif)
+[See old result Click Link](https://img-blog.csdn.net/20150714163306188)
 

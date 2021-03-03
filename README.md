@@ -35,6 +35,8 @@ A tiny and powerful UIFrameWork for Unity4.x and Unity5.x
 Wish this simple tiny frame work can help some one who want to save his time develop the window logic
 
 ## Show the result 
+![20150714163306188](https://user-images.githubusercontent.com/14041295/109735476-c9f2b180-7bfd-11eb-930a-982642aebced.gif)
+
 
 [See old result Click Link](https://img-blog.csdn.net/20150714163306188)
 
